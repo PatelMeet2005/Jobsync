@@ -30,6 +30,25 @@
   cursor: pointer;
 }
 
+.heading{
+  margin: 10px;
+}
+
+.heading h2{
+  font-size: 35px;
+  margin-bottom: 20px;
+}
+
+.heading-p{
+  font-size: 20px;
+}
+
+.signup{
+  display: flex;
+}
+
+
+
 .login-btn {
   width: 100%;
   padding: 10px;
