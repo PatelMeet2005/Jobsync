@@ -44,7 +44,7 @@ const Signup = ({ onClose, switchToLogin }) => {
               Sign in
             </a>
           </div>
-          <form onSubmit={handleFormsubmit}>
+          <form className="register-form" onSubmit={handleFormsubmit}>
             <div className="name-row">
               <div className="input-group">
                   <label htmlFor="firstname">
@@ -63,7 +63,7 @@ const Signup = ({ onClose, switchToLogin }) => {
 
             <div className="input-group">
                   <label htmlFor="lastname">
-              <b>First Name</b>
+              <b>Last Name</b>
             </label>
             <input
             id="lastname"
@@ -71,7 +71,7 @@ const Signup = ({ onClose, switchToLogin }) => {
               name="lastname"
               placeholder="Enter Last Name"
               required
-              value={user.firstname}
+              value={user.lastname}
               onChange={handleInputChange}
             />
             </div>

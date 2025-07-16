@@ -35,12 +35,12 @@ const Login = ({ onClose, switchToSignup }) => {
               Sign up
             </a>
           </div>
-          <form className="" onSubmit={handleSubmit}>
+          <form className="login-form" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="login-email" className="">
-                Email address
+              <label htmlFor="login-email" className="login-email-label">
+                <b>Email address</b>
               </label>
-              <div className="">
+              <div className="login-email">
                 <input
                   id="login-email"
                   name="email"
@@ -49,16 +49,16 @@ const Login = ({ onClose, switchToSignup }) => {
                   required
                   value={loginUser.email}
                   onChange={handleInputChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="login-email-input"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="login-password" className="">
-                Password
+              <label htmlFor="login-password" className="login-password-label">
+                <b>Password</b>
               </label>
-              <div className="">
+              <div className="login-password">
                 <input
                   id="login-password"
                   name="password"
@@ -67,13 +67,13 @@ const Login = ({ onClose, switchToSignup }) => {
                   required
                   value={loginUser.password}
                   onChange={handleInputChange}
-                  className=""
+                  className="login-password-input"
                 />
               </div>
             </div>
 
             <div>
-              <button type="submit" className="">
+              <button type="submit" className="login-btn">
                 Sign in
               </button>
             </div>

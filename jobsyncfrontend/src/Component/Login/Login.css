@@ -1,61 +1,74 @@
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* dark background */
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 1000;
+  justify-content: center;
+  z-index: 50;
 }
 
 .modal-content {
   background-color: white;
-  padding: 2rem;
-  margin: 10px;
-  border-radius: 10px;
-  width: 400px;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: relative;
 }
 
 .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 18px;
+  color: #555;
   cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+.heading {
+  margin-bottom: 5px;
 }
 
 .heading h2 {
-  font-size: 1.5rem;
+  font-size: 30px;
   font-weight: bold;
-  color: #111827;
-  margin-bottom: 0.25rem;
+  margin-bottom: 6px;
+  color: #333;
 }
 
 .heading-p {
-  margin-bottom: 1rem;
-  color: #4b5563;
-  font-size: 0.9rem;
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .signup {
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-  color: #6b7280;
+  font-size: 18px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 15px;
+}
+
+.signup p {
+  color: #666;
 }
 
 .signup .google-btn {
   color: #2563eb;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.2s ease;
 }
 
 .signup .google-btn:hover {
@@ -66,45 +79,76 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 2px;
 }
 
-form label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.25rem;
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-form input {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: #111827;
+form label,
+.login-email-label,
+.login-password-label {
+  font-weight: 400;
+  font-size: 18px;
+  margin-bottom: 4px;
+  display: block;
+  color: #333;
+}
+
+form label b {
+  font-weight: 600;
+}
+
+form input,
+.login-email-input,
+.login-password-input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
   width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 8px;
 }
 
-form input:focus {
+form input:focus,
+.login-email-input:focus,
+.login-password-input:focus {
   border-color: #2563eb;
-  outline: none;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  outline: none;
 }
 
-form button {
+form button,
+.login-btn {
   background-color: #2563eb;
   color: white;
-  padding: 0.6rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-top: 10px;
+  width: 100%;
 }
 
-form button:hover {
+form button:hover,
+.login-btn:hover {
   background-color: #1d4ed8;
+}
+
+form button:active,
+.login-btn:active {
+  transform: scale(0.98);
+}
+
+.login-email,
+.login-password {
+  width: 100%;
+  margin-bottom: 5px;
 }
