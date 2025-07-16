@@ -2,14 +2,27 @@ import React, { useState } from 'react'
 import './Navbar.css'
 
 import Login from '../Login/Login';
+import Register from '../Register/Register';
 
 const Navbar = () => {
 
   const [showLogin,setShowLogin] = useState(false);
+  const [showRegister,setShowRegister] = useState(false);
 
-  const openModel = () => setShowLogin(true);
+  const openLoginModel = () => {
+    setShowLogin(true);
+    setShowRegister(false);
+  };
 
-  const closeModel = () => setShowLogin(false);
+  const openRegisterModel = () => {
+    setShowRegister(true);
+    setShowLogin(false);
+  };
+
+  const closeModel = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+  };
 
   return (
     <>
@@ -30,11 +43,12 @@ const Navbar = () => {
         </div>
 
         <div className="login">
-          <button id='clt' onClick={openModel}>Sign in / sign up</button>
+          <button id='clt' onClick={openLoginModel}>Sign in / sign up</button>
           <button id='emp'>Employees</button>
         </div>
 
-        {showLogin && <Login onClose = {closeModel} />}
+        {showLogin && <Login onClose = {closeModel} switchToSignup={openRegisterModel} />}
+        {showRegister && <Register onClose = {closeModel} switchToLogin={openLoginModel} />}
 
       </div>
     </>
