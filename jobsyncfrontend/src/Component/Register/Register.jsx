@@ -19,7 +19,23 @@ const Signup = ({ onClose, switchToLogin }) => {
   const handleFormsubmit = async (e) => {
     e.preventDefault();
     // Here you would typically send the user data to your backend for registration
-    console.log(user);
+
+    try{
+      const response = await fetch("url-to-your-backend/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
+
+    if(!response.ok){
+      throw new Error("Registration failed");
+    }
+
+    const data = await response.json();
+    console.log("Registration successful:", data);
+
     // Reset the form after submission
     setUser({
       firstname: "",
@@ -28,7 +44,17 @@ const Signup = ({ onClose, switchToLogin }) => {
       password: "",
       phonenumber: "",
     });
+
+    alert("Registration successful!");
+
+    }
+    catch (error) {
+      console.error("Error during registration:", error.message);
+      alert("Registration failed. Please try again.",error.message);
+    }
+
   };
+
   return (
     <div className="modal-overlay">
       <div className="modal-content">

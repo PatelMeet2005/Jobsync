@@ -16,8 +16,34 @@ const Login = ({ onClose, switchToSignup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(loginUser);
-    
+    // Here you would typically send the login data to your backend for authentication
+    try{
+      const response = await fetch("URL",{
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body : JSON.stringify(loginUser),
+      });
+
+      if(!response.ok){
+        throw new Error("Login failed");
+      }
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+
+      // Reset the form after submission
+      setLoginUser({
+        email: "",
+        password: "",
+      });
+    }
+    catch(error){
+      console.error("Error during login:", error.message);
+      alert("Login failed. Please try again.", error.message);
+      
+    }
   };
 
   return (
