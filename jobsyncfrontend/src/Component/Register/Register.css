@@ -1,3 +1,5 @@
+/* Signup.css */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -47,23 +49,19 @@
   color: #333;
 }
 
-.heading-p {
+.heading p {
   color: #666;
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-.signup {
+.login-switch {
   font-size: 18px;
   display: flex;
   margin-bottom: 15px;
 }
 
-.signup p {
-  color: #666;
-}
-
-.signup .google-btn {
+.login-switch a {
   color: #2563eb;
   text-decoration: none;
   font-weight: 600;
@@ -71,26 +69,18 @@
   transition: color 0.2s ease;
 }
 
-.signup .google-btn:hover {
-  color: #1d4ed8;
+.login-switch a:hover {
   text-decoration: underline;
 }
 
-form {
+form,
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-form label,
-.login-email-label,
-.login-password-label {
+form label {
   font-weight: 400;
   font-size: 18px;
   margin-bottom: 4px;
@@ -98,13 +88,27 @@ form label,
   color: #333;
 }
 
-form label b {
+/* Styling for bold text in labels */
+label b {
   font-weight: 600;
 }
 
-form input,
-.login-email-input,
-.login-password-input {
+.name-row {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 5px;
+}
+
+.input-group {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"],
+.register-form input[type="password"],
+.register-form input[type="tel"] {
   padding: 10px 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -114,16 +118,15 @@ form input,
   margin-bottom: 8px;
 }
 
-form input:focus,
-.login-email-input:focus,
-.login-password-input:focus {
+
+
+input:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
   outline: none;
 }
 
-form button,
-.login-btn {
+button[type="submit"] {
   background-color: #2563eb;
   color: white;
   padding: 10px;
@@ -137,18 +140,10 @@ form button,
   width: 100%;
 }
 
-form button:hover,
-.login-btn:hover {
+button[type="submit"]:hover {
   background-color: #1d4ed8;
 }
 
-form button:active,
-.login-btn:active {
+button[type="submit"]:active {
   transform: scale(0.98);
-}
-
-.login-email,
-.login-password {
-  width: 100%;
-  margin-bottom: 5px;
 }

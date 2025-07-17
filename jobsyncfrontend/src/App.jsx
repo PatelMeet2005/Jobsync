@@ -2,17 +2,18 @@ import React from 'react'
 import { Route , Routes } from 'react-router-dom'
 import Navbar from './Component/Navbar/Navbar'
 import Footer from './Component/Footer/Footer'
+import Job from './Component/Job/Job'
+import Companie from './Component/Companie/Companie'
 import './App.css'
 
 
 const App = () => {
   return (
     <>
-      <Navbar />
         <Routes>
-
-        </Routes>
-      <Footer />
+          <Route path="/" element={<><Navbar /><Job /><Footer /></>} />
+          <Route path="/companie" element={<><Navbar /><Companie /><Footer /></>} />
+        </Routes>   
     </>
   )
 }

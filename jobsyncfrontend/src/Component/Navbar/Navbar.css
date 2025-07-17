@@ -43,16 +43,19 @@ li a{
     margin-left: 20px;
 }
 
-.serchbar input{
-    height: 30px;
+.searchbar input{
+    height: 35px;
     width: 300px;
     border: none;
     border-bottom-left-radius: 50px;
     border-top-left-radius: 50px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+
 }
 
-.serchbar button{
-    height: 30px;
+.searchbar button{
+    height: 35px;
     width: 50px;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;

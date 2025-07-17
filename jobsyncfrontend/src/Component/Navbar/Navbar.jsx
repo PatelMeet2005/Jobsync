@@ -3,15 +3,32 @@ import './Navbar.css';
 import './Job_drop.css';
 import categories from '../../Data/categories.json';
 import Login from '../Login/Login';
+import Register from '../Register/Register';
 
 const Navbar = () => {
 
-  const [showLogin, setShowLogin] = useState(false);
   const [Jobdropfun, setJobdropfun] = useState(false);
   const timeoutID = useRef(null); // Use useRef for timeoutID
 
   const openModel = () => setShowLogin(true);
   const closeModel = () => setShowLogin(false);
+  const [showLogin,setShowLogin] = useState(false);
+  const [showRegister,setShowRegister] = useState(false);
+
+  const openLoginModel = () => {
+    setShowLogin(true);
+    setShowRegister(false);
+  };
+
+  const openRegisterModel = () => {
+    setShowRegister(true);
+    setShowLogin(false);
+  };
+
+  const closeModel = () => {
+    setShowLogin(false);
+    setShowRegister(false);
+  };
 
   return (
     <>
@@ -67,16 +84,17 @@ const Navbar = () => {
         </div>
 
         <div className="searchbar">
-          <input type="text" aria-label="Search" />
-          <button>search</button>
+          <input type="text" />
+          <button>serch</button>
         </div>
 
         <div className="login">
-          <button id='clt' onClick={openModel}>Sign in / sign up</button>
+          <button id='clt' onClick={openLoginModel}>Sign in / sign up</button>
           <button id='emp'>Employees</button>
         </div>
 
-        {showLogin && <Login onClose={closeModel} />}
+        {showLogin && <Login onClose = {closeModel} switchToSignup={openRegisterModel} />}
+        {showRegister && <Register onClose = {closeModel} switchToLogin={openLoginModel} />}
 
       </div>
     </>
