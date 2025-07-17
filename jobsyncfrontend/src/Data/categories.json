@@ -1,0 +1,26 @@
+{
+  "POPULAR_CATEGORIES": [
+    "IT Jobs",
+    "Sales Jobs",
+    "Marketing Jobs",
+    "Data Science Jobs",
+    "HR Jobs",
+    "Engineering Jobs"
+  ],
+  "JOBS_IN_DEMAND": [
+    "Fresher jobs",
+    "MNC jobs",
+    "Remote jobs",
+    "Work from home jobs",
+    "Walk-in jobs",
+    "Part-time jobs"
+  ],
+  "JOBS_BY_LOCATION": [
+    "Jobs in Delhi",
+    "Jobs in Mumbai",
+    "Jobs in Bangalore",
+    "Jobs in Hyderabad",
+    "Jobs in Chennai",
+    "Jobs in Pune"
+  ]
+}

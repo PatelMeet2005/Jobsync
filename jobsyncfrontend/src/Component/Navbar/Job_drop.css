@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.job_drop{
+        position: relative;
+}
+.job_drop_content {
+  margin-top: 10px;
+  min-height: 320px;
+  min-width: 700px;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 32px 24px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.categories_grid {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.category_column {
+  flex: 1;
+  padding: 0 24px;
+  border-right: 1px solid #ececec;
+}
+
+.category_column:last-child {
+  border-right: none;
+}
+
+.categories_head {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #22223b;
+}
+
+.category_item {
+  list-style: none;
+  margin-bottom: 12px;
+  color: #22223b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.category_item:hover {
+  color: #0077b6;
+  text-decoration: underline;
+}
