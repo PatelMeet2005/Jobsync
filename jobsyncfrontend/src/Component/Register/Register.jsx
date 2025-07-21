@@ -3,56 +3,51 @@ import "./Register.css";
 
 const Signup = ({ onClose, switchToLogin }) => {
   const [user, setUser] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    phonenumber: "",
+    userFirstName: "",
+    userLastName: "",
+    userEmail: "",
+    userPassword: "",
+    userPhoneNumber: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormsubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the user data to your backend for registration
 
-    try{
+    try {
       const response = await fetch("http://localhost:8000/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
 
-    if(!response.ok){
-      throw new Error("Registration failed");
-    }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
 
-    const data = await response.json();
-    console.log("Registration successful:", data);
+      const data = await response.json();
+      console.log("Registration successful:", data);
 
-    // Reset the form after submission
-    setUser({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      phonenumber: "",
-    });
+      setUser({
+        userFirstName: "",
+        userLastName: "",
+        userEmail: "",
+        userPassword: "",
+        userPhoneNumber: "",
+      });
 
-    alert("Registration successful!");
-
-    }
-    catch (error) {
+      alert("Registration successful!");
+    } catch (error) {
       console.error("Error during registration:", error.message);
-      alert("Registration failed. Please try again.",error.message);
+      alert("Registration failed: " + error.message);
     }
-
   };
 
   return (
@@ -73,69 +68,69 @@ const Signup = ({ onClose, switchToLogin }) => {
           <form className="register-form" onSubmit={handleFormsubmit}>
             <div className="name-row">
               <div className="input-group">
-                  <label htmlFor="firstname">
-              <b>First Name</b>
-            </label>
-            <input
-            id="firstname"
-              type="text"
-              name="firstname"
-              placeholder="Enter First Name"
-              required
-              value={user.firstname}
-              onChange={handleInputChange}
-            />
+                <label htmlFor="userFirstName">
+                  <b>First Name</b>
+                </label>
+                <input
+                  id="userFirstName"
+                  type="text"
+                  name="userFirstName"
+                  placeholder="Enter First Name"
+                  required
+                  value={user.userFirstName}
+                  onChange={handleInputChange}
+                />
               </div>
 
-            <div className="input-group">
-                  <label htmlFor="lastname">
-              <b>Last Name</b>
-            </label>
-            <input
-            id="lastname"
-              type="text"
-              name="lastname"
-              placeholder="Enter Last Name"
-              required
-              value={user.lastname}
-              onChange={handleInputChange}
-            />
-            </div>
+              <div className="input-group">
+                <label htmlFor="userLastName">
+                  <b>Last Name</b>
+                </label>
+                <input
+                  id="userLastName"
+                  type="text"
+                  name="userLastName"
+                  placeholder="Enter Last Name"
+                  required
+                  value={user.userLastName}
+                  onChange={handleInputChange}
+                />
+              </div>
             </div>
 
-            <label htmlFor="email">
+            <label htmlFor="userEmail">
               <b>Email</b>
             </label>
             <input
               type="email"
-              name="email"
+              name="userEmail"
               placeholder="Enter Email"
               required
-              value={user.email}
+              value={user.userEmail}
               onChange={handleInputChange}
             />
 
-            <label htmlFor="password">
+            <label htmlFor="userPassword">
               <b>Password</b>
             </label>
             <input
               type="password"
-              name="password"
+              name="userPassword"
               placeholder="Enter Password"
               required
-              value={user.password}
+              value={user.userPassword}
               onChange={handleInputChange}
             />
 
-            <label htmlFor="phonenumber">
+            <label htmlFor="userPhoneNumber">
               <b>Phone Number</b>
             </label>
             <input
               type="tel"
-              name="phonenumber"
+              name="userPhoneNumber"
               placeholder="Enter Phone Number"
               required
-              value={user.phonenumber}
+              value={user.userPhoneNumber}
               onChange={handleInputChange}
             />
 

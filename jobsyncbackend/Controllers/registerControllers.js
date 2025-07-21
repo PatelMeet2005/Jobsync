@@ -1,7 +1,7 @@
-const Register = require('../Models/register');
+const Register = require('../Models/register.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
 
 const registerUser = async (req, res) => {
@@ -36,7 +36,7 @@ const registerUser = async (req, res) => {
         })
     }
     catch (error) {
-        return red.status(500).json({
+        return res.status(500).json({
             status : "error",
             message : error.message,
         })

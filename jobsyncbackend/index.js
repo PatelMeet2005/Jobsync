@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const registerRoute = require('./Routes/registerRoute');
+const cors = require('cors');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -8,9 +10,25 @@ dotenv.config();
 // Connect to MongoDB
 connectDB();
 
+
+
 // Initialize Express app
 const app = express();
 app.use(express.json());
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allow specific HTTP methods
+  allowedHeaders: 'Content-Type , Authorization', // Allow specific headers
+  credentials: true // Allow credentials
+}));
+
+
+
+
+// Middleware to parse JSON requests
+app.use(express.urlencoded({ extended: true }));
 
 // Define a simple route    
 app.use('/user',registerRoute)
