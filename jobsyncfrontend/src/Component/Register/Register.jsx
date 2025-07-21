@@ -1,54 +1,98 @@
 import React, { useState } from "react";
 import "./Register.css";
+import axios from 'axios';
 
 const Signup = ({ onClose, switchToLogin }) => {
-  const [user, setUser] = useState({
-    userFirstName: "",
-    userLastName: "",
-    userEmail: "",
-    userPassword: "",
-    userPhoneNumber: "",
-  });
+  // const [user, setUser] = useState({
+  //   userFirstName: "",
+  //   userLastName: "",
+  //   userEmail: "",
+  //   userPassword: "",
+  //   userPhoneNumber: "",
+  // });
+  const [userFirstName, setUserFirstName] = useState('');
+  const [userLastName, setUserLastName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [userPhoneNumber, setUserPhoneNumber] = useState('');
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
+  const fnamechange = (e) => {
+    setUserFirstName(e.target.value);
+  }
+
+  const lnamechange = (e) => {
+    setUserLastName(e.target.value);
+  }
+
+  const handlemail = (e) => {
+    setUserEmail(e.target.value);
+  }
+
+  const handlepassword = (e) => {
+    setUserPassword(e.target.value);
+  }
+
+  const handlephone = (e) => {
+    setUserPhoneNumber(e.target.value);
+  }
+
+  // const handleFormsubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await fetch("http://localhost:8000/user/register", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(user),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.message || "Registration failed");
+  //     }
+
+  //     const data = await response.json();
+  //     console.log("Registration successful:", data);
+
+  //     setUser({
+  //       userFirstName: "",
+  //       userLastName: "",
+  //       userEmail: "",
+  //       userPassword: "",
+  //       userPhoneNumber: "",
+  //     });
+
+  //     alert("Registration successful!");
+  //   } catch (error) {
+  //     console.error("Error during registration:", error.message);
+  //     alert("Registration failed: " + error.message);
+  //   }
+  // };
 
   const handleFormsubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:8000/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
-      }
-
-      const data = await response.json();
-      console.log("Registration successful:", data);
-
-      setUser({
-        userFirstName: "",
-        userLastName: "",
-        userEmail: "",
-        userPassword: "",
-        userPhoneNumber: "",
-      });
-
-      alert("Registration successful!");
-    } catch (error) {
-      console.error("Error during registration:", error.message);
-      alert("Registration failed: " + error.message);
+    const data = {
+      userFirstName,
+      userLastName,
+      userEmail,
+      userPassword,
+      userPhoneNumber,
     }
-  };
+
+    try {
+      const response = await axios.post(`http://localhost:8000/user/register`, data);
+      console.log("Response Data:", response.data);
+      alert(response.data.message);
+
+    } catch (error) {
+      console.log("Error", error);
+      alert(error.response.data.message);
+
+    }
+  }
 
   return (
     <div className="modal-overlay">
@@ -77,8 +121,8 @@ const Signup = ({ onClose, switchToLogin }) => {
                   name="userFirstName"
                   placeholder="Enter First Name"
                   required
-                  value={user.userFirstName}
-                  onChange={handleInputChange}
+                  value={userFirstName}
+                  onChange={fnamechange}
                 />
               </div>
 
@@ -92,8 +136,8 @@ const Signup = ({ onClose, switchToLogin }) => {
                   name="userLastName"
                   placeholder="Enter Last Name"
                   required
-                  value={user.userLastName}
-                  onChange={handleInputChange}
+                  value={userLastName}
+                  onChange={lnamechange}
                 />
               </div>
             </div>
@@ -106,8 +150,8 @@ const Signup = ({ onClose, switchToLogin }) => {
               name="userEmail"
               placeholder="Enter Email"
               required
-              value={user.userEmail}
-              onChange={handleInputChange}
+              value={userEmail}
+              onChange={handlemail}
             />
 
             <label htmlFor="userPassword">
@@ -118,8 +162,8 @@ const Signup = ({ onClose, switchToLogin }) => {
               name="userPassword"
               placeholder="Enter Password"
               required
-              value={user.userPassword}
-              onChange={handleInputChange}
+              value={userPassword}
+              onChange={handlepassword}
             />
 
             <label htmlFor="userPhoneNumber">
@@ -130,8 +174,8 @@ const Signup = ({ onClose, switchToLogin }) => {
               name="userPhoneNumber"
               placeholder="Enter Phone Number"
               required
-              value={user.userPhoneNumber}
-              onChange={handleInputChange}
+              value={userPhoneNumber}
+              onChange={handlephone}
             />
 
             <button type="submit">Register</button>
