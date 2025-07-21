@@ -21,7 +21,7 @@ const Signup = ({ onClose, switchToLogin }) => {
     // Here you would typically send the user data to your backend for registration
 
     try{
-      const response = await fetch("url-to-your-backend/register", {
+      const response = await fetch("http://localhost:8000/user/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
