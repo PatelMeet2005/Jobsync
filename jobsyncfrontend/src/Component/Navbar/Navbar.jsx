@@ -10,11 +10,9 @@ const Navbar = () => {
   const [Jobdropfun, setJobdropfun] = useState(false);
   const timeoutID = useRef(null); // Use useRef for timeoutID
 
-  const openModel = () => setShowLogin(true);
-  const closeModel = () => setShowLogin(false);
   const [showLogin,setShowLogin] = useState(false);
   const [showRegister,setShowRegister] = useState(false);
-
+  
   const openLoginModel = () => {
     setShowLogin(true);
     setShowRegister(false);
@@ -78,7 +76,7 @@ const Navbar = () => {
                 </div>
               )}
               </li>
-            <li><a href="#">Companies</a></li>
+            <li><a href="/companie">Companies</a></li>
             <li><a href="#">About</a></li>
           </ul>
         </div>
