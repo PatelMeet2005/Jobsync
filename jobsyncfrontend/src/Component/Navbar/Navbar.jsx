@@ -7,13 +7,12 @@ import Register from '../Register/Register';
 
 const Navbar = () => {
 
+
   const [Jobdropfun, setJobdropfun] = useState(false);
   const timeoutID = useRef(null); // Use useRef for timeoutID
 
-  const openModel = () => setShowLogin(true);
-  const closeModel = () => setShowLogin(false);
-  const [showLogin,setShowLogin] = useState(false);
-  const [showRegister,setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   const openLoginModel = () => {
     setShowLogin(true);
@@ -29,7 +28,6 @@ const Navbar = () => {
     setShowLogin(false);
     setShowRegister(false);
   };
-
   return (
     <>
       <div className="mainNav">
@@ -37,7 +35,8 @@ const Navbar = () => {
 
         <div className="navLink">
           <ul>
-            <li className='job_drop' onMouseEnter={() => {
+            {/* Job drop down contant */}
+            <li className='job_drop nav_li' onMouseEnter={() => {
               clearTimeout(timeoutID.current);
               setJobdropfun(true);
             }}
@@ -47,12 +46,13 @@ const Navbar = () => {
                 }, 300);
               }}>
               <a href="#" tabIndex={0} aria-haspopup="true" aria-expanded={Jobdropfun} aria-label="Jobs dropdown">Jobs</a>
+
               {Jobdropfun && (
                 <div className="job_drop_content">
                   <div className="categories_grid">
                     <div className="category_column">
                       <h1 className="categories_head">Popular categories</h1>
-                      <ul>
+                      <ul className='category_list'>
                         {categories.POPULAR_CATEGORIES.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -60,7 +60,7 @@ const Navbar = () => {
                     </div>
                     <div className="category_column">
                       <h1 className="categories_head">Jobs in demand</h1>
-                      <ul>
+                      <ul className='category_list'>
                         {categories.JOBS_IN_DEMAND.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -68,7 +68,7 @@ const Navbar = () => {
                     </div>
                     <div className="category_column">
                       <h1 className="categories_head">Jobs by location</h1>
-                      <ul>
+                      <ul className='category_list'>
                         {categories.JOBS_BY_LOCATION.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -77,9 +77,9 @@ const Navbar = () => {
                   </div>
                 </div>
               )}
-              </li>
-            <li><a href="#">Companies</a></li>
-            <li><a href="#">About</a></li>
+            </li>
+            <li className='nav_li'><a href="#">Companies</a></li>
+            <li className='nav_li'><a href="#">About</a></li>
           </ul>
         </div>
 
@@ -93,8 +93,8 @@ const Navbar = () => {
           <button id='emp'>Employees</button>
         </div>
 
-        {showLogin && <Login onClose = {closeModel} switchToSignup={openRegisterModel} />}
-        {showRegister && <Register onClose = {closeModel} switchToLogin={openLoginModel} />}
+        {showLogin && <Login onClose={closeModel} switchToSignup={openRegisterModel} />}
+        {showRegister && <Register onClose={closeModel} switchToLogin={openLoginModel} />}
 
       </div>
     </>
