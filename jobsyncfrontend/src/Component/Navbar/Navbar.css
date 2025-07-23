@@ -24,10 +24,9 @@
 ul{
     display: flex;
     list-style: none;
-    margin-left: 20px;
 }
 
-li{
+.nav_li{
     margin-left: 20px;
     font-size: 18px;
     color: #023047;
