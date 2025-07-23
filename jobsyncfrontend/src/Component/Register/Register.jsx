@@ -3,13 +3,8 @@ import "./Register.css";
 import axios from 'axios';
 
 const Signup = ({ onClose, switchToLogin }) => {
-  // const [user, setUser] = useState({
-  //   userFirstName: "",
-  //   userLastName: "",
-  //   userEmail: "",
-  //   userPassword: "",
-  //   userPhoneNumber: "",
-  // });
+
+  // State variables for form inputs
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -36,56 +31,35 @@ const Signup = ({ onClose, switchToLogin }) => {
     setUserPhoneNumber(e.target.value);
   }
 
-  // const handleFormsubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await fetch("http://localhost:8000/user/register", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(user),
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       throw new Error(errorData.message || "Registration failed");
-  //     }
-
-  //     const data = await response.json();
-  //     console.log("Registration successful:", data);
-
-  //     setUser({
-  //       userFirstName: "",
-  //       userLastName: "",
-  //       userEmail: "",
-  //       userPassword: "",
-  //       userPhoneNumber: "",
-  //     });
-
-  //     alert("Registration successful!");
-  //   } catch (error) {
-  //     console.error("Error during registration:", error.message);
-  //     alert("Registration failed: " + error.message);
-  //   }
-  // };
-
   const handleFormsubmit = async (e) => {
     e.preventDefault();
 
+
+    // Prepare data to be sent in the request
     const data = {
-      userFirstName,
-      userLastName,
-      userEmail,
-      userPassword,
-      userPhoneNumber,
+      userFirstName : userFirstName,
+      userLastName : userLastName,
+      userEmail : userEmail,
+      userPassword : userPassword,
+      userPhoneNumber : userPhoneNumber,
     }
 
     try {
       const response = await axios.post(`http://localhost:8000/user/register`, data);
       console.log("Response Data:", response.data);
       alert(response.data.message);
+
+      // reset form fields after successful registration
+      setUserFirstName('');
+      setUserLastName('');
+      setUserEmail('');
+      setUserPassword('');
+      setUserPhoneNumber('');
+      
+      // redirect to login page or close the modal
+      onClose();
+      switchToLogin();
+      
 
     } catch (error) {
       console.log("Error", error);

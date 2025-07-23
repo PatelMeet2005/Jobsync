@@ -1,4 +1,4 @@
-const Register = require('../Models/register.js');
+const Register = require('../Models/register');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');

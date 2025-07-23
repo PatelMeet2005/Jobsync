@@ -32,6 +32,4 @@ const RegisterSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Register = mongoose.model('Register', RegisterSchema)
-
-module.exports = Register
+module.exports = mongoose.model('Register', RegisterSchema, 'Register');
