@@ -33,6 +33,11 @@ const registerUser = async (req, res) => {
             status : "sucess",
             message : "User registered successfully",
             token,
+            userFirstName: newUser.userFirstName,
+            userLastName: newUser.userLastName, 
+            userEmail: newUser.userEmail,
+            userPhoneNumber: newUser.userPhoneNumber,
+            role: newUser.role,
         })
     }
     catch (error) {

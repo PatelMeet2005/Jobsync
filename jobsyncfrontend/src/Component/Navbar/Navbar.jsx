@@ -11,6 +11,10 @@ const Navbar = () => {
   const [Jobdropfun, setJobdropfun] = useState(false);
   const timeoutID = useRef(null); // Use useRef for timeoutID
 
+  const selectedEmail = sessionStorage.getItem('userEmail');
+  const selectedFirstName = sessionStorage.getItem('userFirstName');
+  const selectedLastName = sessionStorage.getItem('userLastName');
+
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -45,7 +49,7 @@ const Navbar = () => {
                   setJobdropfun(false);
                 }, 300);
               }}>
-              <a href="#" tabIndex={0} aria-haspopup="true" aria-expanded={Jobdropfun} aria-label="Jobs dropdown">Jobs</a>
+              <a href="./" tabIndex={0} aria-haspopup="true" aria-expanded={Jobdropfun} aria-label="Jobs dropdown">Jobs</a>
 
               {Jobdropfun && (
                 <div className="job_drop_content">
@@ -78,8 +82,8 @@ const Navbar = () => {
                 </div>
               )}
             </li>
-            <li className='nav_li'><a href="#">Companies</a></li>
-            <li className='nav_li'><a href="#">About</a></li>
+            <li className='nav_li'><a href="/companie">Companies</a></li>
+            <li className='nav_li'><a href="/about">About</a></li>
           </ul>
         </div>
 
@@ -88,10 +92,18 @@ const Navbar = () => {
           <button>serch</button>
         </div>
 
-        <div className="login">
-          <button id='clt' onClick={openLoginModel}>Sign in / sign up</button>
-          <button id='emp'>Employees</button>
-        </div>
+
+        {selectedEmail ? (
+          <div className="user-info">
+            <p>Welcome, {selectedFirstName} {selectedLastName}</p>
+            {/* <button onClick={handleLogout}>Logout</button> */}
+          </div>
+        ) : (
+          <div className="login">
+            <button id='clt' onClick={openLoginModel}>Sign in / sign up</button>
+            <button id='emp'>Employees</button>
+          </div>
+        )}
 
         {showLogin && <Login onClose={closeModel} switchToSignup={openRegisterModel} />}
         {showRegister && <Register onClose={closeModel} switchToLogin={openLoginModel} />}

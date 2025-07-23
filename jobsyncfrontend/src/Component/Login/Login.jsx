@@ -21,6 +21,13 @@ const Login = ({ onClose, switchToSignup }) => {
     try{
       const response = await axios.post(`http://localhost:8000/user/login`, loginUser);
       console.log("Response Data:", response.data);
+      sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('userFirstName', response.data.userFirstName);
+      sessionStorage.setItem('userLastName', response.data.userLastName);
+      sessionStorage.setItem('userEmail', userEmail);
+      sessionStorage.setItem('userPhoneNumber', response.data.userPhoneNumber);
+      sessionStorage.setItem('role', response.data.role);
+      
       alert(response.data.message);
 
       // Reset the form after submission
