@@ -1,47 +1,38 @@
 import React, { useState } from "react";
 import "./Login.css";
+import axios from "axios";
 
 const Login = ({ onClose, switchToSignup }) => {
-  const [loginUser, setLoginUser] = useState({
-    email:"",
-    password:"",
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
 
-    setLoginUser((prev) => ({ ...prev, [name]: value }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prepare data to be sent in the request
+    const loginUser = {
+      userEmail: userEmail,
+      userPassword: userPassword,
+    };
+
     // Here you would typically send the login data to your backend for authentication
     try{
-      const response = await fetch("URL",{
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body : JSON.stringify(loginUser),
-      });
-
-      if(!response.ok){
-        throw new Error("Login failed");
-      }
-
-      const data = await response.json();
-      console.log("Login successful:", data);
+      const response = await axios.post(`http://localhost:8000/user/login`, loginUser);
+      console.log("Response Data:", response.data);
+      alert(response.data.message);
 
       // Reset the form after submission
-      setLoginUser({
-        email: "",
-        password: "",
-      });
+      setUserEmail('');
+      setUserPassword('');
+
+      // Close the modal or redirect to another page
+      onClose();
     }
     catch(error){
       console.error("Error during login:", error.message);
-      alert("Login failed. Please try again.", error.message);
+      alert(error.response.data.message);
       
     }
   };
@@ -69,12 +60,12 @@ const Login = ({ onClose, switchToSignup }) => {
               <div className="login-email">
                 <input
                   id="login-email"
-                  name="email"
+                  name="userEmail"
                   type="email"
                   autoComplete="email"
                   required
-                  value={loginUser.email}
-                  onChange={handleInputChange}
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
                   className="login-email-input"
                 />
               </div>
@@ -87,12 +78,12 @@ const Login = ({ onClose, switchToSignup }) => {
               <div className="login-password">
                 <input
                   id="login-password"
-                  name="password"
+                  name="userPassword"
                   type="password"
                   autoComplete="current-password"
                   required
-                  value={loginUser.password}
-                  onChange={handleInputChange}
+                  value={userPassword}
+                  onChange={(e) => setUserPassword(e.target.value)}
                   className="login-password-input"
                 />
               </div>

@@ -1,59 +1,72 @@
 import React, { useState } from "react";
 import "./Register.css";
+import axios from 'axios';
 
 const Signup = ({ onClose, switchToLogin }) => {
-  const [user, setUser] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    phonenumber: "",
-  });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  // State variables for form inputs
+  const [userFirstName, setUserFirstName] = useState('');
+  const [userLastName, setUserLastName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [userPhoneNumber, setUserPhoneNumber] = useState('');
 
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
+  const fnamechange = (e) => {
+    setUserFirstName(e.target.value);
+  }
+
+  const lnamechange = (e) => {
+    setUserLastName(e.target.value);
+  }
+
+  const handlemail = (e) => {
+    setUserEmail(e.target.value);
+  }
+
+  const handlepassword = (e) => {
+    setUserPassword(e.target.value);
+  }
+
+  const handlephone = (e) => {
+    setUserPhoneNumber(e.target.value);
+  }
 
   const handleFormsubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the user data to your backend for registration
 
-    try{
-      const response = await fetch("url-to-your-backend/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
 
-    if(!response.ok){
-      throw new Error("Registration failed");
+    // Prepare data to be sent in the request
+    const data = {
+      userFirstName : userFirstName,
+      userLastName : userLastName,
+      userEmail : userEmail,
+      userPassword : userPassword,
+      userPhoneNumber : userPhoneNumber,
     }
 
-    const data = await response.json();
-    console.log("Registration successful:", data);
+    try {
+      const response = await axios.post(`http://localhost:8000/user/register`, data);
+      console.log("Response Data:", response.data);
+      alert(response.data.message);
 
-    // Reset the form after submission
-    setUser({
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-      phonenumber: "",
-    });
+      // reset form fields after successful registration
+      setUserFirstName('');
+      setUserLastName('');
+      setUserEmail('');
+      setUserPassword('');
+      setUserPhoneNumber('');
+      
+      // redirect to login page or close the modal
+      onClose();
+      switchToLogin();
+      
 
-    alert("Registration successful!");
+    } catch (error) {
+      console.log("Error", error);
+      alert(error.response.data.message);
 
     }
-    catch (error) {
-      console.error("Error during registration:", error.message);
-      alert("Registration failed. Please try again.",error.message);
-    }
-
-  };
+  }
 
   return (
     <div className="modal-overlay">
@@ -73,70 +86,70 @@ const Signup = ({ onClose, switchToLogin }) => {
           <form className="register-form" onSubmit={handleFormsubmit}>
             <div className="name-row">
               <div className="input-group">
-                  <label htmlFor="firstname">
-              <b>First Name</b>
-            </label>
-            <input
-            id="firstname"
-              type="text"
-              name="firstname"
-              placeholder="Enter First Name"
-              required
-              value={user.firstname}
-              onChange={handleInputChange}
-            />
+                <label htmlFor="userFirstName">
+                  <b>First Name</b>
+                </label>
+                <input
+                  id="userFirstName"
+                  type="text"
+                  name="userFirstName"
+                  placeholder="Enter First Name"
+                  required
+                  value={userFirstName}
+                  onChange={fnamechange}
+                />
               </div>
 
-            <div className="input-group">
-                  <label htmlFor="lastname">
-              <b>Last Name</b>
-            </label>
-            <input
-            id="lastname"
-              type="text"
-              name="lastname"
-              placeholder="Enter Last Name"
-              required
-              value={user.lastname}
-              onChange={handleInputChange}
-            />
-            </div>
+              <div className="input-group">
+                <label htmlFor="userLastName">
+                  <b>Last Name</b>
+                </label>
+                <input
+                  id="userLastName"
+                  type="text"
+                  name="userLastName"
+                  placeholder="Enter Last Name"
+                  required
+                  value={userLastName}
+                  onChange={lnamechange}
+                />
+              </div>
             </div>
 
-            <label htmlFor="email">
+            <label htmlFor="userEmail">
               <b>Email</b>
             </label>
             <input
               type="email"
-              name="email"
+              name="userEmail"
               placeholder="Enter Email"
               required
-              value={user.email}
-              onChange={handleInputChange}
+              value={userEmail}
+              onChange={handlemail}
             />
 
-            <label htmlFor="password">
+            <label htmlFor="userPassword">
               <b>Password</b>
             </label>
             <input
               type="password"
-              name="password"
+              name="userPassword"
               placeholder="Enter Password"
               required
-              value={user.password}
-              onChange={handleInputChange}
+              value={userPassword}
+              onChange={handlepassword}
             />
 
-            <label htmlFor="phonenumber">
+            <label htmlFor="userPhoneNumber">
               <b>Phone Number</b>
             </label>
             <input
               type="tel"
-              name="phonenumber"
+              name="userPhoneNumber"
               placeholder="Enter Phone Number"
               required
-              value={user.phonenumber}
-              onChange={handleInputChange}
+              value={userPhoneNumber}
+              onChange={handlephone}
             />
 
             <button type="submit">Register</button>
