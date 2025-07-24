@@ -3,40 +3,26 @@ import './Navbar.css';
 import './Job_drop.css';
 import categories from '../../Data/categories.json';
 import Login from '../Login/Login';
-import Register from '../Register/Register';
 
 const Navbar = () => {
 
-
-  const [Jobdropfun, setJobdropfun] = useState(false);
-  const timeoutID = useRef(null); // Use useRef for timeoutID
-
   const [showLogin, setShowLogin] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
+  const [Jobdropfun, setJobdropfun] = useState(false);
+  const timeoutID = useRef(); // Use useRef for timeoutID
 
-  const openLoginModel = () => {
-    setShowLogin(true);
-    setShowRegister(false);
-  };
+  const openModel = () => setShowLogin(true);
+  // const [Companiesdropfun, setCompaniesdropfun] = useState(false);
+  // const [Aboutdropfun, setAboutdropfun] = useState(false);
+  const closeModel = () => setShowLogin(false);
 
-  const openRegisterModel = () => {
-    setShowRegister(true);
-    setShowLogin(false);
-  };
-
-  const closeModel = () => {
-    setShowLogin(false);
-    setShowRegister(false);
-  };
   return (
     <>
       <div className="mainNav">
         <div className="logo">JobSync</div>
 
         <div className="navLink">
-          <ul>
-            {/* Job drop down contant */}
-            <li className='job_drop nav_li' onMouseEnter={() => {
+          <ul className='nav_ul'>
+            <li className='job_drop' onMouseEnter={() => {
               clearTimeout(timeoutID.current);
               setJobdropfun(true);
             }}
@@ -45,14 +31,13 @@ const Navbar = () => {
                   setJobdropfun(false);
                 }, 300);
               }}>
-              <a href="#" tabIndex={0} aria-haspopup="true" aria-expanded={Jobdropfun} aria-label="Jobs dropdown">Jobs</a>
-
+              <a href="#" className='nav_li'>Jobs</a>
               {Jobdropfun && (
                 <div className="job_drop_content">
                   <div className="categories_grid">
                     <div className="category_column">
                       <h1 className="categories_head">Popular categories</h1>
-                      <ul className='category_list'>
+                      <ul className="category_list">
                         {categories.POPULAR_CATEGORIES.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -60,7 +45,7 @@ const Navbar = () => {
                     </div>
                     <div className="category_column">
                       <h1 className="categories_head">Jobs in demand</h1>
-                      <ul className='category_list'>
+                      <ul className="category_list">
                         {categories.JOBS_IN_DEMAND.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -68,7 +53,7 @@ const Navbar = () => {
                     </div>
                     <div className="category_column">
                       <h1 className="categories_head">Jobs by location</h1>
-                      <ul className='category_list'>
+                      <ul className="category_list">
                         {categories.JOBS_BY_LOCATION.map((cat, i) => (
                           <li key={i} className="category_item">{cat}</li>
                         ))}
@@ -78,23 +63,17 @@ const Navbar = () => {
                 </div>
               )}
             </li>
-            <li className='nav_li'><a href="#">Companies</a></li>
-            <li className='nav_li'><a href="#">About</a></li>
+            <li><a href="#" className='nav_li'>Companies</a></li>
+            <li><a href="#" className='nav_li'>About</a></li>
           </ul>
         </div>
 
-        <div className="searchbar">
-          <input type="text" />
-          <button>serch</button>
-        </div>
-
         <div className="login">
-          <button id='clt' onClick={openLoginModel}>Sign in / sign up</button>
+          <button id='clt' onClick={openModel}>Sign in / sign up</button>
           <button id='emp'>Employees</button>
         </div>
 
-        {showLogin && <Login onClose={closeModel} switchToSignup={openRegisterModel} />}
-        {showRegister && <Register onClose={closeModel} switchToLogin={openLoginModel} />}
+        {showLogin && <Login onClose={closeModel} />}
 
       </div>
     </>
