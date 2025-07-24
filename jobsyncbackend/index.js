@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const registerRoute = require('./Routes/registerRoute');
-const loginRoute = require('./Routes/loginRoute')
+const loginRoute = require('./Routes/loginRoute');
+const logoutUser = require('./Routes/loginRoute');
 const cors = require('cors');
 
 // Load environment variables from .env file
@@ -35,6 +36,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/user',registerRoute);
 
 app.use('/user',loginRoute);
+
+app.use('/user', logoutUser);
 
 const PORT = process.env.PORT || 5000;
 

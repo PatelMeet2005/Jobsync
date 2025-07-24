@@ -4,6 +4,7 @@ import './Job_drop.css';
 import categories from '../../Data/categories.json';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import axios from 'axios';
 
 const Navbar = () => {
 
@@ -32,6 +33,20 @@ const Navbar = () => {
     setShowLogin(false);
     setShowRegister(false);
   };
+
+  const handleLogout = async () => {
+    try{
+      const response = await axios.post('http://localhost:8000/user/logout');
+      console.log("Logout data : ",response.data);
+      sessionStorage.clear();
+      window.location.reload(); // Reload the page to reflect the logout
+      
+    }
+    catch(error){
+      console.error("Logout error:", error);
+      alert("Logout failed. Please try again.");
+    }
+  }
   return (
     <>
       <div className="mainNav">
@@ -96,7 +111,7 @@ const Navbar = () => {
         {selectedEmail ? (
           <div className="user-info">
             <p>Welcome, {selectedFirstName} {selectedLastName}</p>
-            {/* <button onClick={handleLogout}>Logout</button> */}
+            <button onClick={handleLogout}>Logout</button>
           </div>
         ) : (
           <div className="login">

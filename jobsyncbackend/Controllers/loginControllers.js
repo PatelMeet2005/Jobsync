@@ -29,6 +29,7 @@ const loginUser = async (req, res) => {
 
         const token = jwt.sign({id : existingUser._id},process.env.JWT_SECRET,{expiresIn: '1h'});
 
+
         return res.status(200).json({
             status : "success",
             message : "Login successful",
@@ -48,4 +49,27 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = loginUser;
+const logoutUser = async (req,res) => {
+    try{
+        // Invalidate the token on the client side by clearing it from sessionStorage
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('userEmail');
+        sessionStorage.removeItem('userFirstName');
+        sessionStorage.removeItem('userLastName');
+        sessionStorage.removeItem('userPhoneNumber');
+
+        return res.status(200).json({
+            status: "success",
+            message: "Logout successful"
+    });
+    }
+    catch(error){
+        return res.status(500).json({
+            status: "error",
+            message: error.message,
+        });
+    }
+
+};
+
+module.exports = { loginUser, logoutUser };
