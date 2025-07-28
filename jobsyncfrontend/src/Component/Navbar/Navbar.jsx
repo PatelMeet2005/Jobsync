@@ -4,6 +4,7 @@ import './Job_drop.css';
 import categories from '../../Data/categories.json';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
+import './ProfileDropDown.css';
 import axios from 'axios';
 
 const Navbar = () => {
@@ -47,6 +48,16 @@ const Navbar = () => {
       alert("Logout failed. Please try again.");
     }
   }
+
+  const [openProfileDropDown, setOpenProfileDropDown] = useState(false);
+
+  const toggleProfileDropDown = () => {
+    setOpenProfileDropDown(!openProfileDropDown);
+  }
+
+  const firstLetter = selectedFirstName ? selectedFirstName.charAt(0).toUpperCase() : '';
+
+
   return (
     <>
       <div className="mainNav">
@@ -109,9 +120,26 @@ const Navbar = () => {
 
 
         {selectedEmail ? (
-          <div className="user-info">
-            <p>Welcome, {selectedFirstName} {selectedLastName}</p>
-            <button onClick={handleLogout}>Logout</button>
+          <div className="user-section">
+          <button className="avatar-btn" onClick={toggleProfileDropDown}>
+            {firstLetter}
+          </button>
+          {openProfileDropDown && (
+            <div className="dropdown-menu">
+              <div className="dropdown-header">
+                {selectedFirstName} {selectedLastName}
+              </div>
+              <button
+                className="dropdown-item"
+                onClick={() => (window.location.href = "/profile")}
+              >
+                View Profile
+              </button>
+              <button className="dropdown-item logout" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          )}
           </div>
         ) : (
           <div className="login">

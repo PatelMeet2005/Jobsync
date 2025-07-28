@@ -52,11 +52,6 @@ const loginUser = async (req, res) => {
 const logoutUser = async (req,res) => {
     try{
         // Invalidate the token on the client side by clearing it from sessionStorage
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('userEmail');
-        sessionStorage.removeItem('userFirstName');
-        sessionStorage.removeItem('userLastName');
-        sessionStorage.removeItem('userPhoneNumber');
 
         return res.status(200).json({
             status: "success",
