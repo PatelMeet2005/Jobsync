@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import categories from "../../Data/categories.json";
+import categories from "../../../Data/categories.json";
 import "./SideMenu.css";
 
 const SideMenu = ({ 

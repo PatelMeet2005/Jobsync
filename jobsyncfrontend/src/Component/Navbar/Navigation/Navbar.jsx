@@ -1,12 +1,12 @@
 // Navbar.jsx
 import React, { useState, useRef } from "react";
 import "./Navbar.css";
-import JobDropdown from "./JobDropdown";
-import ProfileDropdown from "./ProfileDropdown";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
+import JobDropdown from "../JobDropDown/JobDropdown";
+import ProfileDropdown from "../ProfileDropDown/ProfileDropdown";
+import Login from "../../Login/Login";
+import Register from "../../Register/Register";
 import { IoSearch } from "react-icons/io5";
-import SideMenu from "./SideMenu";
+import SideMenu from "../SideMenu/SideMenu";
 
 const Navbar = () => {
   const [showLogin, setShowLogin] = useState(false);

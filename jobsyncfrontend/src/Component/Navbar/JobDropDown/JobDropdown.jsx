@@ -1,6 +1,6 @@
 // JobDropdown.jsx
 import React, { useState, useRef } from "react";
-import categories from "../../Data/categories.json";
+import categories from "../../../Data/categories.json";
 import "./Job_drop.css";
 
 const JobDropdown = () => {
