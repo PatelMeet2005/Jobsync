@@ -1,456 +1,307 @@
-.mainNav{
-    background-color: #48cae4;
-    min-height: 80px;
-    width: 100%;
-    display: flex;
-    align-items: center;
+/* Navbar.css */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #30c0e4;
+  padding: 10px 20px;
+  position: relative;
+}
+
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-left: 1.5rem;
+}
+
+/* Desktop Navigation */
+.nav-links {
+  display: flex;
+}
+
+.nav-links ul {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #000;
+  font-size: 1.5rem;
+}
+
+.search-login-wrap {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.searchbar {
+  display: flex;
+  border: 1px solid ;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.searchbar input {
+  border: none;
+  padding: 8px 12px;
+  outline: none;
+  width: 20rem;
+  font-size: 1rem;
+}
+
+.searchbar button {
+  background: #005bbb;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.desktop-auth {
+  display: flex;
+  align-items: center;
+}
+
+.login-btns {
+  display: flex;
+  gap: 5px;
+}
+
+.login-btns button {
+  background-color: #005bbb;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.login-btns .emp {
+  background-color: #222;
+}
+
+.user-section {
+  position: relative;
+}
+
+.avatar-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #005bbb;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Hamburger - hidden by default */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: black;
+  transition: 0.3s;
+}
+
+/* Mobile Styles - Below 850px to catch tablets and small laptops */
+@media (max-width: 850px) {
+  .navbar {
     justify-content: space-between;
-    padding: 0 20px;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-}
+    flex-wrap: nowrap;
+    padding: 10px 15px;
+  }
 
-.logo{
-    font-size: 24px;
-    font-weight: bold;
-    color: #023047;
+  /* Logo - left side */
+  .logo {
+    order: 1;
     flex-shrink: 0;
-}
+    text-align: left;
+    font-size: 2rem;
+    margin-left: 0;
+  }
 
-.navLink{
-    display: flex;
-    align-items: center;
+  /* Search bar - center */
+  .search-login-wrap {
+    order: 2;
+    flex-grow: 1;
     justify-content: center;
-    flex: 1;
-    max-width: 600px;
-}
-
-ul{
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.nav_li{
     margin: 0 15px;
-    font-size: 18px;
-    color: #023047;
-    font-weight: 500;
-}
+  }
 
-li a{
-    text-decoration: none;
-    color: black;
-}
+  .searchbar input {
+    width: 15rem;
+    padding: 6px 10px;
+  }
 
-.serchbar{
-    margin: 10px 0;
-    flex-shrink: 0;
-}
+  .searchbar button {
+    padding: 6px 10px;
+  }
 
-.searchbar{
+  /* Hamburger - right side */
+  .hamburger {
     display: flex;
-}
-
-.searchbar input{
-    height: 35px;
-    width: 250px;
-    min-width: 200px;
-    border: none;
-    border-bottom-left-radius: 50px;
-    border-top-left-radius: 50px;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.searchbar button{
-    height: 35px;
-    width: 50px;
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    background-color: #0077b6;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.login{
-    display: flex;
-    gap: 0;
+    order: 3;
     flex-shrink: 0;
+  }
+
+  /* Hide desktop navigation */
+  .nav-links {
+    display: none;
+  }
+
+  /* Hide desktop auth buttons */
+  .desktop-auth {
+    display: none;
+  }
 }
 
-.login #clt{
-    border-bottom-left-radius: 50px;
-    border-top-left-radius: 50px;
-    height: 35px;
-    width: 130px;
-    background-color: #0077b6;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
+/* Short screen adjustments - for screens like 1024x600 */
+@media (max-height: 650px) and (min-width: 1024px) {
+  .navbar {
+    padding: 8px 20px;
+    min-height: auto;
+  }
+  
+  .logo {
+    font-size: 2.2rem;
+  }
+  
+  .nav-links a {
+    font-size: 1.3rem;
+  }
+  
+  .search-login-wrap {
+    gap: 20px;
+  }
+  
+  .searchbar input {
+    width: 16rem;
+    padding: 6px 10px;
+  }
+  
+  .login-btns button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
 }
 
-.login #emp{
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
-    height: 35px;
-    width: 100px;
-    background-color: #fb5607;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
+/* Even smaller screens */
+@media (max-width: 600px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  .searchbar input {
+    width: 12rem;
+    padding: 5px 8px;
+  }
+  
+  .searchbar button {
+    padding: 5px 8px;
+  }
 }
 
-/* Mobile Responsive Styles */
-
-/* Extra Small Devices (Portrait phones, less than 576px) */
-@media screen and (max-width: 575px) {
-    .mainNav {
-        flex-direction: column;
-        padding: 10px;
-        min-height: auto;
-        gap: 10px;
-    }
-    
-    .logo {
-        font-size: 16px;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-    
-    .navLink {
-        order: 3;
-        margin: 10px 0;
-        max-width: 100%;
-    }
-    
-    ul {
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .nav_li {
-        margin: 3px 0;
-        font-size: 13px;
-    }
-    
-    .serchbar {
-        order: 2;
-        margin: 10px 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .searchbar {
-        width: 100%;
-        max-width: 280px;
-    }
-    
-    .searchbar input {
-        width: calc(100% - 45px);
-        min-width: 140px;
-        height: 32px;
-        font-size: 12px;
-    }
-    
-    .searchbar button {
-        width: 45px;
-        height: 32px;
-    }
-    
-    .login {
-        order: 1;
-        margin-bottom: 10px;
-        justify-content: center;
-    }
-    
-    .login #clt {
-        width: 100px;
-        height: 35px;
-        font-size: 11px;
-    }
-    
-    .login #emp {
-        width: 80px;
-        height: 35px;
-        font-size: 11px;
-    }
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.3rem;
+  }
+  
+  .searchbar input {
+    width: 8rem;
+  }
+  
+  .search-login-wrap {
+    margin: 0 10px;
+  }
 }
 
-/* Small Devices (Landscape phones, 576px and up) */
-@media screen and (min-width: 576px) and (max-width: 767px) {
-    .mainNav {
-        flex-direction: column;
-        padding: 12px;
-        min-height: auto;
-        gap: 12px;
-    }
-    
-    .logo {
-        font-size: 18px;
-        margin-bottom: 12px;
-        text-align: center;
-    }
-    
-    .navLink {
-        order: 3;
-        margin: 12px 0;
-        max-width: 100%;
-    }
-    
-    ul {
-        flex-direction: row;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .nav_li {
-        margin: 5px 8px;
-        font-size: 14px;
-    }
-    
-    .serchbar {
-        order: 2;
-        margin: 12px 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-    
-    .searchbar {
-        width: 100%;
-        max-width: 350px;
-    }
-    
-    .searchbar input {
-        width: calc(100% - 50px);
-        min-width: 200px;
-        height: 35px;
-    }
-    
-    .login {
-        order: 1;
-        margin-bottom: 12px;
-        justify-content: center;
-    }
-    
-    .login #clt {
-        width: 120px;
-        height: 38px;
-        font-size: 13px;
-    }
-    
-    .login #emp {
-        width: 90px;
-        height: 38px;
-        font-size: 13px;
-    }
+/* Very small mobile screens */
+@media (max-width: 360px) {
+  .navbar {
+    padding: 8px 10px;
+  }
+  
+  .logo {
+    font-size: 1.1rem;
+  }
+  
+  .searchbar input {
+    width: 6rem;
+    padding: 4px 6px;
+    font-size: 0.9rem;
+  }
+  
+  .searchbar button {
+    padding: 4px 6px;
+  }
+  
+  .search-login-wrap {
+    margin: 0 5px;
+  }
 }
 
-/* Medium Devices (Tablets, 768px and up) */
-@media screen and (min-width: 768px) and (max-width: 991px) {
-    .mainNav {
-        flex-direction: row;
-        padding: 0 15px;
-        min-height: 70px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .logo {
-        font-size: 20px;
-        flex-shrink: 0;
-    }
-    
-    .navLink {
-        flex: 1;
-        max-width: 400px;
-        margin: 0 10px;
-    }
-    
-    ul {
-        flex-direction: row;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .nav_li {
-        margin: 0 8px;
-        font-size: 15px;
-    }
-    
-    .serchbar {
-        margin: 5px 0;
-        flex-shrink: 0;
-    }
-    
-    .searchbar input {
-        width: 180px;
-        height: 35px;
-    }
-    
-    .login #clt {
-        width: 115px;
-        height: 35px;
-        font-size: 13px;
-    }
-    
-    .login #emp {
-        width: 90px;
-        height: 35px;
-        font-size: 13px;
-    }
-}
+/* ===== CRITICAL: Main Mobile Media Query ===== */
+@media screen and (width: 820px) and (height: 1180px) {
+  .navbar {
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    padding: 10px 15px !important;
+    display: flex !important;
+  }
 
-/* Large Devices (Desktops, 992px and up) */
-@media screen and (min-width: 992px) and (max-width: 1199px) {
-    .mainNav {
-        padding: 0 25px;
-        min-height: 80px;
-    }
-    
-    .logo {
-        font-size: 22px;
-    }
-    
-    .navLink {
-        max-width: 500px;
-    }
-    
-    .nav_li {
-        margin: 0 12px;
-        font-size: 16px;
-    }
-    
-    .searchbar input {
-        width: 220px;
-    }
-    
-    .login #clt {
-        width: 125px;
-        font-size: 14px;
-    }
-    
-    .login #emp {
-        width: 95px;
-        font-size: 14px;
-    }
-}
+  .logo {
+    order: 1 !important;
+    flex-shrink: 0 !important;
+    text-align: left !important;
+    font-size: 2rem !important;
+    margin-left: 0 !important;
+  }
 
-/* Extra Large Devices (Large desktops, 1200px and up) */
-@media screen and (min-width: 1200px) and (max-width: 1399px) {
-    .mainNav {
-        padding: 0 30px;
-        min-height: 85px;
-    }
-    
-    .logo {
-        font-size: 24px;
-    }
-    
-    .navLink {
-        max-width: 600px;
-    }
-    
-    .nav_li {
-        margin: 0 15px;
-        font-size: 17px;
-    }
-    
-    .searchbar input {
-        width: 250px;
-    }
-}
+  .search-login-wrap {
+    order: 2 !important;
+    flex-grow: 1 !important;
+    justify-content: center !important;
+    margin: 0 15px !important;
+    gap: 0 !important;
+  }
 
-/* Extra Extra Large Devices (1400px and up) */
-@media screen and (min-width: 1400px) {
-    .mainNav {
-        padding: 0 40px;
-        min-height: 90px;
-    }
-    
-    .logo {
-        font-size: 26px;
-    }
-    
-    .navLink {
-        max-width: 700px;
-    }
-    
-    .nav_li {
-        margin: 0 18px;
-        font-size: 18px;
-    }
-    
-    .searchbar input {
-        width: 280px;
-    }
-    
-    .login #clt {
-        width: 135px;
-        font-size: 15px;
-    }
-    
-    .login #emp {
-        width: 105px;
-        font-size: 15px;
-    }
-}
+  .searchbar input {
+    width: 15rem !important;
+    padding: 6px 10px !important;
+  }
 
-/* Landscape orientation for mobile devices */
-@media screen and (max-height: 500px) and (orientation: landscape) {
-    .mainNav {
-        min-height: 60px;
-        padding: 5px 15px;
-    }
-    
-    .logo {
-        font-size: 16px;
-    }
-    
-    .nav_li {
-        font-size: 13px;
-        margin: 0 8px;
-    }
-    
-    .searchbar input {
-        height: 30px;
-        width: 150px;
-    }
-    
-    .searchbar button {
-        height: 30px;
-        width: 40px;
-    }
-    
-    .login #clt,
-    .login #emp {
-        height: 30px;
-        font-size: 12px;
-    }
-}
+  .searchbar button {
+    padding: 6px 10px !important;
+  }
 
-/* High DPI displays */
-@media screen and (min-resolution: 192dpi), 
-       screen and (min-resolution: 2dppx) {
-    .logo {
-        font-weight: 600;
-    }
-    
-    .nav_li {
-        font-weight: 500;
-    }
+  .hamburger {
+    display: flex !important;
+    order: 3 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .nav-links {
+    display: none !important;
+  }
+
+  .desktop-auth {
+    display: none !important;
+  }
 }
