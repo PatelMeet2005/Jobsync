@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import "./Login.css";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ onClose, switchToSignup }) => {
 
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (e) => {
@@ -27,6 +30,18 @@ const Login = ({ onClose, switchToSignup }) => {
       sessionStorage.setItem('userEmail', userEmail);
       sessionStorage.setItem('userPhoneNumber', response.data.userPhoneNumber);
       sessionStorage.setItem('role', response.data.role);
+
+      if(response.status === 200){
+        setTimeout(() => {
+          if(response.data.role === "admin"){
+            navigate('/admin');
+          }
+          else{
+            navigate('/');
+          }
+          window.location.reload();
+        }, 1000); // Redirect after 1 second
+      }
       
       alert(response.data.message);
 

@@ -1,0 +1,64 @@
+.AdminContainer {
+    width: 100%;
+    height: 60px;
+    background-color: #920916;
+    position: fixed; /* Fix the navbar at the top */
+    top: 0; /* Align it to the top */
+    left: 0; /* Align it to the left */
+    z-index: 1000; /* Ensure it stays above other content */
+}
+
+.AdminContain p {
+    font-size: 20px;
+    color: aliceblue;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 15px;
+}
+
+.menu-icon {
+    width: 20px;  /* Adjust the size as needed */
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+.AdminSidebar {
+    height: calc(100vh - 60px); /* Adjust height to account for the fixed navbar */
+    width: 250px;
+    background-color: #48040a;
+    position: fixed; /* Keep the sidebar fixed */
+    top: 60px; /* Start below the fixed navbar */
+    left: 0;
+    padding-top: 20px;
+    overflow-y: auto; /* Allow scrolling if the sidebar content exceeds the height */
+}
+
+.AdminDashboardTitle {
+    color: #ffffff;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    padding-bottom: 20px;
+    list-style: none;
+}
+
+.AdminMenu {
+    list-style: none;
+    padding: 0;
+}
+
+.AdminNavLink li {
+    padding: 15px;
+    color: #FFFFFF80;
+    font-size: 16px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+}
+
+.AdminNavLink li:hover {
+    color: white;
+}
+
+.AdminNavLink a {
+    text-decoration: none;
+    display: block;
+}

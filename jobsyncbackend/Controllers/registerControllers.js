@@ -1,8 +1,35 @@
 const Register = require('../Models/register');
+const loginUser = require('./loginControllers.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config();
+
+const createAdmin = async () => {
+
+    const isAdminExists = await Register.findOne({ userEmail: "admin@gmail.com" });
+
+    if(!isAdminExists){
+        const hashedPassword = await bcrypt.hash("admin", 10);
+
+        const adminUser = new Register({
+            userFirstName: "Admin",
+            userLastName: "User",
+            userEmail: "admin@gmail.com",
+            userPassword: hashedPassword,
+            role: "admin",
+            userPhoneNumber: "7862056323"
+        });
+
+        await adminUser.save();
+        await new loginUser({
+            userEmail: "admin@gmail.com",
+            userPassword: hashedPassword
+        }).save();
+        console.log("Admin user created successfully.");
+    }
+}
+createAdmin().catch(err => console.error("Error creating admin user:", err));
 
 const registerUser = async (req, res) => {
     try{
