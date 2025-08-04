@@ -38,6 +38,13 @@
   border-right: 1.5px solid #f0f0f0;
 }
 
+.category_column ul{
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0px;
+}
+
 .category_column:last-child {
   border-right: none;
 }
