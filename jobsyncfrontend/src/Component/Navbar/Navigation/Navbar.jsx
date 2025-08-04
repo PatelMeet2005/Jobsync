@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <>
       <header className="navbar">
-        <div className="logo">JobSync</div>
+        <div className="logo"><span className="highlight">Job</span>Sync</div>
 
         {/* Hamburger - only visible below 800px */}
         <div className="hamburger" onClick={() => setSideOpen(true)}>

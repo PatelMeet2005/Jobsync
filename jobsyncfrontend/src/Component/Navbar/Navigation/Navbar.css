@@ -8,6 +8,11 @@
   position: relative;
 }
 
+.highlight {
+  color: #fb5607;
+  font-style: italic;
+}
+
 .logo {
   font-size: 2.5rem;
   font-weight: bold;

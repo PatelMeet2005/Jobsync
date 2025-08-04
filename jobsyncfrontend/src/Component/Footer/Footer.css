@@ -1,5 +1,5 @@
 .footer{
-    height: 30vh;
+    height: 17vh;
     width: 100%;
     background-color: rgb(29, 27, 27);
     position: fixed;
@@ -9,28 +9,29 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow: hidden;
 }
 
 .leftfooter{
     color: aliceblue;
-    margin-bottom: 55px;
-    margin-right: 500px;
+    margin-bottom: 5vh;
+    margin-right: 25vw;
     margin-left: auto;
 }
 
 .firstline{
     color: #fb5607;
-    font-size: 45px;
+    font-size: 42px;
 }
 
 .secondline{
-    font-size: 25px;
+    font-size: 22px;
     position: relative;
-    left: 30px;
+    left: 34px;
 }
 
 .copyright{
-    height: 50px;
+    height: 4vh;
     width: 100%;
     color: aliceblue;
     display: flex;
@@ -43,9 +44,15 @@
     bottom: 0;
 }
 
+.middlefooter{
+    margin-bottom: 5vh;
+    color: aliceblue;
+   
+}
+
 .rightfooter{
-    margin-bottom: 40px;
-    margin-left: 500px;
+    margin-bottom: 1vh;
+    margin-left: 25vw;
     margin-right: auto;
 }
 
@@ -61,3 +68,18 @@
     color: aliceblue;
     margin-bottom: 10px;
 }
+
+.highlight {
+    color: #fb5607;
+    font-style: italic;
+  }
+
+  .footlink ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    padding-left: 20px;
+  }
