@@ -239,7 +239,8 @@ const Companie = () => {
           </div>
 
           <div className="filter-section">
-            <h4>Location</h4>
+          <h4>Location</h4>
+          
             {filterOptions.location.map((option) => (
               <label key={option.label} className="filter-option">
                 <input

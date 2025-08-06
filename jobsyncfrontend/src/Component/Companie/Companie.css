@@ -2,6 +2,7 @@
 .companies-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  margin-bottom: 15vh;
 }
 
 /* Hero Section */
@@ -149,6 +150,10 @@
 
 .filter-section {
   margin-bottom: 30px;
+  display: flex;
+  gap: 0 px; 
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .filter-section h4 {
