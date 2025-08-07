@@ -56,10 +56,10 @@ const AdminNavbar = () => {
           <Link to='/admincompany' onClick={() => setIsMobileMenuOpen(false)}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Company" className="menu-icon" />Company</li>
           </Link>
-          <Link to='/admincustomer' onClick={() => setIsMobileMenuOpen(false)}>
+          <Link to='/adminuser' onClick={() => setIsMobileMenuOpen(false)}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Users" className="menu-icon" />Users</li>
           </Link>
-          <Link to='/adminbooking' onClick={() => setIsMobileMenuOpen(false)}>
+          <Link to='/adminrequest' onClick={() => setIsMobileMenuOpen(false)}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Requests" className="menu-icon" />Requests</li>
           </Link>
           <Link to='/adminenquiry' onClick={() => setIsMobileMenuOpen(false)}>

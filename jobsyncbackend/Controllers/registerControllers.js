@@ -22,10 +22,6 @@ const createAdmin = async () => {
         });
 
         await adminUser.save();
-        await new loginUser({
-            userEmail: "admin@gmail.com",
-            userPassword: hashedPassword
-        }).save();
         console.log("Admin user created successfully.");
     }
 }

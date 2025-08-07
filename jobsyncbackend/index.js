@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const connectDB = require('./Config/db');
 const registerRoute = require('./Routes/registerRoute');
 const loginRoute = require('./Routes/loginRoute');
 const logoutUser = require('./Routes/loginRoute');
@@ -39,7 +39,7 @@ app.use('/user',loginRoute);
 
 app.use('/user', logoutUser);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // Start the server
 app.listen(PORT, () => {
