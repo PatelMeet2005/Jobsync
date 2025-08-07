@@ -3,7 +3,6 @@ node_modules/
 
 # Environment variables
 
-
 # Logs
 logs
 *.log
@@ -11,3 +10,4 @@ logs
 # OS/system files
 .DS_Store
 Thumbs.db
+
