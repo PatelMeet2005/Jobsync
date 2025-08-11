@@ -1,9 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./Config/db');
-const registerRoute = require('./Routes/registerRoute');
-const loginRoute = require('./Routes/loginRoute');
-const logoutUser = require('./Routes/loginRoute');
+const authRoute = require('./Routes/authRoute');
 const cors = require('cors');
 
 // Load environment variables from .env file
@@ -33,11 +31,7 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 
 // Define a register route    
-app.use('/user',registerRoute);
-
-app.use('/user',loginRoute);
-
-app.use('/user', logoutUser);
+app.use('/user',authRoute);
 
 const PORT = process.env.PORT || 8000;
 
