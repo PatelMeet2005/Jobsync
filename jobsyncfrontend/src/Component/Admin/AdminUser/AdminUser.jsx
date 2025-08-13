@@ -213,7 +213,7 @@ const fetchUsersAndEmployees = async () => {
               <div className="user-header">
                 <div className="user-main-info">
                   <h3 className="user-name">{user.name}</h3>
-                  <p className="user-email">{user.email}</p>
+                  {/* <p className="user-email">{user.email}</p> */}
                   {activeTab === "employees" && user.company && (
                     <p className="user-company">
                       {user.company} - {user.position}
@@ -224,6 +224,10 @@ const fetchUsersAndEmployees = async () => {
 
               <div className="user-details">
                 <div className="user-info-grid">
+                  <div className="info-item">
+                    <span className="label">Email:</span>
+                    <span className="value">{user.email}</span>
+                  </div>
                   <div className="info-item">
                     <span className="label">Phone:</span>
                     <span className="value">{user.phone}</span>
@@ -247,7 +251,7 @@ const fetchUsersAndEmployees = async () => {
 
                   {activeTab === "users" ? (
                     <>
-                      <div className="info-item">
+                      {/* <div className="info-item">
                         <span className="label">Location:</span>
                         <span className="value">{user.location}</span>
                       </div>
@@ -264,7 +268,7 @@ const fetchUsersAndEmployees = async () => {
                         <span className="value">
                           {user.skills?.join(", ") || "Not specified"}
                         </span>
-                      </div>
+                      </div> */}
                     </>
                   ) : (
                     <>
