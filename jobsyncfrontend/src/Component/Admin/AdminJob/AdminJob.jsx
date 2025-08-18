@@ -1,89 +1,147 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './AdminJob.css';
+import { useFormik } from 'formik';
 
 const AdminJob = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    company: '',
-    location: '',
-    salary: '',
-    jobType: 'Full-time',
-    experience: '',
-    description: '',
-    requirements: '',
-    benefits: '',
-    contactEmail: '',
-    applicationDeadline: '',
-    department: '',
-    skills: ''
-  });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  // const [formData, setFormData] = useState({
+  //   title: '',
+  //   company: '',
+  //   location: '',
+  //   salary: '',
+  //   jobType: 'Full-time',
+  //   experience: '',
+  //   description: '',
+  //   requirements: '',
+  //   benefits: '',
+  //   contactEmail: '',
+  //   applicationDeadline: '',
+  //   department: '',
+  //   skills: ''
+  // });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage({ type: '', text: '' });
+  
+
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     [name]: value
+  //   }));
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   setMessage({ type: '', text: '' });
+
+  //   try {
+  //     // Prepare the data for submission
+  //     const jobData = {
+  //       ...formData,
+  //       skills: formData.skills.split(',').map(skill => skill.trim()),
+  //       requirements: formData.requirements.split('\n').filter(req => req.trim()),
+  //       benefits: formData.benefits.split('\n').filter(benefit => benefit.trim()),
+  //       salary: parseFloat(formData.salary) || 0,
+  //       postedBy: 'admin',
+  //       postedDate: new Date().toISOString(),
+  //       status: 'active'
+  //     };
+
+  //     const response = await axios.post('http://localhost:8000/admin/jobs', jobData, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+  //       }
+  //     });
+
+  //     if (response.data.status === 'success') {
+  //       setMessage({ type: 'success', text: 'Job posted successfully!' });
+  //       // Reset form
+  //       setFormData({
+  //         title: '',
+  //         company: '',
+  //         location: '',
+  //         salary: '',
+  //         jobType: 'Full-time',
+  //         experience: '',
+  //         description: '',
+  //         requirements: '',
+  //         benefits: '',
+  //         contactEmail: '',
+  //         applicationDeadline: '',
+  //         department: '',
+  //         skills: ''
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error posting job:', error);
+  //     setMessage({ 
+  //       type: 'error', 
+  //       text: error.response?.data?.message || 'Failed to post job. Please try again.' 
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const formik = useFormik({
+    initialValues:{
+      title: '',
+      company: '',
+      location: '',
+      salary: '',
+      jobType: 'Full-time',
+      experience: '',
+      description: '',
+      requirements: '',
+      benefits: '',
+      contactEmail: '',
+      applicationDeadline: '',
+      department: '',
+      skills: ''
+    },
+
+    onSubmit: async (values , { setSubmitting }) => {
+      await saveJobData(values);
+      setSubmitting(false);
+      // console.log('Form values:', values);
+    }
+  });
+
+  const saveJobData = async (values) => {
+    const data = {
+      jobTitle: values.title,
+      jobCompany: values.company,
+      jobLocation: values.location,
+      jobSalary: values.salary,
+      jobType: values.jobType,
+      jobExperience: values.experience,
+      jobDescription: values.description,
+      jobRequirements: values.requirements,
+      jobBenefits: values.benefits,
+      jobContactEmail: values.contactEmail,
+      jobApplicationDeadline: values.applicationDeadline,
+      jobDepartment: values.department,
+      jobSkills: values.skills
+    }
+
+    console.log("sending job data:", data);
 
     try {
-      // Prepare the data for submission
-      const jobData = {
-        ...formData,
-        skills: formData.skills.split(',').map(skill => skill.trim()),
-        requirements: formData.requirements.split('\n').filter(req => req.trim()),
-        benefits: formData.benefits.split('\n').filter(benefit => benefit.trim()),
-        salary: parseFloat(formData.salary) || 0,
-        postedBy: 'admin',
-        postedDate: new Date().toISOString(),
-        status: 'active'
-      };
+      const response = await axios.post("http://localhost:8000/admin/jobs", data);
+      console.log("Job data saved successfully:", response.data);
+      formik.resetForm();
 
-      const response = await axios.post('http://localhost:8000/admin/jobs', jobData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-        }
-      });
-
-      if (response.data.status === 'success') {
-        setMessage({ type: 'success', text: 'Job posted successfully!' });
-        // Reset form
-        setFormData({
-          title: '',
-          company: '',
-          location: '',
-          salary: '',
-          jobType: 'Full-time',
-          experience: '',
-          description: '',
-          requirements: '',
-          benefits: '',
-          contactEmail: '',
-          applicationDeadline: '',
-          department: '',
-          skills: ''
-        });
-      }
     } catch (error) {
-      console.error('Error posting job:', error);
-      setMessage({ 
-        type: 'error', 
-        text: error.response?.data?.message || 'Failed to post job. Please try again.' 
-      });
-    } finally {
-      setLoading(false);
+      console.error("Error saving job data:", error);
     }
-  };
+
+  }
 
   return (
     <div className="admin-job-container">
@@ -98,7 +156,7 @@ const AdminJob = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="admin-job-form">
+      <form onSubmit={formik.handleSubmit} className="admin-job-form">
         <div className="form-grid">
           <div className="form-group">
             <label htmlFor="title">Job Title *</label>
@@ -106,8 +164,8 @@ const AdminJob = () => {
               type="text"
               id="title"
               name="title"
-              value={formData.title}
-              onChange={handleInputChange}
+              value={formik.values.title}
+              onChange={formik.handleChange}
               required
               placeholder="e.g. Senior Frontend Developer"
             />
@@ -119,8 +177,8 @@ const AdminJob = () => {
               type="text"
               id="company"
               name="company"
-              value={formData.company}
-              onChange={handleInputChange}
+              value={formik.values.company}
+              onChange={formik.handleChange}
               required
               placeholder="e.g. Tech Solutions Inc."
             />
@@ -132,8 +190,8 @@ const AdminJob = () => {
               type="text"
               id="location"
               name="location"
-              value={formData.location}
-              onChange={handleInputChange}
+              value={formik.values.location}
+              onChange={formik.handleChange}
               required
               placeholder="e.g. New York, NY or Remote"
             />
@@ -145,8 +203,8 @@ const AdminJob = () => {
               type="number"
               id="salary"
               name="salary"
-              value={formData.salary}
-              onChange={handleInputChange}
+              value={formik.values.salary}
+              onChange={formik.handleChange}
               required
               placeholder="e.g. 75000"
             />
@@ -157,8 +215,8 @@ const AdminJob = () => {
             <select
               id="jobType"
               name="jobType"
-              value={formData.jobType}
-              onChange={handleInputChange}
+              value={formik.values.jobType}
+              onChange={formik.handleChange}
               required
             >
               <option value="Full-time">Full-time</option>
@@ -174,8 +232,8 @@ const AdminJob = () => {
             <select
               id="experience"
               name="experience"
-              value={formData.experience}
-              onChange={handleInputChange}
+              value={formik.values.experience}
+              onChange={formik.handleChange}
               required
             >
               <option value="">Select experience level</option>
@@ -192,8 +250,8 @@ const AdminJob = () => {
               type="text"
               id="department"
               name="department"
-              value={formData.department}
-              onChange={handleInputChange}
+              value={formik.values.department}
+              onChange={formik.handleChange}
               placeholder="e.g. Engineering, Marketing, Sales"
             />
           </div>
@@ -204,8 +262,8 @@ const AdminJob = () => {
               type="email"
               id="contactEmail"
               name="contactEmail"
-              value={formData.contactEmail}
-              onChange={handleInputChange}
+              value={formik.values.contactEmail}
+              onChange={formik.handleChange}
               required
               placeholder="e.g. hr@company.com"
             />
@@ -217,8 +275,8 @@ const AdminJob = () => {
               type="date"
               id="applicationDeadline"
               name="applicationDeadline"
-              value={formData.applicationDeadline}
-              onChange={handleInputChange}
+              value={formik.values.applicationDeadline}
+              onChange={formik.handleChange}
             />
           </div>
 
@@ -228,8 +286,8 @@ const AdminJob = () => {
               type="text"
               id="skills"
               name="skills"
-              value={formData.skills}
-              onChange={handleInputChange}
+              value={formik.values.skills}
+              onChange={formik.handleChange}
               placeholder="e.g. React, Node.js, JavaScript, MongoDB"
             />
           </div>
@@ -240,8 +298,8 @@ const AdminJob = () => {
           <textarea
             id="description"
             name="description"
-            value={formData.description}
-            onChange={handleInputChange}
+            value={formik.values.description}
+            onChange={formik.handleChange}
             required
             rows="6"
             placeholder="Provide a detailed description of the job role, responsibilities, and what the candidate will be doing..."
@@ -253,8 +311,8 @@ const AdminJob = () => {
           <textarea
             id="requirements"
             name="requirements"
-            value={formData.requirements}
-            onChange={handleInputChange}
+            value={formik.values.requirements}
+            onChange={formik.handleChange}
             rows="5"
             placeholder="Bachelor's degree in Computer Science
 3+ years of React experience
@@ -268,8 +326,8 @@ Experience with REST APIs"
           <textarea
             id="benefits"
             name="benefits"
-            value={formData.benefits}
-            onChange={handleInputChange}
+            value={formik.values.benefits}
+            onChange={formik.handleChange}
             rows="4"
             placeholder="Health insurance
 401(k) matching
