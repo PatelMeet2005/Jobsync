@@ -105,11 +105,13 @@
   flex-direction: column;
 }
 
-.sort-select {
+.sort-select-request {
   padding: 12px 16px;
+  margin: 15px 2px 2px 2px;
   border: 2px solid #e5e7eb;
   border-radius: 8px;
   font-size: 16px;
+  outline: none;
   background-color: #fafafa;
   cursor: pointer;
   transition: all 0.2s;

@@ -186,7 +186,7 @@ const fetchUsersAndEmployees = async () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="sort-select"
+              className="sort-select-user"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>

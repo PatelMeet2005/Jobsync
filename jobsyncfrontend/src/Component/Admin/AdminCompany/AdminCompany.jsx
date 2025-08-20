@@ -255,7 +255,7 @@ const AdminCompany = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="sort-select"
+              className="sort-select-company"
             >
               <option value="jobs-desc">Most Jobs</option>
               <option value="jobs-asc">Least Jobs</option>

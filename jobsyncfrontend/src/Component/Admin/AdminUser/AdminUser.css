@@ -58,6 +58,7 @@
   justify-content: space-between !important;
   gap: 12px !important;
   width: 100% !important;
+  flex-wrap: nowrap !important;
 }
 
 .search-box {
@@ -72,18 +73,24 @@
   border-radius: 4px !important;
   font-size: 0.9rem !important;
   height: 38px !important;
+  box-sizing: border-box !important;
 }
 
 .filter-section {
   flex: 0 0 200px !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
-.sort-select {
+.sort-select-user {
   width: 100% !important;
   height: 38px !important;
   padding: 8px 12px !important;
+  margin: 30px 5px 5px 5px;
   border: 1px solid #ccc !important;
   border-radius: 4px !important;
+  box-sizing: border-box !important;
+
 }
 
 /* ===== User List ===== */
@@ -226,6 +233,17 @@
     margin-left: 10.6rem; /* 170px converted to rem (170/16) */
     max-width: calc(100vw - 10.6rem - 30px);
     padding: 15px;
+  }
+}
+
+@media (max-width: 640px) {
+  .search-filter-section {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .filter-section {
+    flex: 0 0 auto !important;
+    width: 100% !important;
   }
 }
 

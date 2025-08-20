@@ -11,6 +11,7 @@ import AdminJobList from './Component/Admin/AdminJobList/AdminJobList'
 import AdminCompany from './Component/Admin/AdminCompany/AdminCompany'
 import AdminUser from './Component/Admin/AdminUser/AdminUser'
 import AdminRequest from './Component/Admin/AdminRequest/AdminRequest'
+import UserProfile from './Component/UserProfile/UserProfile'
 import './App.css'
 
 
@@ -36,6 +37,7 @@ const App = () => {
           <>
             <Route path="/" element={<><Navbar /><Job /><Footer /></>} />
             <Route path="/companie" element={<><Navbar /><Companie /><Footer /></>} />
+            <Route path="/profile" element={<><Navbar /><UserProfile /><Footer /></>} />
             <Route path="*" element={<><Navbar /><Job /><Footer /></>} />
           </>
         )}
