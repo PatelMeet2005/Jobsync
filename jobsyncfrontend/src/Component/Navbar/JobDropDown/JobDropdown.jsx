@@ -15,7 +15,7 @@ const JobDropdown = () => {
         setOpen(true);
       }}
       onMouseLeave={() => {
-        timeoutID.current = setTimeout(() => setOpen(true), 300);
+        timeoutID.current = setTimeout(() => setOpen(false), 300);
       }}
     >
       <a href="./" aria-haspopup="true" aria-expanded={open}>Jobs</a>
