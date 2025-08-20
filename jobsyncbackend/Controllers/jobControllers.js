@@ -42,4 +42,26 @@ const addJob = async (req, res) => {
     }
 }
 
-module.exports = { addJob };
+const getJobs = async (req, res) => {
+    try {
+        const jobs = await Job.find();
+        res.status(200).json({ jobs });
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).json({ message: 'Error fetching jobs', error });
+    }
+};
+
+const deleteJob = async (req,res) => {
+    const { jobId } = req.params;
+
+    try {
+        await Job.findByIdAndDelete(jobId);
+        res.status(204).send();
+    } catch (error) {
+        console.error('Error deleting job:', error);
+        res.status(500).json({ message: 'Error deleting job', error });
+    }
+}
+
+module.exports = { addJob, getJobs, deleteJob };

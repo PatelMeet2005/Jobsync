@@ -133,8 +133,9 @@ const AdminJob = () => {
     console.log("sending job data:", data);
 
     try {
-      const response = await axios.post("http://localhost:8000/admin/jobs", data);
+      const response = await axios.post("http://localhost:8000/admin/addJob", data);
       console.log("Job data saved successfully:", response.data);
+      alert("Job posted successfully!");
       formik.resetForm();
 
     } catch (error) {
