@@ -13,6 +13,7 @@ import AdminUser from './Component/Admin/AdminUser/AdminUser'
 import AdminRequest from './Component/Admin/AdminRequest/AdminRequest'
 import UserProfile from './Component/UserProfile/UserProfile'
 import './App.css'
+import About from './Component/About/About'
 
 
 const App = () => {
@@ -37,7 +38,8 @@ const App = () => {
           <>
             <Route path="/" element={<><Navbar /><Job /><Footer /></>} />
             <Route path="/companie" element={<><Navbar /><Companie /><Footer /></>} />
-            <Route path="/profile" element={<><Navbar /><UserProfile /><Footer /></>} />
+            <Route path="/profile" element={<><Navbar /><UserProfile /></>} />
+            <Route path="/about"element={<><Navbar /><About /> <Footer /></>} />
             <Route path="*" element={<><Navbar /><Job /><Footer /></>} />
           </>
         )}
