@@ -1,0 +1,74 @@
+/* ===============================
+   JobCard.css - Job Cards
+   =============================== */
+
+
+.job-card {
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 28px 24px 22px 24px;
+  box-shadow: 0 4px 18px rgba(37,99,235,0.07);
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  cursor: pointer;
+}
+.job-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 12px 32px rgba(37,99,235,0.13);
+}
+.job-company-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-right: 18px;
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+}
+.job-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2px;
+  letter-spacing: -0.5px;
+}
+.job-company {
+  font-size: 1.05rem;
+  color: #2563eb;
+  font-weight: 600;
+}
+.job-location,
+.job-type,
+.job-salary {
+  font-size: 0.98rem;
+  color: #475569;
+  margin-right: 12px;
+  font-weight: 500;
+}
+.job-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+.details-btn {
+  background: #f1f5f9;
+  color: #2563eb;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 18px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.details-btn:hover {
+  background: #2563eb;
+  color: #fff;
+}

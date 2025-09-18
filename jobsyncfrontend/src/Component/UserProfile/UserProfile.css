@@ -1,3 +1,190 @@
+/* Professional Profile Layout */
+.profile-pro-container {
+  display: flex;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.profile-pro-sidebar {
+  width: 320px;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,41,59,0.09);
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  position: relative;
+}
+.sidebar-user-info h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.2rem 0;
+  color: #1e293b;
+}
+.sidebar-role {
+  color: #2563eb;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+.sidebar-email {
+  color: #64748b;
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+}
+.sidebar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  margin: 1.2rem 0 0.5rem 0;
+}
+.profile-pro-main {
+  flex: 1;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(30,41,59,0.09);
+  padding: 2.2rem 2.5rem 2.5rem 2.5rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.profile-pro-tabs {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2.2rem;
+}
+.profile-pro-tabs button {
+  background: #f1f5f9;
+  color: #2563eb;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 2.2rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.profile-pro-tabs button.active, .profile-pro-tabs button:focus {
+  background: #2563eb;
+  color: #fff;
+  outline: none;
+}
+.profile-pro-tab-content {
+  min-height: 320px;
+}
+.about-section label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.about-section {
+  margin-top: 1.5rem;
+}
+.about-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 1.08rem;
+  background: #f8fafc;
+  margin-top: 0.5rem;
+  resize: vertical;
+}
+.about-content {
+  font-size: 1.08rem;
+  color: #334155;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-top: 0.5rem;
+}
+.about-placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+.resume-section label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.resume-content {
+  font-size: 1.08rem;
+  color: #334155;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.jobs-section {
+  margin-top: 1.5rem;
+}
+@media (max-width: 900px) {
+  .profile-pro-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem 0.5rem;
+  }
+  .profile-pro-sidebar {
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1.2rem 1rem;
+    gap: 1.2rem;
+  }
+  .profile-pro-main {
+    padding: 1.2rem 1rem;
+  }
+  .profile-pro-tabs {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+.profile-avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 2px 8px rgba(52,152,219,0.12);
+}
+
+.profile-upload-section {
+  margin: 1.2rem 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.resume-filename {
+  color: #2c3e50;
+  font-size: 1rem;
+  background: #eaf6fb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  margin-left: 0.5rem;
+}
+.upload-msg {
+  color: #16a34a;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
 /* User Profile Styles */
 .profile-container {
   max-width: 1300px;

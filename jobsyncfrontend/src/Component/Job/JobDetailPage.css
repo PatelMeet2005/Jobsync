@@ -1,0 +1,478 @@
+/* JobDetailPage.css */
+.job-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #64748b;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.job-details-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.job-details-content {
+  flex: 2;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  overflow: hidden;
+}
+
+.job-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.company-info {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.job-details-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.company-name {
+  font-size: 1.2rem;
+  color: #475569;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.job-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.job-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.save-job-btn, .apply-now-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.save-job-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.save-job-btn:hover {
+  background: #e2e8f0;
+}
+
+.save-job-btn.saved {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.apply-now-btn {
+  background: #4361ee;
+  color: white;
+}
+
+.apply-now-btn:hover {
+  background: #3a56d4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+}
+
+.job-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.meta-item i {
+  color: #4361ee;
+  font-size: 1.2rem;
+  width: 24px;
+}
+
+.meta-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+}
+
+.job-details-body {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.detail-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  color: #1e293b;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.detail-section h3 i {
+  color: #4361ee;
+}
+
+.detail-section p {
+  line-height: 1.6;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  background: #f1f5f9;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.requirements-list, .benefits-list {
+  list-style: none;
+  padding: 0;
+}
+
+.requirements-list li, .benefits-list li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.requirements-list li:before {
+  content: "•";
+  color: #4361ee;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.benefits-list li:before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.apply-form-container {
+  flex: 1;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  position: sticky;
+  top: 24px;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.form-header h3 {
+  font-size: 1.3rem;
+  color: #1e293b;
+  margin: 0;
+}
+
+.close-form-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.close-form-btn:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.form-group input, 
+.form-group textarea {
+  padding: 12px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-input-container input[type="file"] {
+  display: none;
+}
+
+.file-input-label {
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.file-input-label:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.file-input-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: center;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.submit-apply-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-apply-btn:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.submit-apply-btn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.loading-container, .error-container, .not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-container .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #4361ee;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.error-container i, .not-found-container i {
+  font-size: 3rem;
+  color: #ef4444;
+  margin-bottom: 20px;
+}
+
+.not-found-container i {
+  color: #94a3b8;
+}
+
+.error-container h3, .not-found-container h3 {
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.not-found-container p {
+  color: #64748b;
+  max-width: 400px;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .job-details-container {
+    flex-direction: column;
+  }
+  
+  .apply-form-container {
+    position: static;
+    width: 100%;
+  }
+  
+  .job-details-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .job-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .job-detail-page {
+    padding: 16px;
+  }
+  
+  .job-details-content, .apply-form-container {
+    padding: 24px 20px;
+  }
+  
+  .job-details-header h1 {
+    font-size: 1.7rem;
+  }
+  
+  .job-meta-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .company-info {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .job-actions {
+    flex-direction: column;
+  }
+}
