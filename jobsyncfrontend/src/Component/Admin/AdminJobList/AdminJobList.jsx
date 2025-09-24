@@ -189,10 +189,6 @@ const AdminJobList = () => {
             <span className="stat-number">{jobs.length}</span>
             <span className="stat-label">Total Jobs</span>
           </div>
-          <div className="stat-item">
-          </div>
-          <div className="stat-item">
-          </div>
         </div>
       </div>
 

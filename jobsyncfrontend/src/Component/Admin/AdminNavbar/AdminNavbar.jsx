@@ -62,9 +62,9 @@ const AdminNavbar = () => {
           <Link to='/adminrequest' onClick={() => setIsMobileMenuOpen(false)}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Requests" className="menu-icon" />Requests</li>
           </Link>
-          <Link to='/adminenquiry' onClick={() => setIsMobileMenuOpen(false)}>
+          {/* <Link to='/adminenquiry' onClick={() => setIsMobileMenuOpen(false)}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Enquiry" className="menu-icon" />Enquiry</li>
-          </Link>
+          </Link> */}
           <Link to='/adminlogout' onClick={() => { handlelogout(); setIsMobileMenuOpen(false); }}>
             <li><img src="https://t3.ftcdn.net/jpg/05/40/08/54/240_F_540085480_WN26Tz5VOFRwdPsLmK73JXNuSYsi2luw.jpg" alt="Logout" className="menu-icon" /> Logout</li>
           </Link>

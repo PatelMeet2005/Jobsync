@@ -345,7 +345,7 @@ Remote work options"
           >
             {loading ? 'Posting Job...' : 'Post Job'}
           </button>
-          <button 
+          {/* <button 
             type="button" 
             className="cancel-btn"
             onClick={() => {
@@ -368,7 +368,7 @@ Remote work options"
             }}
           >
             Clear Form
-          </button>
+          </button> */}
         </div>
       </form>
     </div>
