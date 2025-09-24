@@ -2,8 +2,7 @@
 .job-header {
   position: relative;
   padding: 60px 24px;
-  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-  border-radius: 20px;
+  background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);  
   overflow: hidden;
   margin-bottom: 40px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -64,28 +63,39 @@
 
 .search-input-wrapper {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0 16px;
   color: #64748b;
   font-size: 1.1rem;
+  min-height: 52px;
 }
 
 .search-input {
   flex: 1;
   border: none;
-  padding: 18px 0;
-  font-size: 1.1rem;
+  padding: 16px 16px;
+  font-size: 1.05rem;
   color: #334155;
   background: transparent;
   outline: none;
+  min-height: 52px;
 }
 
 .search-input::placeholder {
@@ -96,16 +106,28 @@
   background: #4361ee;
   color: white;
   border: none;
-  padding: 18px 28px;
+  padding: 0 24px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, transform 0.06s ease;
   white-space: nowrap;
+  border-radius: 0 12px 12px 0;
+  min-height: 52px;
+  margin: 0;
 }
 
 .search-button:hover {
   background: #3a56d4;
+}
+
+.search-button:active {
+  transform: translateY(1px);
+}
+
+.search-button:focus-visible {
+  outline: 3px solid rgba(67, 97, 238, 0.5);
+  outline-offset: 2px;
 }
 
 /* Quick Filters */
@@ -141,6 +163,11 @@
 .filter-button:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
+}
+
+.filter-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
 }
 
 /* Stats */
@@ -224,6 +251,7 @@
     flex-direction: column;
     background: transparent;
     box-shadow: none;
+    border: none;
   }
   
   .search-input {
@@ -232,11 +260,14 @@
     border-radius: 12px;
     margin-bottom: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    min-height: 48px;
   }
   
   .search-button {
     width: 100%;
     border-radius: 12px;
+    min-height: 48px;
   }
   
   .quick-filters {

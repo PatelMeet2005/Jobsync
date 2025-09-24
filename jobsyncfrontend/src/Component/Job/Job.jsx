@@ -232,30 +232,6 @@ const JobPage = () => {
         </aside>
         
         <main className="job-list-section" ref={jobListRef}>
-          <div className="results-header">
-            <h2>
-              {loading ? "Searching jobs..." : 
-               `${sortedJobs.length} ${sortedJobs.length === 1 ? 'job' : 'jobs'} found`}
-            </h2>
-            
-            {sortedJobs.length > 0 && (
-              <div className="sort-container">
-                <label htmlFor="sort-select">Sort by:</label>
-                <select
-                  id="sort-select"
-                  value={filters.sort}
-                  onChange={handleSortChange}
-                  className="sort-select"
-                >
-                  <option value="">Relevance</option>
-                  <option value="date">Date Posted</option>
-                  <option value="salary-desc">Salary (High to Low)</option>
-                  <option value="salary-asc">Salary (Low to High)</option>
-                  <option value="company">Company Name</option>
-                </select>
-              </div>
-            )}
-          </div>
           
           <JobList
             jobs={paginatedJobs}

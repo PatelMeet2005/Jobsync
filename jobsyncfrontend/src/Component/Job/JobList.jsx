@@ -48,18 +48,8 @@ const JobList = ({ jobs, loading, empty, onViewDetails, onSaveJob, onApply }) =>
       ) : (
         <>
           <div className="results-header">
-            <h2>
-              <span className="results-count">{jobs.length}</span> 
-              {jobs.length === 1 ? ' job' : ' jobs'} found
-            </h2>
-            <div className="sort-container">
-              <label htmlFor="sort-select">Sort by:</label>
-              <select id="sort-select" className="sort-select">
-                <option value="relevance">Relevance</option>
-                <option value="date">Date Posted</option>
-                <option value="salary">Salary</option>
-              </select>
-            </div>
+            
+            
           </div>
           <div className="job-list-grid">
             {jobs.map(job => (

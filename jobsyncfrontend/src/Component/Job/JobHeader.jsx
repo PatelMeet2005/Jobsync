@@ -32,26 +32,7 @@ const JobHeader = ({ searchTerm, onSearchChange, onSearchSubmit, onQuickFilter }
           aria-label="Job search" 
           onSubmit={onSearchSubmit}
         >
-          <div className="search-input-wrapper">
-            <i className="fas fa-search search-icon"></i>
-            <input
-              type="text"
-              placeholder="Job title, company, or location..."
-              className="search-input"
-              value={searchTerm}
-              onChange={onSearchChange}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-              aria-label="Search jobs by title, company, or location"
-            />
-            <button 
-              className="search-button" 
-              type="submit" 
-              aria-label="Search jobs"
-            >
-              Search
-            </button>
-          </div>
+         
           
           {/* <div className="quick-filters">
             <span className="quick-filters-label">Quick filters:</span>

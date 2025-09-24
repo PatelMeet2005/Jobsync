@@ -3,9 +3,11 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  padding: 24px;
+  padding: 30px;
+  margin-left: 1rem;
+  margin-top: 1.5rem;
   height: fit-content;
-  position: sticky;
+  position:sticky;
   top: 24px;
   transition: all 0.3s ease;
 }
