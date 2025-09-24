@@ -1,15 +1,12 @@
 .footer{
-    height: 17vh;
+    min-height: 17vh;
     width: 100%;
     background-color: rgb(29, 27, 27);
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     overflow: hidden;
+    margin-top: 40px;
 }
 
 .leftfooter{

@@ -1,0 +1,135 @@
+/* Pagination container */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+  flex-wrap: wrap;
+}
+
+/* Page numbers container */
+.pagination-pages {
+  display: flex;
+  gap: 8px;
+}
+
+/* Base button styles */
+.pagination-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  color: #4a5568;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  outline: none;
+  min-width: 48px;
+  height: 48px;
+}
+
+/* Hover state */
+.pagination-btn:not(:disabled):not(.active):hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus state */
+.pagination-btn:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  border-color: #4299e1;
+}
+
+/* Active page */
+.pagination-btn.active {
+  background: #4299e1;
+  color: #ffffff;
+  border-color: #4299e1;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+}
+
+/* Disabled state */
+.pagination-btn:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+  box-shadow: none;
+}
+
+/* Previous/Next buttons */
+.pagination-prev,
+.pagination-next {
+  padding: 12px 20px;
+  gap: 8px;
+}
+
+/* Ellipsis */
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  padding: 0 8px;
+  min-width: 48px;
+  height: 48px;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .pagination-container {
+    gap: 8px;
+  }
+  
+  .pagination-btn {
+    padding: 10px 14px;
+    min-width: 42px;
+    height: 42px;
+    font-size: 0.9rem;
+  }
+  
+  .pagination-prev span,
+  .pagination-next span {
+    display: none;
+  }
+  
+  .pagination-prev,
+  .pagination-next {
+    padding: 10px 15px;
+  }
+}
+
+/* Animation for page changes */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pagination-btn:not(:disabled):active {
+  animation: pulse 0.3s ease;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .pagination-btn {
+    transition: none;
+  }
+  
+  .pagination-btn:not(:disabled):hover {
+    transform: none;
+  }
+  
+  .pagination-btn:not(:disabled):active {
+    animation: none;
+  }
+}

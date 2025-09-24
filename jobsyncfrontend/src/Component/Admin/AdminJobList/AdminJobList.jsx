@@ -10,6 +10,7 @@ const AdminJobList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [filterCompany, setFilterCompany] = useState("");
   const [sortBy, setSortBy] = useState("newest");
 
@@ -40,6 +41,37 @@ const AdminJobList = () => {
     }
   };
 
+  const handleStatusUpdate = async (jobId, newStatus) => {
+    try {
+      // TODO: Uncomment when backend is ready
+      // const response = await axios.patch(`http://localhost:8000/admin/jobs/${jobId}/status`,
+      //   { status: newStatus },
+      //   {
+      //     headers: {
+      //       'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+      //       'Content-Type': 'application/json'
+      //     }
+      //   }
+      // );
+
+      // if (response.data.status === 'success') {
+      //   setJobs(jobs.map(job =>
+      //     job._id === jobId ? { ...job, status: newStatus } : job
+      //   ));
+      // }
+
+      // For now, update locally
+      setJobs(
+        jobs.map((job) =>
+          job._id === jobId ? { ...job, status: newStatus } : job
+        )
+      );
+    } catch (error) {
+      console.error("Error updating job status:", error);
+      alert("Failed to update job status");
+    }
+  };
+
   const handleDeleteJob = async (jobId) => {
     if (
       window.confirm(
@@ -47,17 +79,17 @@ const AdminJobList = () => {
       )
     ) {
       try {
-        const response = await axios.delete(`http://localhost:8000/admin/deleteJob/${jobId}`, {
+        // TODO: Uncomment when backend is ready
+        const response = await axios.delete(`http://localhost:8000/admin/jobs/${jobId}`, {
           headers: {
             'Content-Type': 'application/json'
           }
         });
 
-        
+        if (response.data.status === 'success') {
           setJobs(jobs.filter(job => job._id !== jobId));
           console.log(`Job deleted successfully: ${jobId}`);
-
-        
+        }
 
       } catch (error) {
         console.error("Error deleting job:", error);
@@ -84,10 +116,12 @@ const AdminJobList = () => {
         (job.jobLocation?.toLowerCase() || "").includes(
           searchTerm.toLowerCase()
         );
+      const matchesFilter =
+        filterStatus === "all" || job.status === filterStatus;
       const matchesCompany =
         !filterCompany ||
         job.jobCompany.toLowerCase() === filterCompany.toLowerCase();
-      return matchesSearch && matchesCompany;
+      return matchesSearch && matchesFilter && matchesCompany;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -99,6 +133,8 @@ const AdminJobList = () => {
           return b.jobSalary - a.jobSalary;
         case "salary-low":
           return a.jobSalary - b.jobSalary;
+        case "applicants":
+          return (b.jobApplicants || 0) - (a.jobApplicants || 0);
         default:
           return 0;
       }
@@ -118,6 +154,20 @@ const AdminJobList = () => {
       currency: "USD",
       minimumFractionDigits: 0,
     }).format(salary);
+  };
+
+  const getStatusBadge = (status) => {
+    const statusClasses = {
+      active: "status-active",
+      paused: "status-paused",
+      closed: "status-closed",
+      draft: "status-draft",
+    };
+    return (
+      <span className={`status-badge ${statusClasses[status] || ""}`}>
+        {status}
+      </span>
+    );
   };
 
   if (loading) {
@@ -169,6 +219,17 @@ const AdminJobList = () => {
           </div>
 
           <div className="filter-section">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="filter-select"
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="paused">Paused</option>
+              <option value="closed">Closed</option>
+              <option value="draft">Draft</option>
+            </select>
 
             <select
               value={sortBy}
@@ -188,6 +249,18 @@ const AdminJobList = () => {
           <div className="stat-item">
             <span className="stat-number">{jobs.length}</span>
             <span className="stat-label">Total Jobs</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">
+              {jobs.filter((j) => j.status === "active").length}
+            </span>
+            <span className="stat-label">Active</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">
+              {jobs.reduce((sum, job) => sum + (job.jobApplicants || 0), 0)}
+            </span>
+            <span className="stat-label">Total Applicants</span>
           </div>
         </div>
       </div>
@@ -210,6 +283,9 @@ const AdminJobList = () => {
                     <span className="department">{job.jobDepartment}</span>
                   </div>
                 </div>
+                <div className="job-status-section">
+                  {getStatusBadge(job.status)}
+                </div>
               </div>
 
               <div className="job-details">
@@ -227,13 +303,35 @@ const AdminJobList = () => {
                     <span className="value">{job.jobExperience}</span>
                   </div>
                   <div className="info-item">
+                    <span className="label">Applicants:</span>
+                    <span className="value">{job.jobApplicants || 0}</span>
+                  </div>
+                  <div className="info-item">
                     <span className="label">Posted:</span>
                     <span className="value">{formatDate(job.createdAt)}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="label">Deadline:</span>
+                    <span className="value">
+                      {job.applicationDeadline
+                        ? formatDate(job.applicationDeadline)
+                        : "No deadline"}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="job-actions">
+                <select
+                  value={job.status}
+                  onChange={(e) => handleStatusUpdate(job._id, e.target.value)}
+                  className="status-select"
+                >
+                  <option value="active">Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="closed">Closed</option>
+                  <option value="draft">Draft</option>
+                </select>
 
                 <button className="view-btn"> View</button>
                 <button className="edit-btn"> Edit</button>
