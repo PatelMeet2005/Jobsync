@@ -78,7 +78,7 @@ const Navbar = () => {
             ) : (
               <div className="login-btns">
                 <button onClick={openLogin}>Sign in / sign up</button>
-                <button className="emp">Employees</button>
+                <button className="emp"><a href="/employees">Employees</a></button>
               </div>
             )}
           </div>

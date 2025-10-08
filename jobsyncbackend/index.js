@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const connectDB = require('./Config/db');
 const authRoute = require('./Routes/authRoute');
 const jobRoute = require('./Routes/jobRoute');
+const employeeRoute = require('./Routes/employeeRoutes');
+const employeeJobRoute = require('./Routes/employeeJobRoutes');
 const cors = require('cors');
 
 // Load environment variables from .env file
@@ -35,6 +37,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/user',authRoute);
 
 app.use('/admin', jobRoute);
+
+// employee route
+
+app.use('/employee', employeeRoute);
+
+app.use('/employeejob', employeeJobRoute);
 
 const PORT = process.env.PORT || 8000;
 

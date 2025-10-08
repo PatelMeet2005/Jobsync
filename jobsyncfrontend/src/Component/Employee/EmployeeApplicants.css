@@ -1,0 +1,35 @@
+.employee-applicants {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.employee-applicants h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.employee-applicants ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.employee-applicants li {
+  background: #e2e8f0;
+  margin-bottom: 12px;
+  padding: 14px;
+  border-radius: 6px;
+}
+
+.employee-applicants strong {
+  color: #0f172a;
+}
+
+.employee-applicants em {
+  color: #2563eb;
+}

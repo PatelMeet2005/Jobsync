@@ -13,6 +13,8 @@ import AdminCompany from './Component/Admin/AdminCompany/AdminCompany'
 import AdminUser from './Component/Admin/AdminUser/AdminUser'
 import AdminRequest from './Component/Admin/AdminRequest/AdminRequest'
 import UserProfile from './Component/UserProfile/UserProfile'
+import Employees from './Component/Employee/Employees'
+import EmployeesNav from './Component/Employee/EmployeesNav'
 import './App.css'
 import About from './Component/About/About'
 
@@ -42,6 +44,8 @@ const App = () => {
             <Route path="/profile" element={<><Navbar /><UserProfile /></>} />
             <Route path="/about"element={<><Navbar /><About /> <Footer /></>} />
             <Route path="/jobdetails/:id" element={<><Navbar /><JobDetailPage /><Footer /></>} />
+            {/* <Route path="/employees" element={<><EmployeesNav /><EmployeePage /></>} /> */}
+            <Route path="/employees" element={<><EmployeesNav /><Employees /></>} />
             <Route path="*" element={<><Navbar /><Job /><Footer /></>} />
           </>
         )}
