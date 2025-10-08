@@ -18,7 +18,7 @@ const employeeJobSchema = new mongoose.Schema({
     department: String,
     contactEmail: { type: String, required: true },
   },
-  postedBy: { type: String, default: 'employee' },
+  postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   postedDate: { type: Date, default: Date.now },
   status: { type: String, default: 'pending' },
 });

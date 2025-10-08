@@ -42,7 +42,7 @@ app.use('/admin', jobRoute);
 
 app.use('/employee', employeeRoute);
 
-app.use('/employeejob', employeeJobRoute);
+app.use('/employee', employeeJobRoute);
 
 const PORT = process.env.PORT || 8000;
 

@@ -5,6 +5,10 @@ import "./EmployeeAuth.css";
 
 const EmployeeAuth = ({ onLogin }) => {
   const [isRegister, setIsRegister] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check token on mount
+
 
   // Formik for Login
   const loginFormik = useFormik({

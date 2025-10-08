@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import EmployeeNav from "./EmployeesNav";
 import EmployeeDashboard from "./EmployeeDashboard";
 import EmployeeAddJob from "./EmployeeAddJob";
@@ -9,6 +9,16 @@ import "./Employees.css";
 
 const Employee = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setIsLoggedIn(true);
+  }, []);
+
+    const handleLogout = () => {
+    localStorage.removeItem("token"); // remove token
+    setIsLoggedIn(false);
+  };
 
   // Refs for smooth scrolling
   const authRef = useRef(null);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
+import axios from "axios";
 import "./EmployeeAddJob.css";
 
 const EmployeeAddJob = () => {
@@ -47,27 +48,37 @@ const EmployeeAddJob = () => {
             department: values.companyDepartment,
             contactEmail: values.companyContactEmail,
           },
-          postedDate: new Date().toISOString(),
-          status: "pending",
-          postedBy: "employee",
         };
 
-        console.log("Job Data Submitted:", jobData);
+        // Get JWT token from localStorage or sessionStorage
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        
+        // Make API call to backend
+        const response = await axios.post(
+          'http://localhost:8000/employee/addjob',
+          jobData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
 
-        setTimeout(() => {
+        if (response.data.success) {
           setMessage({
             type: "success",
             text: "✅ Job posted successfully! It will be reviewed by admin.",
           });
           resetForm();
-          setLoading(false);
-        }, 1000);
+        }
       } catch (err) {
-        console.error(err);
+        console.error('Error posting job:', err);
         setMessage({
           type: "error",
-          text: "❌ Failed to post job. Please try again.",
+          text: err.response?.data?.message || "❌ Failed to post job. Please try again.",
         });
+      } finally {
         setLoading(false);
       }
     },

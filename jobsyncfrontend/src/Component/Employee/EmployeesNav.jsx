@@ -24,7 +24,10 @@ const EmployeeNav = ({ isLoggedIn, setIsLoggedIn, scrollToSection, refs }) => {
         </ul>
 
         <div className="nav-profile">
-          <div className="profile-email" onClick={() => setIsLoggedIn(false)}>
+          <div className="profile-email" onClick={() => {
+                localStorage.removeItem("token"); // remove token
+                setIsLoggedIn(false);
+          }}>
             employee@jobsync.com
           </div>
         </div>
