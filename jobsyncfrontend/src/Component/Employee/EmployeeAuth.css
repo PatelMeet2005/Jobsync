@@ -1,6 +1,7 @@
 /* Employee Auth Container - Fullscreen Center */
 .employee-auth-container {
   min-height: 100vh;
+  border-radius: 25px;
   background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
   display: flex;
   align-items: center;
@@ -149,7 +150,7 @@
   text-decoration: underline;
 }
 
-/* Button */
+/* Button  */
 .auth-submit-btn {
   background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
   color: #fff;

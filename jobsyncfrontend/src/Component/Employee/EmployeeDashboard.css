@@ -2,6 +2,7 @@
 .employee-dashboard {
   width: 100%;
   min-height: 100vh;
+  border-radius: 25px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 80px 20px 40px;
   box-sizing: border-box;
@@ -191,11 +192,12 @@
   background: #f7fafc;
   border-radius: 12px;
   border-left: 4px solid #667eea;
+  border-bottom: 6px solid #667eea;
   transition: all 0.3s ease;
 }
 
 .job-item:hover {
-  background: #edf2f7;
+  background: #dbe8f6;
   transform: translateX(5px);
 }
 

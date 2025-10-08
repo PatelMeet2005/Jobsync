@@ -219,7 +219,7 @@ const AdminJobList = () => {
           </div>
 
           <div className="filter-section">
-            <select
+            {/* <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               className="filter-select"
@@ -229,7 +229,7 @@ const AdminJobList = () => {
               <option value="paused">Paused</option>
               <option value="closed">Closed</option>
               <option value="draft">Draft</option>
-            </select>
+            </select> */}
 
             <select
               value={sortBy}
@@ -245,7 +245,7 @@ const AdminJobList = () => {
           </div>
         </div>
 
-        <div className="job-stats">
+       <div className="job-stats">
           <div className="stat-item">
             <span className="stat-number">{jobs.length}</span>
             <span className="stat-label">Total Jobs</span>
@@ -263,7 +263,7 @@ const AdminJobList = () => {
             <span className="stat-label">Total Applicants</span>
           </div>
         </div>
-      </div>
+      </div> 
 
       <div className="job-list">
         {filteredAndSortedJobs.length === 0 ? (
