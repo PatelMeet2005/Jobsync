@@ -42,7 +42,7 @@ const EmployeePostedJob = () => {
   const getStatusBadge = (status) => {
     const statusMap = {
       pending: { class: 'pending', icon: '⏳', text: 'Pending Review' },
-      approved: { class: 'approved', icon: '✅', text: 'Approved' },
+      accepted: { class: 'accepted', icon: '✅', text: 'Accepted' },
       active: { class: 'approved', icon: '🟢', text: 'Active' },
       rejected: { class: 'rejected', icon: '❌', text: 'Rejected' },
       closed: { class: 'closed', icon: '🔒', text: 'Closed' },
