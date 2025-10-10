@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Companie.css';
 import { IoSearch, IoStar, IoStarOutline, IoFilter, IoClose } from 'react-icons/io5';
 
 const Companie = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
-    companyType: [],
-    location: [],
     industry: [],
-    size: []
+    location: [],
+    department: [],
+    jobCount: []
   });
   const [showFilters, setShowFilters] = useState(false);
   const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // Sample company data
   const companiesData = [
@@ -110,42 +113,134 @@ const Companie = () => {
     { name: "IT Services", count: "3.5K+ Companies" }
   ];
 
-  const filterOptions = {
-    companyType: [
-      { label: "Corporate", count: 4597 },
-      { label: "Foreign MNC", count: 1560 },
-      { label: "Startup", count: 695 },
-      { label: "Indian MNC", count: 638 }
-    ],
-    location: [
-      { label: "Mumbai", count: 2543 },
-      { label: "Bangalore", count: 2234 },
-      { label: "Delhi", count: 1876 },
-      { label: "Pune", count: 1234 }
-    ],
-    size: [
-      { label: "1-50", count: 1234 },
-      { label: "51-200", count: 2345 },
-      { label: "201-1000", count: 3456 },
-      { label: "1000+", count: 1922 }
-    ]
+  // Generate dynamic filter options based on actual company data
+  const generateFilterOptions = () => {
+    const locations = [...new Set(companies.map(c => c.location).filter(Boolean))];
+    const industries = [...new Set(companies.map(c => c.industry).filter(Boolean))];
+    const departments = [...new Set(companies.map(c => c.department).filter(Boolean))];
+    
+    return {
+      industry: industries.map(industry => ({
+        label: industry,
+        count: companies.filter(c => c.industry === industry).length
+      })),
+      location: locations.map(location => ({
+        label: location,
+        count: companies.filter(c => c.location === location).length
+      })),
+      department: departments.map(department => ({
+        label: department,
+        count: companies.filter(c => c.department === department).length
+      })),
+      jobCount: [
+        { label: "1 Job", count: companies.filter(c => c.totalJobs === 1).length },
+        { label: "2-5 Jobs", count: companies.filter(c => c.totalJobs >= 2 && c.totalJobs <= 5).length },
+        { label: "6-10 Jobs", count: companies.filter(c => c.totalJobs >= 6 && c.totalJobs <= 10).length },
+        { label: "10+ Jobs", count: companies.filter(c => c.totalJobs > 10).length }
+      ]
+    };
+  };
+
+  const filterOptions = generateFilterOptions();
+
+  const fetchCompanies = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:8000/employee/fetchjobs');
+
+      console.log('API Response:', response.data); // Debug log
+
+      if (response.data && response.data.success && Array.isArray(response.data.jobs)) {
+        // Process jobs to extract unique companies with job counts
+        const companyMap = new Map();
+        
+        response.data.jobs.forEach(job => {
+          const company = job.company;
+          if (company && company.name) {
+            const companyKey = company.name.toLowerCase();
+            
+            if (companyMap.has(companyKey)) {
+              // Company exists, increment job count
+              const existingCompany = companyMap.get(companyKey);
+              existingCompany.totalJobs += 1;
+              
+              // Count jobs by status
+              if (job.status === 'accepted' || job.status === 'active') {
+                existingCompany.activeJobs += 1;
+              }
+            } else {
+              // New company, create entry
+              const companyName = company.name;
+              companyMap.set(companyKey, {
+                id: job._id + '_company', // Use job ID as base for company ID
+                name: companyName,
+                logo: companyName.charAt(0).toUpperCase(),
+                rating: (Math.random() * 2 + 3).toFixed(1), // Random rating between 3-5
+                reviews: Math.floor(Math.random() * 1000) + 50, // Random reviews
+                industry: job.category || 'Technology',
+                founded: 'Not specified',
+                employees: 'Not specified',
+                type: 'Corporate',
+                location: company.location || 'Not specified',
+                description: job.description?.substring(0, 100) + '...' || `Company in ${job.category || 'Technology'} sector`,
+                color: `#${Math.floor(Math.random()*16777215).toString(16)}`, // Random color
+                totalJobs: 1,
+                activeJobs: (job.status === 'accepted' || job.status === 'active') ? 1 : 0,
+                department: company.department || 'General',
+                email: company.contactEmail || 'Not provided'
+              });
+            }
+          }
+        });
+
+        // Convert map to array
+        const companiesArray = Array.from(companyMap.values());
+        console.log('Processed companies:', companiesArray); // Debug log
+        setCompanies(companiesArray);
+        setError('');
+      } else {
+        console.error('Invalid API response structure:', response.data);
+        setError('Invalid data format received from API');
+        setCompanies([]);
+      }
+    } catch (error) {
+      console.error('Error fetching companies from jobs:', error);
+      setError(error.response?.data?.message || 'Failed to fetch company data');
+      setCompanies([]); // Set empty array on error
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    setCompanies(companiesData);
+    fetchCompanies();
   }, []);
 
   const filteredCompanies = companies.filter(company => {
     const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.industry.toLowerCase().includes(searchTerm.toLowerCase());
+                         company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         company.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         company.department.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesType = selectedFilters.companyType.length === 0 || 
-                       selectedFilters.companyType.includes(company.type);
+    const matchesIndustry = selectedFilters.industry.length === 0 || 
+                           selectedFilters.industry.includes(company.industry);
     
     const matchesLocation = selectedFilters.location.length === 0 || 
                            selectedFilters.location.includes(company.location);
 
-    return matchesSearch && matchesType && matchesLocation;
+    const matchesDepartment = selectedFilters.department.length === 0 || 
+                             selectedFilters.department.includes(company.department);
+
+    const matchesJobCount = selectedFilters.jobCount.length === 0 || 
+                           selectedFilters.jobCount.some(filter => {
+                             if (filter === "1 Job") return company.totalJobs === 1;
+                             if (filter === "2-5 Jobs") return company.totalJobs >= 2 && company.totalJobs <= 5;
+                             if (filter === "6-10 Jobs") return company.totalJobs >= 6 && company.totalJobs <= 10;
+                             if (filter === "10+ Jobs") return company.totalJobs > 10;
+                             return false;
+                           });
+
+    return matchesSearch && matchesIndustry && matchesLocation && matchesDepartment && matchesJobCount;
   });
 
   const handleFilterChange = (filterType, value) => {
@@ -159,10 +254,10 @@ const Companie = () => {
 
   const clearAllFilters = () => {
     setSelectedFilters({
-      companyType: [],
-      location: [],
       industry: [],
-      size: []
+      location: [],
+      department: [],
+      jobCount: []
     });
   };
 
@@ -189,11 +284,29 @@ const Companie = () => {
 
   return (
     <div className="companies-page">
+      {/* Loading State */}
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p>Loading companies...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="error-container">
+          <p className="error-message">{error}</p>
+          <button onClick={fetchCompanies} className="retry-btn">
+            Retry
+          </button>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="companies-hero">
         <div className="hero-content">
-          <h1>Top companies hiring now</h1>
-          <p>Discover your next career opportunity with leading companies</p>
+          <h1>Companies from Job Submissions</h1>
+          <p>Discover companies that are actively posting jobs through our platform</p>
         </div>
       </section>
 
@@ -224,13 +337,13 @@ const Companie = () => {
           </div>
 
           <div className="filter-section">
-            <h4>Company type</h4>
-            {filterOptions.companyType.map((option) => (
+            <h4>Industry</h4>
+            {filterOptions.industry.map((option) => (
               <label key={option.label} className="filter-option">
                 <input
                   type="checkbox"
-                  checked={selectedFilters.companyType.includes(option.label)}
-                  onChange={() => handleFilterChange('companyType', option.label)}
+                  checked={selectedFilters.industry.includes(option.label)}
+                  onChange={() => handleFilterChange('industry', option.label)}
                 />
                 <span className="checkmark"></span>
                 {option.label} ({option.count})
@@ -255,16 +368,31 @@ const Companie = () => {
           </div>
 
           <div className="filter-section">
-            <h4>Company Size</h4>
-            {filterOptions.size.map((option) => (
+            <h4>Department</h4>
+            {filterOptions.department.map((option) => (
               <label key={option.label} className="filter-option">
                 <input
                   type="checkbox"
-                  checked={selectedFilters.size.includes(option.label)}
-                  onChange={() => handleFilterChange('size', option.label)}
+                  checked={selectedFilters.department.includes(option.label)}
+                  onChange={() => handleFilterChange('department', option.label)}
                 />
                 <span className="checkmark"></span>
-                {option.label} employees ({option.count})
+                {option.label} ({option.count})
+              </label>
+            ))}
+          </div>
+
+          <div className="filter-section">
+            <h4>Job Count</h4>
+            {filterOptions.jobCount.map((option) => (
+              <label key={option.label} className="filter-option">
+                <input
+                  type="checkbox"
+                  checked={selectedFilters.jobCount.includes(option.label)}
+                  onChange={() => handleFilterChange('jobCount', option.label)}
+                />
+                <span className="checkmark"></span>
+                {option.label} ({option.count})
               </label>
             ))}
           </div>
@@ -306,43 +434,62 @@ const Companie = () => {
             {filteredCompanies.map((company) => (
               <div key={company.id} className="company-card">
                 <div className="company-header">
-                  <div 
+                  {/* <div 
                     className="company-logo"
                     style={{ backgroundColor: company.color }}
                   >
                     {company.logo}
-                  </div>
+                  </div> */}
                   <div className="company-info">
                     <h3>{company.name}</h3>
-                    <div className="rating-info">
+                    {/* <div className="rating-info">
                       <div className="stars">
                         {renderStars(company.rating)}
                       </div>
                       <span className="rating-text">
                         {company.rating} {company.reviews} reviews
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
                 <div className="company-details">
                   <div className="detail-tags">
                     <span className="tag industry">{company.industry}</span>
-                    <span className="tag founded">Founded: {company.founded}</span>
-                    <span className="tag employees">{company.employees}</span>
+                    {/* <span className="tag founded">Founded: {company.founded}</span>
+                    <span className="tag employees">{company.employees}</span> */}
                   </div>
                   
-                  <p className="company-description">{company.description}</p>
+                  
                   
                   <div className="company-meta">
                     <span className="location">{company.location}</span>
                     <span className="type">{company.type}</span>
                   </div>
+
+                  {/* Job Statistics */}
+                  <div className="job-stats-company">
+                    <div className="job-stat">
+                      <span className="stat-number">{company.totalJobs || 0}</span>
+                      <span className="stat-label">Total Jobs</span>
+                    </div>
+                    <div className="job-stat">
+                      <span className="stat-number">{company.activeJobs || 0}</span>
+                      <span className="stat-label">Active Jobs</span>
+                    </div>
+                    {company.department && (
+                      <div className="job-stat">
+                        <span className="stat-label">Department:</span>
+                        <span className="stat-value">{company.department}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="company-description">{company.description}</p>
                 </div>
 
                 <div className="company-actions">
-                  <button className="btn-primary">View Jobs</button>
-                  <button className="btn-secondary">Company Profile</button>
+                  <button className="btn-primary"><a href="/">View Jobs</a></button>
                 </div>
               </div>
             ))}
