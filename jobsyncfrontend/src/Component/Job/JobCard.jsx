@@ -126,14 +126,14 @@ const JobCard = ({ job, onSaveJob, onQuickApply }) => {
         </div>
         
         <div className="job-actions">
-          <button 
+          {/* <button 
             className="quick-apply-btn"
             onClick={handleQuickApply}
             aria-label={`Quick apply for ${job.jobTitle}`}
           >
             <i className="fas fa-bolt"></i>
             Quick Apply
-          </button>
+          </button> */}
           <button 
             className="details-btn"
             onClick={handleViewDetails}

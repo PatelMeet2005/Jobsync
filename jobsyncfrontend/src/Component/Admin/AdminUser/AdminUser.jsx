@@ -18,19 +18,17 @@ const AdminUser = () => {
 const fetchUsersAndEmployees = async () => {
   try {
     setLoading(true);
-    const response = await axios.get("http://localhost:8000/user/getallusers", {
+    
+    // Fetch users
+    const userResponse = await axios.get("http://localhost:8000/user/getallusers", {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (response.status === 304) {
-      console.log("Data not modified — using existing state");
-      setLoading(false);
-      return;
-    }
-
-    if (Array.isArray(response.data)) {
-      // Map API fields to UI fields
-      const formattedUsers = response.data.map((u) => ({
+    if (userResponse.status === 304) {
+      console.log("User data not modified — using existing state");
+    } else if (Array.isArray(userResponse.data)) {
+      // Map API fields to UI fields for users
+      const formattedUsers = userResponse.data.map((u) => ({
         _id: u._id,
         name: `${u.userFirstName} ${u.userLastName}`,
         email: u.userEmail,
@@ -39,16 +37,44 @@ const fetchUsersAndEmployees = async () => {
         lastLogin: u.updatedAt,
         profileCompleted: 80, // example default value
         skills: [], // example default value
-        userType: u.role === "user" ? "jobseeker" : "employee",
+        userType: "jobseeker",
       }));
 
       setUsers(formattedUsers);
       console.log("Fetched users:", formattedUsers);
     } else {
-      console.error("Unexpected response format:", response.data);
+      console.error("Unexpected user response format:", userResponse.data);
     }
+
+    // Fetch employees
+    const employeeResponse = await axios.get("http://localhost:8000/employee/all", {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (Array.isArray(employeeResponse.data)) {
+      // Map API fields to UI fields for employees
+      const formattedEmployees = employeeResponse.data.map((e) => ({
+        _id: e._id,
+        name: e.employeename,
+        email: e.employeeemail,
+        phone: "", // Not provided in employee API
+        registeredDate: e.createdAt,
+        lastLogin: e.updatedAt,
+        profileCompleted: 100, // Assuming employees have complete profiles
+        skills: [], // Not provided in employee API
+        userType: "employee",
+        company: "Employee", // Default company for employees
+      }));
+
+      setEmployees(formattedEmployees);
+      console.log("Fetched employees:", formattedEmployees);
+    } else {
+      console.error("Unexpected employee response format:", employeeResponse.data);
+    }
+
   } catch (error) {
-    console.error("Error fetching users:", error);
+    console.error("Error fetching users and employees:", error);
+    setError("Failed to load users and employees. Please try again later.");
   } finally {
     setLoading(false);
   }
@@ -63,18 +89,27 @@ const fetchUsersAndEmployees = async () => {
       )
     ) {
       try {
-        // TODO: Uncomment when backend is ready
-        const endpoint = userType === 'jobseeker' ? 'user' : 'employee';
-      const response = await axios.delete(`http://localhost:8000/${endpoint}/deleteuser/${userId}`,
-        {
+        let endpoint;
+        if (userType === 'jobseeker') {
+          endpoint = `http://localhost:8000/user/deleteuser/${userId}`;
+        } else if (userType === 'employee') {
+          endpoint = `http://localhost:8000/employee/delete/${userId}`;
+        }
+
+        const response = await axios.delete(endpoint, {
           headers: {
             'Content-Type': 'application/json'
           }
-        }
-      );
+        });
 
-      setUsers(users.filter(user => user._id !== userId));
-      console.log(`User ${userId} deleted`);
+        // Update the appropriate state based on user type
+        if (userType === 'jobseeker') {
+          setUsers(users.filter(user => user._id !== userId));
+        } else if (userType === 'employee') {
+          setEmployees(employees.filter(employee => employee._id !== userId));
+        }
+        
+        console.log(`${userType} ${userId} deleted`);
 
       } catch (error) {
         console.error("Error deleting user:", error);
@@ -162,7 +197,7 @@ const fetchUsersAndEmployees = async () => {
           className={`tab-btn ${activeTab === "employees" ? "active" : ""}`}
           onClick={() => setActiveTab("employees")}
         >
-          Employers ({employees.length})
+          Employees ({employees.length})
         </button>
       </div>
 
@@ -214,11 +249,6 @@ const fetchUsersAndEmployees = async () => {
                 <div className="user-main-info">
                   <h3 className="user-name">{user.name}</h3>
                   {/* <p className="user-email">{user.email}</p> */}
-                  {activeTab === "employees" && user.company && (
-                    <p className="user-company">
-                      {user.company} - {user.position}
-                    </p>
-                  )}
                 </div>
               </div>
 
@@ -227,10 +257,6 @@ const fetchUsersAndEmployees = async () => {
                   <div className="info-item">
                     <span className="label">Email:</span>
                     <span className="value">{user.email}</span>
-                  </div>
-                  <div className="info-item">
-                    <span className="label">Phone:</span>
-                    <span className="value">{user.phone}</span>
                   </div>
                   <div className="info-item">
                     <span className="label">Registered:</span>
@@ -242,12 +268,6 @@ const fetchUsersAndEmployees = async () => {
                     <span className="label">Last Login:</span>
                     <span className="value">{formatDate(user.lastLogin)}</span>
                   </div>
-                  {/* <div className="info-item">
-                    <span className="label">Profile:</span>
-                    <span className="value">
-                      {user.profileCompleted}% Complete
-                    </span>
-                  </div> */}
 
                   {activeTab === "users" ? (
                     <>
@@ -272,7 +292,7 @@ const fetchUsersAndEmployees = async () => {
                     </>
                   ) : (
                     <>
-                      <div className="info-item">
+                      {/* <div className="info-item">
                         <span className="label">Department:</span>
                         <span className="value">{user.department}</span>
                       </div>
@@ -287,7 +307,7 @@ const fetchUsersAndEmployees = async () => {
                       <div className="info-item">
                         <span className="label">Company Size:</span>
                         <span className="value">{user.companySize}</span>
-                      </div>
+                      </div> */}
                     </>
                   )}
                 </div>

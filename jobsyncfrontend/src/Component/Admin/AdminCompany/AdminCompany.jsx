@@ -18,109 +18,72 @@ const AdminCompany = () => {
   const fetchCompanies = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8000/admin/companies', {
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-        }
-      });
+      const response = await axios.get('http://localhost:8000/employee/fetchjobs');
 
-      if (response.data.status === 'success') {
-        setCompanies(response.data.companies || []);
+      console.log('API Response:', response.data); // Debug log
+
+      if (response.data && response.data.success && Array.isArray(response.data.jobs)) {
+        // Process jobs to extract unique companies with job counts
+        const companyMap = new Map();
+        
+        response.data.jobs.forEach(job => {
+          const company = job.company;
+          if (company && company.name) {
+            const companyKey = company.name.toLowerCase();
+            
+            if (companyMap.has(companyKey)) {
+              // Company exists, increment job count
+              const existingCompany = companyMap.get(companyKey);
+              existingCompany.totalJobs += 1;
+              
+              // Count jobs by status
+              if (job.status === 'accepted' || job.status === 'active') {
+                existingCompany.activeJobs += 1;
+              } else if (job.status === 'pending') {
+                existingCompany.pendingJobs += 1;
+              } else if (job.status === 'rejected') {
+                existingCompany.rejectedJobs += 1;
+              }
+            } else {
+              // New company, create entry
+              companyMap.set(companyKey, {
+                _id: job._id + '_company', // Use job ID as base for company ID
+                name: company.name,
+                location: company.location || 'Not specified',
+                email: company.contactEmail || 'Not provided',
+                department: company.department || 'General',
+                totalJobs: 1,
+                activeJobs: (job.status === 'accepted' || job.status === 'active') ? 1 : 0,
+                pendingJobs: job.status === 'pending' ? 1 : 0,
+                rejectedJobs: job.status === 'rejected' ? 1 : 0,
+                industry: job.category || 'Not specified',
+                website: `https://${company.name.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '')}.com`,
+                phone: 'Not provided',
+                description: `Company posting jobs in ${job.category || 'various'} sector. Department: ${company.department || 'General'}`,
+                size: 'Not specified',
+                founded: 'Not specified',
+                logo: `https://via.placeholder.com/150/0066CC/FFFFFF?text=${company.name.charAt(0)}`,
+                status: 'active',
+                totalApplications: 0 // This would need to come from applications data
+              });
+            }
+          }
+        });
+
+        // Convert map to array
+        const companiesArray = Array.from(companyMap.values());
+        console.log('Processed companies:', companiesArray); // Debug log
+        setCompanies(companiesArray);
+        setError('');
       } else {
-        setError('Failed to fetch companies');
+        console.error('Invalid API response structure:', response.data);
+        setError('Invalid data format received from API');
+        setCompanies([]);
       }
     } catch (error) {
-      console.error('Error fetching companies:', error);
-      setError(error.response?.data?.message || 'Failed to fetch companies');
-      
-      // Fallback to mock data for demonstration
-      setCompanies([
-        {
-          _id: '1',
-          name: 'Tech Solutions Inc.',
-          industry: 'Technology',
-          location: 'New York, NY',
-          website: 'https://techsolutions.com',
-          email: 'hr@techsolutions.com',
-          phone: '+1-555-0101',
-          description: 'Leading software development company specializing in enterprise solutions.',
-          size: '500-1000',
-          founded: 2010,
-          logo: 'https://via.placeholder.com/150/0066CC/FFFFFF?text=TS',
-          totalJobs: 15,
-          activeJobs: 8,
-          totalApplications: 234,
-          status: 'active'
-        },
-        {
-          _id: '2',
-          name: 'Innovation Corp',
-          industry: 'Software',
-          location: 'San Francisco, CA',
-          website: 'https://innovationcorp.com',
-          email: 'careers@innovationcorp.com',
-          phone: '+1-555-0202',
-          description: 'Innovative startup focused on AI and machine learning solutions.',
-          size: '100-500',
-          founded: 2018,
-          logo: 'https://via.placeholder.com/150/FF6600/FFFFFF?text=IC',
-          totalJobs: 12,
-          activeJobs: 7,
-          totalApplications: 156,
-          status: 'active'
-        },
-        {
-          _id: '3',
-          name: 'Creative Studio',
-          industry: 'Design',
-          location: 'Los Angeles, CA',
-          website: 'https://creativestudio.com',
-          email: 'hello@creativestudio.com',
-          phone: '+1-555-0303',
-          description: 'Award-winning design agency creating beautiful digital experiences.',
-          size: '50-100',
-          founded: 2015,
-          logo: 'https://via.placeholder.com/150/9933CC/FFFFFF?text=CS',
-          totalJobs: 8,
-          activeJobs: 5,
-          totalApplications: 89,
-          status: 'active'
-        },
-        {
-          _id: '4',
-          name: 'Global Finance Corp',
-          industry: 'Finance',
-          location: 'Chicago, IL',
-          website: 'https://globalfinance.com',
-          email: 'jobs@globalfinance.com',
-          phone: '+1-555-0404',
-          description: 'International financial services company with 50+ years of experience.',
-          size: '1000+',
-          founded: 1970,
-          logo: 'https://via.placeholder.com/150/006600/FFFFFF?text=GF',
-          totalJobs: 25,
-          activeJobs: 18,
-          totalApplications: 445,
-          status: 'active'
-        },
-        {
-          _id: '5',
-          name: 'HealthTech Solutions',
-          industry: 'Healthcare',
-          location: 'Boston, MA',
-          website: 'https://healthtech.com',
-          email: 'hr@healthtech.com',
-          phone: '+1-555-0505',
-          description: 'Healthcare technology company improving patient outcomes through innovation.',
-          size: '200-500',
-          founded: 2012,
-          logo: 'https://via.placeholder.com/150/CC0000/FFFFFF?text=HT',
-          totalJobs: 18,
-          activeJobs: 12,
-          totalApplications: 298,
-          status: 'active'
-        }
-      ]);
+      console.error('Error fetching companies from jobs:', error);
+      setError(error.response?.data?.message || 'Failed to fetch company data');
+      setCompanies([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
@@ -195,8 +158,8 @@ const AdminCompany = () => {
   return (
     <div className="admin-company-container">
       <div className="admin-company-header">
-        <h1>Company Management</h1>
-        <p>Manage and monitor all companies on the platform</p>
+        <h1>Companies Overview</h1>
+        <p>Companies that have posted jobs through employees - extracted from job submissions</p>
       </div>
 
       {error && (
@@ -278,7 +241,6 @@ const AdminCompany = () => {
             <div key={company._id} className="company-card">
               <div className="company-header">
                 <div className="company-logo-section">
-                  <img src={company.logo} alt={`${company.name} logo`} className="company-logo" />
                   <div className="company-basic-info">
                     <h3 className="company-name">{company.name}</h3>
                     <div className="company-meta">
@@ -290,9 +252,9 @@ const AdminCompany = () => {
                   </div>
                 </div>
                 <div className="company-status">
-                  <span className={`status-badge ${company.status}`}>
+                  {/* <span className={`status-badge ${company.status}`}>
                     {company.status}
-                  </span>
+                  </span> */}
                 </div>
               </div>
 
@@ -325,12 +287,16 @@ const AdminCompany = () => {
                   <span className="job-stat-label">Total Jobs</span>
                 </div>
                 <div className="job-stat-item">
-                  <span className="job-stat-number">{company.activeJobs}</span>
-                  <span className="job-stat-label">Active Jobs</span>
+                  <span className="job-stat-number">{company.activeJobs || 0}</span>
+                  <span className="job-stat-label">Active/Accepted</span>
                 </div>
                 <div className="job-stat-item">
-                  <span className="job-stat-number">{company.totalApplications}</span>
-                  <span className="job-stat-label">Applications</span>
+                  <span className="job-stat-number">{company.pendingJobs || 0}</span>
+                  <span className="job-stat-label">Pending</span>
+                </div>
+                <div className="job-stat-item">
+                  <span className="job-stat-number">{company.rejectedJobs || 0}</span>
+                  <span className="job-stat-label">Rejected</span>
                 </div>
               </div>
 
@@ -342,7 +308,7 @@ const AdminCompany = () => {
                   📋 View All Jobs ({company.totalJobs})
                 </button>
                 
-                {company.status === 'active' ? (
+                {/* {company.status === 'active' ? (
                   <button 
                     className="deactivate-btn"
                     onClick={() => handleCompanyAction(company._id, 'deactivate')}
@@ -356,10 +322,10 @@ const AdminCompany = () => {
                   >
                     ▶️ Activate
                   </button>
-                )}
+                )} */}
                 
-                <button className="edit-btn">✏️ Edit</button>
-                <button className="details-btn">👁️ View Details</button>
+                {/* <button className="edit-btn">✏️ Edit</button>
+                <button className="details-btn">👁️ View Details</button> */}
               </div>
             </div>
           ))

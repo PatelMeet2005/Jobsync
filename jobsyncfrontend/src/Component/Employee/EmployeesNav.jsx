@@ -17,9 +17,9 @@ const EmployeeNav = ({ isLoggedIn, setIsLoggedIn, scrollToSection, refs }) => {
         </div>
         
         <ul className="nav-links">
-          <li onClick={() => scrollToSection(refs.dashboardRef)}>Work</li>
+          <li onClick={() => scrollToSection(refs.dashboardRef)}>Dashboard</li>
           <li onClick={() => scrollToSection(refs.addJobRef)}>Add Job</li>
-          <li onClick={() => scrollToSection(refs.postedJobRef)}>Jobs</li>
+          <li onClick={() => scrollToSection(refs.postedJobRef)}>Jobs Tracking</li>
           <li onClick={() => scrollToSection(refs.applicantsRef)}>Applicants</li>
         </ul>
 
@@ -28,7 +28,7 @@ const EmployeeNav = ({ isLoggedIn, setIsLoggedIn, scrollToSection, refs }) => {
                 localStorage.removeItem("token"); // remove token
                 setIsLoggedIn(false);
           }}>
-            employee@jobsync.com
+            Log out
           </div>
         </div>
       </div>
