@@ -62,7 +62,28 @@ const loginEmployee = async (req, res) => {
     }
 };
 
+const getAllEmployees = async (req, res) => {
+    try {
+        const employees = await EmployeeRegister.find();
+        res.status(200).json(employees);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const deleteEmployee = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await EmployeeRegister.findByIdAndDelete(id);
+        res.status(200).json({ message: "Employee deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     registerEmployee,
-    loginEmployee
+    loginEmployee,
+    getAllEmployees,
+    deleteEmployee
 };

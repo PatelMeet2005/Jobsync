@@ -97,8 +97,10 @@
   cursor: pointer;
 }
 
-.job-stats {
+.job-statsabc {
   display: flex;
+  /* give prirority to flex direction */
+  flex-direction: row;
   gap: 30px;
   padding-top: 20px;
   border-top: 1px solid #e1e5e9;

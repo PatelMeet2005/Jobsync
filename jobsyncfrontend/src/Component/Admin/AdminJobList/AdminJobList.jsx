@@ -119,7 +119,7 @@ const AdminJobList = () => {
           </div>
         </div>
 
-        <div className="job-stats">
+        <div className="job-statsabc">
           <div className="stat-item">
             <span className="stat-number">{jobs.length}</span>
             <span className="stat-label">Total Jobs</span>
@@ -129,6 +129,12 @@ const AdminJobList = () => {
               {jobs.filter((job) => job.status === "accepted").length}
             </span>
             <span className="stat-label">Accepted</span>
+          </div>  
+          <div className="stat-item">
+            <span className="stat-number">
+              {jobs.filter((job) => job.status === "rejected").length}
+            </span>
+            <span className="stat-label">Rejected</span>
           </div>
         </div>
       </div>

@@ -5,6 +5,7 @@ import "./AdminRequest.css";
 const AdminJobRequests = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("pending"); // New state for active tab
 
   // Fetch all jobs from admin API
   const fetchJobs = async () => {
@@ -28,6 +29,13 @@ const AdminJobRequests = () => {
       setJobs((prev) =>
         prev.map((job) => (job._id === jobId ? { ...job, status } : job))
       );
+
+      // Optionally switch to the appropriate tab after status update
+      if (status === "accepted" || status === "rejected") {
+        setTimeout(() => {
+          setActiveTab(status);
+        }, 1000); // Switch tab after 1 second to show the updated status
+      }
     } catch (error) {
       alert(error.response?.data?.message || "Error updating status");
     }
@@ -37,6 +45,14 @@ const AdminJobRequests = () => {
     fetchJobs();
   }, []);
 
+  // Filter jobs based on active tab
+  const filteredJobs = jobs.filter(job => job.status === activeTab);
+
+  // Get counts for each status
+  const getStatusCount = (status) => {
+    return jobs.filter(job => job.status === status).length;
+  };
+
   if (loading) {
     return <div className="admin-job-loading">Loading job requests...</div>;
   }
@@ -45,11 +61,33 @@ const AdminJobRequests = () => {
     <div className="admin-job-container">
       <h1 className="admin-job-title">Job Requests</h1>
 
-      {jobs.length === 0 ? (
-        <p className="no-jobs">No job requests found.</p>
+      {/* Tab Navigation */}
+      <div className="request-tabs">
+        <button
+          className={`tab-btn ${activeTab === "pending" ? "active" : ""}`}
+          onClick={() => setActiveTab("pending")}
+        >
+          Pending ({getStatusCount("pending")})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "accepted" ? "active" : ""}`}
+          onClick={() => setActiveTab("accepted")}
+        >
+          Accepted ({getStatusCount("accepted")})
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "rejected" ? "active" : ""}`}
+          onClick={() => setActiveTab("rejected")}
+        >
+          Rejected ({getStatusCount("rejected")})
+        </button>
+      </div>
+
+      {filteredJobs.length === 0 ? (
+        <p className="no-jobs">No {activeTab} job requests found.</p>
       ) : (
         <div className="admin-job-list">
-          {jobs.map((job) => (
+          {filteredJobs.map((job) => (
             <div key={job._id} className="admin-job-card">
               <div className="job-header">
                 <h2>{job.title}</h2>
@@ -66,7 +104,7 @@ const AdminJobRequests = () => {
               <p><strong>Posted By:</strong> {job.postedBy?.employeename || "Unknown"}</p>
 
               <div className="job-actions">
-                {job.status === "pending" ? (
+                {activeTab === "pending" ? (
                   <>
                     <button
                       className="accept-btn"
@@ -83,7 +121,7 @@ const AdminJobRequests = () => {
                   </>
                 ) : (
                   <span className="status-msg">
-                    ✅ Job already {job.status}.
+                    {activeTab === "accepted" ? "✅" : "❌"} Job {job.status}.
                   </span>
                 )}
               </div>
