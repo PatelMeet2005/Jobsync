@@ -4,6 +4,8 @@ import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import "./JobDetailPage.css";
+import { useTokenValidation } from "../../utils/tokenValidation";
+import SessionWarningBanner from "../SessionWarningBanner/SessionWarningBanner";
 
 const JobDetailPage = () => {
   const { id } = useParams();
@@ -13,16 +15,67 @@ const JobDetailPage = () => {
   const [error, setError] = useState(null);
   const [showApplyForm, setShowApplyForm] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [appliedApplication, setAppliedApplication] = useState(null);
+  const [showWarningBanner, setShowWarningBanner] = useState(false);
+  
+  // Validate token on mount
+  const tokenValidation = useTokenValidation();
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/admin/getJob/${id}`);
-        setJob(response.data.job);
+        const response = await axios.get(`http://localhost:8000/employee/job/${id}`);
+        const payload = response.data;
+
+        if (!payload || payload.success === false || !payload.job) {
+          setError("Job not found or could not be loaded");
+          setLoading(false);
+          return;
+        }
+
+        const j = payload.job;
+
+        // Map backend fields to the frontend-friendly keys used across the UI
+        const mapped = {
+          _id: j._id,
+          jobTitle: j.title || '',
+          jobCompany: j.company?.name || '',
+          jobLocation: j.company?.location || '',
+          jobDepartment: j.company?.department || '',
+          jobContactEmail: j.company?.contactEmail || '',
+          jobType: j.jobType || j.jobType || '',
+          jobSalary: j.salary ? (typeof j.salary === 'number' ? `₹${j.salary}` : j.salary) : '',
+          jobExperience: j.experience || '',
+          jobDescription: j.description || '',
+          jobRequirements: j.requirements || [],
+          jobBenefits: j.benefits || [],
+          jobSkills: j.skills || [],
+          jobStatus: j.status || '',
+          postedBy: j.postedBy || null,
+          postedDate: j.postedDate || j.postedDate,
+          jobApplicationDeadline: j.applicationDeadline ? new Date(j.applicationDeadline).toLocaleDateString() : ''
+        };
+
+        setJob(mapped);
         
         // Check if job is saved (you would implement this logic based on your app)
         const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
         setIsSaved(savedJobs.includes(id));
+        // after loading job, check if current user has already applied
+        try {
+          const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+          if (token) {
+            const headers = { Authorization: `Bearer ${token}` };
+            const appRes = await axios.get(`http://localhost:8000/applications/mine?jobId=${id}`, { headers });
+            if (appRes.data && appRes.data.success && Array.isArray(appRes.data.applications) && appRes.data.applications.length > 0) {
+              // pick the most recent application for this job
+              setAppliedApplication(appRes.data.applications[0]);
+            }
+          }
+        } catch (err) {
+          // swallow - not critical, we'll allow apply for guests
+          console.warn('Could not check existing application', err?.response?.data || err.message || err);
+        }
       } catch (err) {
         setError("Failed to load job details");
         console.error("Error fetching job:", err);
@@ -33,6 +86,13 @@ const JobDetailPage = () => {
 
     fetchJob();
   }, [id]);
+
+  // Show warning banner if token validation fails
+  useEffect(() => {
+    if (tokenValidation.needsRelogin) {
+      setShowWarningBanner(true);
+    }
+  }, [tokenValidation]);
 
   const handleSaveJob = () => {
     const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
@@ -99,6 +159,14 @@ const JobDetailPage = () => {
 
   return (
     <div className="job-detail-page">
+      {/* Show warning banner if token needs refresh */}
+      {showWarningBanner && tokenValidation.needsRelogin && (
+        <SessionWarningBanner 
+          message={tokenValidation.message} 
+          onClose={() => setShowWarningBanner(false)}
+        />
+      )}
+      
       <button onClick={() => navigate(-1)} className="back-button">
         <i className="fas fa-arrow-left"></i> Back to Jobs
       </button>
@@ -129,9 +197,13 @@ const JobDetailPage = () => {
                 <i className={`fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}`}></i>
                 {isSaved ? 'Saved' : 'Save'}
               </button>
-              <button className="apply-now-btn" onClick={handleApplyClick}>
-                Apply Now
-              </button>
+              {appliedApplication && appliedApplication.status && appliedApplication.status !== 'rejected' ? (
+                <button className="apply-now-btn disabled" disabled>Already Applied</button>
+              ) : (
+                <button className="apply-now-btn" onClick={handleApplyClick}>
+                  Apply Now
+                </button>
+              )}
             </div>
           </header>
 
@@ -256,7 +328,92 @@ const JobDetailPage = () => {
               }}
             >
               {({ setFieldValue, isSubmitting }) => (
-                <Form className="apply-form">
+                  <Form className="apply-form" onSubmit={async (e) => {
+                    e.preventDefault();
+                    const form = e.target;
+                    const formData = new FormData(form);
+                    // append jobId
+                    formData.append('jobId', job._id);
+
+                    try {
+                      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+                      const headers = { 'Content-Type': 'multipart/form-data' };
+                      if (token) headers.Authorization = `Bearer ${token}`;
+
+                      const res = await axios.post('http://localhost:8000/applications', formData, {
+                        headers
+                      });
+                      if (res.data && res.data.success) {
+                            console.log('Application response:', res.data.application);
+                            const app = res.data.application;
+                            
+                            // Check if applicant was linked successfully
+                            const hasApplicantId = app && (app.applicant || app.applicantId);
+                            
+                            if (!hasApplicantId) {
+                              alert('⚠️ Application submitted, but applicant was not linked on server.\n\n' +
+                                    'This means:\n' +
+                                    '• Your application was saved but may not show in your profile\n' +
+                                    '• You need to LOGOUT and LOGIN again to refresh your session\n' +
+                                    '• Then reapply for this job\n\n' +
+                                    'This happens when your login session is outdated.');
+                              
+                              // Don't cache applications without applicant ID
+                              console.warn('Skipping cache for application without applicant ID');
+                              form.reset();
+                              setShowApplyForm(false);
+                              return;
+                            }
+                            
+                            // Success case - applicant was linked properly
+                            alert('✅ Application submitted successfully!');
+                            form.reset();
+                            setShowApplyForm(false);
+                            
+                            // Mark as applied so button hides
+                            setAppliedApplication(app);
+                            
+                            // Cache the application locally for immediate display in profile
+                            try {
+                              const jobIdKey = app.jobId && (app.jobId._id || app.jobId);
+                              const cachedRaw = JSON.parse(sessionStorage.getItem('appliedApplications') || '[]');
+                              const toStore = {
+                                _id: app._id,
+                                jobId: {
+                                  _id: jobIdKey,
+                                  // Use cached fields from backend first, fallback to populated jobId
+                                  title: app.jobTitle || (app.jobId && (app.jobId.title || app.jobId.jobTitle)) || job.jobTitle || '',
+                                  company: app.companyName || (app.jobId && (app.jobId.company && (app.jobId.company.name || app.jobId.company))) || job.jobCompany || ''
+                                },
+                                jobTitle: app.jobTitle || job.jobTitle || '',
+                                jobCompany: app.companyName || job.jobCompany || '',
+                                status: app.status || 'pending',
+                                createdAt: app.createdAt || new Date().toISOString(),
+                                responses: app.responses || [],
+                                email: app.email || '',
+                                userName: app.userName || app.name || '',
+                                applicantId: app.applicantId || (app.applicant && (app.applicant._id || app.applicant)) || '',
+                                applicant: app.applicant || app.applicantId
+                              };
+                              
+                              // Replace existing or add new
+                              const existingIdx = cachedRaw.findIndex(a => (a._id && a._id === toStore._id) || (a.jobId && a.jobId._id && String(a.jobId._id) === String(toStore.jobId._id)));
+                              if (existingIdx >= 0) cachedRaw[existingIdx] = toStore;
+                              else cachedRaw.push(toStore);
+                              
+                              sessionStorage.setItem('appliedApplications', JSON.stringify(cachedRaw));
+                              console.log('Application cached successfully:', toStore._id);
+                            } catch (err) {
+                              console.warn('Could not cache applied application', err);
+                            }
+                      } else {
+                        alert('Failed to submit application');
+                      }
+                    } catch (err) {
+                      console.error('Application submission error', err);
+                      alert('Error submitting application. Please try again later.');
+                    }
+                  }}>
                   <div className="form-group">
                     <label htmlFor="name">Full Name *</label>
                     <Field 
@@ -282,13 +439,13 @@ const JobDetailPage = () => {
                   <div className="form-group">
                     <label htmlFor="resume">Upload Resume *</label>
                     <div className="file-input-container">
-                      <input
-                        type="file"
-                        id="resume"
-                        name="resume"
-                        onChange={(event) => setFieldValue("resume", event.currentTarget.files[0])}
-                        accept=".pdf,.doc,.docx"
-                      />
+                        <input
+                          type="file"
+                          id="resume"
+                          name="resume"
+                          onChange={(event) => setFieldValue("resume", event.currentTarget.files[0])}
+                          accept=".pdf,.doc,.docx"
+                        />
                       <label htmlFor="resume" className="file-input-label">
                         <i className="fas fa-upload"></i> Choose File
                       </label>
@@ -327,6 +484,17 @@ const JobDetailPage = () => {
                 </Form>
               )}
             </Formik>
+          </div>
+        )}
+        {/* Show badge or apply button based on whether user already applied for this job */}
+        {!showApplyForm && (
+          <div className="apply-control">
+            {appliedApplication && appliedApplication.status && appliedApplication.status !== 'rejected' ? (
+              <button className="already-applied-btn" disabled>Already Applied</button>
+            ) : (
+              // show the main Apply Now button in header; this duplicate ensures users without token or with rejected status can apply
+              null
+            )}
           </div>
         )}
       </div>

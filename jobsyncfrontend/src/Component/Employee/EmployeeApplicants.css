@@ -33,3 +33,61 @@
 .employee-applicants em {
   color: #2563eb;
 }
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.application-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.app-left { flex: 1; }
+.app-right { width: 320px; display:flex; flex-direction:column; gap:12px; }
+
+.app-email { color:#475569; font-size:0.9rem; }
+.app-job { color:#0f172a; margin-top:6px; }
+.app-message { margin-top:8px; color:#374151; }
+
+.status { font-size:0.95rem; }
+.responses { background:#f8fafc; padding:10px; border-radius:6px; }
+.response-item { border-left:3px solid #e2e8f0; padding:8px; margin-bottom:8px; }
+.response-sender { font-size:0.75rem; color:#6b7280; }
+.response-message { margin:4px 0 0; }
+
+.reply-box textarea { width:100%; min-height:80px; padding:8px; border-radius:6px; border:1px solid #e5e7eb; }
+.reply-actions { display:flex; gap:8px; margin-top:8px; }
+.btn { padding:8px 12px; border-radius:6px; border:none; cursor:pointer; }
+.btn-primary { background:#2563eb; color:white; }
+.btn-secondary { background:#e5e7eb; }
+
+.error { color: #b91c1c; }
+
+/* New styles for status badges and actions */
+.status-badge { display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; text-transform:capitalize; }
+.status-pending { background: #fff4e5; color:#b45309; }
+.status-reviewed { background: #e6f4ff; color:#0369a1; }
+.status-accepted { background: #d1fae5; color:#065f46; }
+.status-rejected { background: #ffd7d7; color:#831843; }
+
+.actions-row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-top:10px; }
+.status-actions { display:flex; gap:8px; }
+.btn.accept { background: linear-gradient(90deg,#10b981,#059669); color:white; padding:8px 12px; }
+.btn.reject { background: linear-gradient(90deg,#ef4444,#dc2626); color:white; padding:8px 12px; }
+
+/* Responsive */
+@media (max-width: 800px) {
+  .application-card { flex-direction: column; }
+  .app-right { width: 100%; }
+  .actions-row { flex-direction: column; align-items:stretch; }
+  .status-actions { justify-content: space-between; }
+}
+

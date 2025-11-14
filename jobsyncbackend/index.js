@@ -5,14 +5,11 @@ const authRoute = require('./Routes/authRoute');
 const jobRoute = require('./Routes/jobRoute');
 const employeeRoute = require('./Routes/employeeRoutes');
 const employeeJobRoute = require('./Routes/employeeJobRoutes');
+const applicationRoutes = require('./Routes/applicationRoutes');
 const cors = require('cors');
 
 // Load environment variables from .env file
 dotenv.config();
-
-// Connect to MongoDB
-connectDB();
-
 
 
 // Initialize Express app
@@ -44,9 +41,31 @@ app.use('/employee', employeeRoute);
 
 app.use('/employee', employeeJobRoute);
 
+// Application routes
+app.use('/applications', applicationRoutes);
+
+// Serve uploaded resumes statically
+const path = require('path');
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 const PORT = process.env.PORT || 8000;
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start server after DB connection is established
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+// Graceful handling of unhandled rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });

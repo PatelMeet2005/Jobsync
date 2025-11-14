@@ -1,7 +1,6 @@
 // Navbar.jsx
 import React, { useState, useRef } from "react";
 import "./Navbar.css";
-import JobDropdown from "../JobDropDown/JobDropdown";
 import ProfileDropdown from "../ProfileDropDown/ProfileDropdown";
 import Login from "../../Login/Login";
 import Register from "../../Register/Register";
@@ -50,17 +49,18 @@ const Navbar = () => {
         {/* Desktop Navigation - hidden below 800px */}
         <nav className="nav-links">
           <ul>
-            <JobDropdown />
+            {/* <JobDropdown /> */}
+            <li><a href="/">Jobs</a></li>
             <li><a href="/companie">Companies</a></li>
             <li><a href="/about">About</a></li>
           </ul>
         </nav>
 
         <div className="search-login-wrap">
-          <div className="searchbar">
+          {/* <div className="searchbar">
             <input type="text" placeholder="Search jobs..." />
             <button><IoSearch /></button>
-          </div>
+          </div> */}
 
           {/* Desktop Auth - hidden below 800px */}
           <div className="desktop-auth">

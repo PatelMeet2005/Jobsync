@@ -58,7 +58,7 @@ const JobList = ({ jobs, loading, empty, onViewDetails, onSaveJob, onApply }) =>
                 job={job}
                 onViewDetails={onViewDetails}
                 onSaveJob={onSaveJob}
-                onApply={onApply}
+                onQuickApply={onApply}
               />
             ))}
           </div>

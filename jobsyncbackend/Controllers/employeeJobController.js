@@ -71,4 +71,20 @@ const getMyJobs = async (req, res) => {
   }
 };
 
-module.exports = { createJob, fetchJobs, getMyJobs, updateJobStatus };
+//get job by id
+const getJobById = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    const job = await Job.findById(jobId).populate('postedBy', 'employeename employeeemail');
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    res.status(200).json({ success: true, job });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+module.exports = { createJob, fetchJobs, getMyJobs, updateJobStatus, getJobById };

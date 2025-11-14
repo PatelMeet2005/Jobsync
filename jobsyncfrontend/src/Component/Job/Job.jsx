@@ -43,8 +43,29 @@ const JobPage = () => {
   const fetchJobs = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:8000/admin/getJobs");
-      setJobs(response.data.jobs || []);
+      // Fetch jobs from employee API (new source)
+      const response = await axios.get("http://localhost:8000/employee/fetchjobs");
+      // API returns { success: true, jobs: [...] }
+      const apiJobs = response.data?.jobs || [];
+
+      // Map backend job schema to frontend expected fields
+      const mapped = apiJobs.map(j => ({
+        _id: j._id || j.id,
+        jobTitle: j.title || j.jobTitle || '',
+        jobCompany: (j.company && j.company.name) || j.jobCompany || (j.companyName) || 'Unknown',
+        jobLocation: (j.company && j.company.location) || j.location || j.jobLocation || 'Remote',
+        jobType: j.jobType || j.type || 'Full-time',
+        jobSalary: j.salary ? (typeof j.salary === 'number' ? `₹${j.salary}` : j.salary) : (j.jobSalary || 'Not disclosed'),
+        jobSkills: j.skills || j.requirements || j.jobSkills || [],
+        createdAt: j.postedDate || j.createdAt || j.postedAt,
+        jobDescription: j.description || j.jobDescription || j.requirements?.join(', ') || '',
+        postedDate: j.postedDate || j.createdAt || j.postedAt,
+        jobStatus: j.status || j.jobStatus || 'pending',
+        description: j.description || '',
+        postedBy: j.postedBy || null
+      }));
+
+      setJobs(mapped);
       setError("");
     } catch (err) {
       setError("Failed to load jobs. Please try again later.");

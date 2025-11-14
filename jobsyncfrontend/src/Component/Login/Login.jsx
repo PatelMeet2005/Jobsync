@@ -25,6 +25,8 @@ const Login = ({ onClose, switchToSignup }) => {
       const response = await axios.post(`http://localhost:8000/user/login`, loginUser);
       console.log("Response Data:", response.data);
       sessionStorage.setItem('token', response.data.token);
+      sessionStorage.setItem('userId', response.data.userId || response.data._id);
+      sessionStorage.setItem('_id', response.data._id || response.data.userId);
       sessionStorage.setItem('userFirstName', response.data.userFirstName);
       sessionStorage.setItem('userLastName', response.data.userLastName);
       sessionStorage.setItem('userEmail', userEmail);
