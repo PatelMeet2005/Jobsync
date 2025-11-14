@@ -4,8 +4,9 @@
   align-items: center;
   justify-content: space-between;
   background: #30c0e4;
-  padding: 10px 20px;
+  padding: 10px 90px;
   position: relative;
+  margin-bottom: 30px;
 }
 
 .highlight {
@@ -92,7 +93,7 @@
 }
 
 .login-btns .emp {
-  background-color: #222;
+  background-color: aliceblue;
 }
 
 .user-section {
