@@ -28,6 +28,54 @@
   font-size: 16px;
 }
 
+/* Filter Info Badge */
+.filter-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.filter-badge {
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.filter-badge strong {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.clear-filter-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.clear-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.clear-filter-btn:active {
+  transform: translateY(0);
+}
+
 /* Same spinner & loading UI */
 .loading-container {
   display: flex;

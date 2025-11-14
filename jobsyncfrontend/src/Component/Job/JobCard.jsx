@@ -68,14 +68,6 @@ const JobCard = ({ job, onSaveJob, onQuickApply }) => {
             <span className="job-company">{job.jobCompany}</span>
           </div>
         </div>
-        
-        <button 
-          className={`save-job-btn ${isSaved ? 'saved' : ''}`}
-          onClick={handleSaveJob}
-          aria-label={isSaved ? "Remove from saved jobs" : "Save this job"}
-        >
-          <i className={`fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}`}></i>
-        </button>
       </div>
 
       <div className="job-card-body">
@@ -126,14 +118,6 @@ const JobCard = ({ job, onSaveJob, onQuickApply }) => {
         </div>
         
         <div className="job-actions">
-          {/* <button 
-            className="quick-apply-btn"
-            onClick={handleQuickApply}
-            aria-label={`Quick apply for ${job.jobTitle}`}
-          >
-            <i className="fas fa-bolt"></i>
-            Quick Apply
-          </button> */}
           <button 
             className="details-btn"
             onClick={handleViewDetails}

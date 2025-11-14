@@ -31,6 +31,7 @@ const UserProfile = () => {
   const [appsError, setAppsError] = useState(null)
   const [showWarningBanner, setShowWarningBanner] = useState(false)
   const [isPolling, setIsPolling] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   // Validate token on mount
   const tokenValidation = useTokenValidation()
@@ -154,10 +155,13 @@ const UserProfile = () => {
           }
         } else {
           setAppsError('Could not load applications')
+          toast.error('Could not load applications')
         }
       } catch (err) {
         console.error('Error loading user applications', err)
-        setAppsError(err.response?.data?.message || err.message || 'Error loading applications')
+        const errorMsg = err.response?.data?.message || err.message || 'Error loading applications'
+        setAppsError(errorMsg)
+        toast.error(errorMsg)
       } finally {
         setAppsLoading(false)
         setIsPolling(false)
@@ -224,10 +228,20 @@ const UserProfile = () => {
     toast.info('Edit cancelled.')
   }
 
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true)
+  }
+
   const handleLogout = () => {
+    setShowLogoutConfirm(false)
     sessionStorage.clear()
+    localStorage.removeItem('token')
     toast.info('Logged out!')
     setTimeout(() => navigate('/'), 800)
+  }
+
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false)
   }
 
   const handleInputChange = (e) => {
@@ -323,7 +337,7 @@ const UserProfile = () => {
                 <button className="cancel-btn" onClick={handleCancel}><i className="fas fa-times"></i> Cancel</button>
               </>
             )}
-            <button className="logout-btn" onClick={handleLogout}><i className="fas fa-sign-out-alt"></i> Logout</button>
+            <button className="logout-btn" onClick={handleLogoutClick}><i className="fas fa-sign-out-alt"></i> Logout</button>
           </div>
           <div className="profile-upload-section">
             <label htmlFor="resume-upload" className="upload-btn">
@@ -576,6 +590,43 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="logout-modal-overlay">
+          <div className="logout-modal">
+            <div className="logout-modal-icon">
+              <i className="fas fa-sign-out-alt"></i>
+            </div>
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+            <div className="logout-modal-actions">
+              <button 
+                type="button"
+                className="logout-cancel-btn" 
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  cancelLogout();
+                }}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button"
+                className="logout-confirm-btn" 
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleLogout();
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

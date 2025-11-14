@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./JobHeader.css";
 
-const JobHeader = ({ searchTerm, onSearchChange, onSearchSubmit, onQuickFilter }) => {
+const JobHeader = ({ searchTerm, onSearchChange, onSearchSubmit, onQuickFilter, companyFilter, onClearCompanyFilter }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   
   // Quick filter options
@@ -24,6 +24,21 @@ const JobHeader = ({ searchTerm, onSearchChange, onSearchSubmit, onQuickFilter }
             Discover opportunities from top companies and apply with ease. 
             Your next career move starts here.
           </p>
+          
+          {/* {companyFilter && (
+            <div className="company-filter-badge">
+              <span className="filter-text">
+                🏢 Showing jobs from: <strong>{companyFilter}</strong>
+              </span>
+              <button 
+                onClick={onClearCompanyFilter} 
+                className="clear-company-filter-btn"
+                aria-label="Clear company filter"
+              >
+                ✕ Clear Filter
+              </button>
+            </div>
+          )} */}
         </div>
         
         <form 
@@ -54,11 +69,11 @@ const JobHeader = ({ searchTerm, onSearchChange, onSearchSubmit, onQuickFilter }
         
         <div className="header-stats">
           <div className="stat-item">
-            <span className="stat-number">10K+</span>
+            <span className="stat-number">100+</span>
             <span className="stat-label">Jobs Available</span>
           </div>
           <div className="stat-item">
-            <span className="stat-number">500+</span>
+            <span className="stat-number">50+</span>
             <span className="stat-label">Companies</span>
           </div>
           <div className="stat-item">

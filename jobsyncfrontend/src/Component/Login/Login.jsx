@@ -3,6 +3,7 @@ import "./Login.css";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Login = ({ onClose, switchToSignup }) => {
 
@@ -34,6 +35,7 @@ const Login = ({ onClose, switchToSignup }) => {
       sessionStorage.setItem('role', response.data.role);
 
       if(response.status === 200){
+        toast.success(response.data.message || 'Login successful!');
         setTimeout(() => {
           if(response.data.role === "admin"){
             navigate('/admin');
@@ -44,8 +46,6 @@ const Login = ({ onClose, switchToSignup }) => {
           window.location.reload();
         }, 1000); // Redirect after 1 second
       }
-      
-      alert(response.data.message);
 
       // Reset the form after submission
       setUserEmail('');
@@ -56,7 +56,7 @@ const Login = ({ onClose, switchToSignup }) => {
     }
     catch(error){
       console.error("Error during login:", error.message);
-      alert(error.response.data.message);
+      toast.error(error.response?.data?.message || 'Login failed. Please try again.');
       
     }
   };

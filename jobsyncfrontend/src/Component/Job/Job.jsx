@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import JobHeader from "./JobHeader";
 import JobFilters from "./JobFilters";
@@ -9,18 +10,22 @@ import "react-toastify/dist/ReactToastify.css";
 import "./Job.css";
 
 const JobPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  
   // State
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ 
+    keywords: "",
     location: "", 
-    type: "", 
-    sort: "",
+    workMode: "",
+    type: "",
+    category: "",
     salary: "",
     experience: "",
-    remote: ""
+    sort: ""
   });
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 9;
@@ -38,7 +43,13 @@ const JobPage = () => {
     // Load saved jobs from localStorage
     const saved = JSON.parse(localStorage.getItem('savedJobs') || '[]');
     setSavedJobs(new Set(saved));
-  }, []);
+    
+    // Get company from URL query parameter and set it in filters.keywords
+    const companyFromUrl = searchParams.get('company');
+    if (companyFromUrl) {
+      setFilters(prev => ({ ...prev, keywords: companyFromUrl }));
+    }
+  }, [searchParams]);
 
   const fetchJobs = async () => {
     try {
@@ -55,14 +66,18 @@ const JobPage = () => {
         jobCompany: (j.company && j.company.name) || j.jobCompany || (j.companyName) || 'Unknown',
         jobLocation: (j.company && j.company.location) || j.location || j.jobLocation || 'Remote',
         jobType: j.jobType || j.type || 'Full-time',
-        jobSalary: j.salary ? (typeof j.salary === 'number' ? `₹${j.salary}` : j.salary) : (j.jobSalary || 'Not disclosed'),
+        jobSalary: j.salary ? (typeof j.salary === 'number' ? `$${j.salary.toLocaleString()}` : j.salary) : (j.jobSalary || 'Not disclosed'),
+        salary: j.salary || 0,
         jobSkills: j.skills || j.requirements || j.jobSkills || [],
         createdAt: j.postedDate || j.createdAt || j.postedAt,
         jobDescription: j.description || j.jobDescription || j.requirements?.join(', ') || '',
         postedDate: j.postedDate || j.createdAt || j.postedAt,
         jobStatus: j.status || j.jobStatus || 'pending',
         description: j.description || '',
-        postedBy: j.postedBy || null
+        postedBy: j.postedBy || null,
+        category: j.category || '',
+        experience: j.experience || '',
+        workMode: j.workMode || ''
       }));
 
       setJobs(mapped);
@@ -77,6 +92,7 @@ const JobPage = () => {
 
   // Filtering & Sorting
   const filteredJobs = jobs.filter(job => {
+    // Search term filter
     const matchesSearch =
       job.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.jobCompany?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -85,18 +101,45 @@ const JobPage = () => {
         skill.toLowerCase().includes(searchTerm.toLowerCase())
       );
     
+    // Keywords filter (from filters.keywords)
+    const matchesKeywords = filters.keywords ? 
+      (job.jobTitle?.toLowerCase().includes(filters.keywords.toLowerCase()) ||
+       job.jobCompany?.toLowerCase().includes(filters.keywords.toLowerCase()) ||
+       job.jobLocation?.toLowerCase().includes(filters.keywords.toLowerCase()) ||
+       job.jobSkills?.some(skill => skill.toLowerCase().includes(filters.keywords.toLowerCase()))) : true;
+    
+    // Location filter
     const matchesLocation = filters.location ? 
       job.jobLocation?.toLowerCase().includes(filters.location.toLowerCase()) : true;
     
-    const matchesType = filters.type ? job.jobType === filters.type : true;
+    // Work mode filter
+    const matchesWorkMode = filters.workMode ? 
+      job.workMode?.toLowerCase() === filters.workMode.toLowerCase() : true;
     
-    const matchesRemote = filters.remote ? 
-      (filters.remote === "remote" ? job.jobLocation?.toLowerCase().includes("remote") :
-       filters.remote === "hybrid" ? job.jobLocation?.toLowerCase().includes("hybrid") :
-       filters.remote === "onsite" ? !job.jobLocation?.toLowerCase().includes("remote") && 
-                                     !job.jobLocation?.toLowerCase().includes("hybrid") : true) : true;
+    // Job type filter
+    const matchesType = filters.type ? 
+      job.jobType?.toLowerCase() === filters.type.toLowerCase() : true;
     
-    return matchesSearch && matchesLocation && matchesType && matchesRemote;
+    // Category filter
+    const matchesCategory = filters.category ? 
+      job.category?.toLowerCase() === filters.category.toLowerCase() : true;
+    
+    // Experience filter
+    const matchesExperience = filters.experience ? 
+      job.experience?.toLowerCase() === filters.experience.toLowerCase() : true;
+    
+    // Salary range filter
+    const matchesSalary = filters.salary ? (() => {
+      const jobSalary = job.salary || 0;
+      if (filters.salary === "0-50000") return jobSalary >= 0 && jobSalary <= 50000;
+      if (filters.salary === "50000-75000") return jobSalary > 50000 && jobSalary <= 75000;
+      if (filters.salary === "75000-100000") return jobSalary > 75000 && jobSalary <= 100000;
+      if (filters.salary === "100000+") return jobSalary > 100000;
+      return true;
+    })() : true;
+    
+    return matchesSearch && matchesKeywords && matchesLocation && matchesWorkMode && 
+           matchesType && matchesCategory && matchesExperience && matchesSalary;
   });
 
   const sortedJobs = [...filteredJobs].sort((a, b) => {
@@ -142,8 +185,24 @@ const JobPage = () => {
   };
   
   const handleResetFilters = () => {
-    setFilters({ location: "", type: "", sort: "", salary: "", experience: "", remote: "" });
+    setFilters({ 
+      keywords: "",
+      location: "", 
+      workMode: "",
+      type: "",
+      category: "",
+      salary: "",
+      experience: "",
+      sort: "" 
+    });
     setSearchTerm("");
+    setCurrentPage(1);
+    scrollToJobList();
+  };
+  
+  const handleClearCompanyFilter = () => {
+    setFilters(prev => ({ ...prev, keywords: "" }));
+    setSearchParams({}); // Clear URL parameters
     setCurrentPage(1);
     scrollToJobList();
   };
@@ -240,6 +299,8 @@ const JobPage = () => {
         onSearchChange={handleSearchChange}
         onSearchSubmit={handleSearchSubmit}
         onQuickFilter={handleQuickFilter}
+        companyFilter={searchParams.get('company')}
+        onClearCompanyFilter={handleClearCompanyFilter}
       />
       
       <div className="job-page-content">

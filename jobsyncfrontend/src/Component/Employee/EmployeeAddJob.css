@@ -1,75 +1,115 @@
-/* Employee Add Job - Modern Design */
+/* ============================================
+   Employee Add Job Form - Enhanced Modern Design
+   ============================================ */
+
+/* Main Container */
 .employee-addjob-container {
   width: 100%;
   min-height: 100vh;
-  border-radius: 25px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 100px 20px 40px;
+  padding: 90px 30px 50px;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* Header Section */
+.employee-addjob-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ============================================
+   Header Section
+   ============================================ */
 .employee-addjob-header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
-  margin-bottom: 30px;
+  max-width: 1200px;
+  margin: 0 auto 35px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 45px;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  animation: fadeInDown 0.6s ease;
+}
+
+.employee-addjob-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px 24px 0 0;
+}
+
+.header-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  animation: bounceIn 0.8s ease;
+}
+
+.header-icon svg {
+  font-size: 2.5rem;
+  color: white;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .employee-addjob-header h1 {
   color: #2d3748;
   margin: 0 0 15px 0;
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 800;
   background: linear-gradient(135deg, #667eea, #764ba2);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(102, 126, 234, 0.1);
 }
 
 .employee-addjob-header p {
   color: #718096;
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 500;
 }
 
-/* Message Styles */
-.message {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 24px;
-  border-radius: 12px;
-  margin-bottom: 25px;
-  font-weight: 500;
-  animation: slideInDown 0.4s ease;
-}
-
-.message.success {
-  background: rgba(72, 187, 120, 0.1);
-  color: #22543d;
-  border: 1px solid rgba(72, 187, 120, 0.3);
-}
-
-.message.error {
-  background: rgba(245, 101, 101, 0.1);
-  color: #c53030;
-  border: 1px solid rgba(245, 101, 101, 0.3);
-}
-
-.message-icon {
-  font-size: 1.2rem;
-}
-
-@keyframes slideInDown {
+@keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-30px);
   }
   to {
     opacity: 1;
@@ -77,74 +117,251 @@
   }
 }
 
-/* Form Styles */
-.employee-addjob-form {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* ============================================
+   Message Alerts
+   ============================================ */
+.message {
+  max-width: 1200px;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  animation: slideInRight 0.5s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
-/* Form Sections */
+.message-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.message::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  border-radius: 16px 0 0 16px;
+}
+
+.message.success {
+  background: rgba(72, 187, 120, 0.95);
+  color: white;
+  border: 1px solid rgba(72, 187, 120, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.message.success::before {
+  background: #22543d;
+}
+
+.message.error {
+  background: rgba(245, 101, 101, 0.95);
+  color: white;
+  border: 1px solid rgba(245, 101, 101, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.message.error::before {
+  background: #742a2a;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   Form Container
+   ============================================ */
+.employee-addjob-form {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 45px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  animation: fadeInUp 0.6s ease 0.2s backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Form Sections
+   ============================================ */
 .form-section {
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 45px;
+  padding: 35px;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 20px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+}
+
+.form-section:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
 }
 
 .form-section:last-of-type {
-  border-bottom: none;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
 }
 
-.form-section h2 {
+.section-title {
   color: #2d3748;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 25px 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 30px 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #e2e8f0;
 }
 
+.section-title svg {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.section-title span {
+  flex: 1;
+}
+
+.job-section .section-title {
+  color: #667eea;
+}
+
+.job-section .section-title svg {
+  color: #667eea;
+}
+
+.company-section .section-title {
+  color: #764ba2;
+}
+
+.company-section .section-title svg {
+  color: #764ba2;
+}
+
+/* ============================================
+   Form Grid Layout
+   ============================================ */
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 25px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  animation: fadeIn 0.5s ease;
 }
 
 .form-group.full-width {
   grid-column: 1 / -1;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Form Labels
+   ============================================ */
 .form-group label {
   color: #2d3748;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: 700;
   font-size: 0.95rem;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
+.form-group label::after {
+  content: '*';
+  color: #e53e3e;
+  margin-left: 2px;
+  display: none;
+}
+
+.form-group:has(input[required]) label::after,
+.form-group:has(select[required]) label::after,
+.form-group:has(textarea[required]) label::after {
+  display: inline;
+}
+
+/* ============================================
+   Form Inputs
+   ============================================ */
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 14px 16px;
+  padding: 15px 18px;
   border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 1rem;
   font-family: inherit;
-  background: #fff;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  background: white;
+  color: #2d3748;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  font-weight: 500;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
 }
 
 .form-group input:focus,
@@ -152,8 +369,11 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  transform: translateY(-1px);
+  background: white;
+  box-shadow: 
+    0 0 0 4px rgba(102, 126, 234, 0.1),
+    0 4px 15px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
 }
 
 .form-group input:hover,
@@ -162,13 +382,15 @@
   border-color: #cbd5e0;
 }
 
+/* Textarea Specific */
 .form-group textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 120px;
+  line-height: 1.6;
   font-family: inherit;
-  line-height: 1.5;
 }
 
+/* Number Input */
 .form-group input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -179,210 +401,394 @@
   margin: 0;
 }
 
+/* Select Dropdown */
 .form-group select {
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
+  background-position: right 14px center;
+  background-size: 18px;
+  padding-right: 45px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
 
-/* Form Actions */
+.form-group select:focus {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Date Input */
+.form-group input[type="date"] {
+  cursor: pointer;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: opacity(0.6);
+  transition: filter 0.3s ease;
+}
+
+.form-group input[type="date"]:hover::-webkit-calendar-picker-indicator {
+  filter: opacity(1);
+}
+
+/* ============================================
+   Form Actions / Buttons
+   ============================================ */
 .form-actions {
   display: flex;
   gap: 20px;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 40px;
   flex-wrap: wrap;
+  padding-top: 30px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.submit-btn,
+.clear-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  min-width: 180px;
+  white-space: nowrap;
+}
+
+.btn-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border: none;
-  padding: 16px 32px;
-  border-radius: 25px;
+  padding: 18px 40px;
   font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 160px;
-  justify-content: center;
-}
-
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.submit-btn:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(-1px) scale(1.01);
+}
+
 .submit-btn:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .clear-btn {
-  background: rgba(74, 85, 104, 0.1);
+  background: white;
   color: #4a5568;
-  border: 2px solid #e2e8f0;
-  padding: 14px 28px;
-  border-radius: 25px;
+  border: 3px solid #e2e8f0;
+  padding: 16px 35px;
   font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .clear-btn:hover:not(:disabled) {
-  background: rgba(74, 85, 104, 0.15);
+  background: #f7fafc;
   border-color: #cbd5e0;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #2d3748;
+}
+
+.clear-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .clear-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Loading Spinner */
+/* ============================================
+   Loading States
+   ============================================ */
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
 .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-/* Section Titles */
-.section-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #4c51bf;
-  border-left: 6px solid #667eea;
-  padding-left: 12px;
-}
-
-/* Stacked form sections */
-.form-section {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 18px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e2e8f0;
-}
-
-/* Full-width textareas and inputs */
-.form-group.full-width input,
-.form-group.full-width textarea {
-  width: 100%;
-}
-
-/* Modern responsive design */
-@media (max-width: 768px) {
-  .form-section {
-    padding: 25px 20px;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-  }
-
-  .employee-addjob-form {
-    padding: 25px 20px;
-  }
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* Responsive Design */
+/* ============================================
+   Validation Styles
+   ============================================ */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+  border-color: #fc8181;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid,
+.form-group textarea:valid:not(:placeholder-shown) {
+  border-color: #48bb78;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
 @media (max-width: 1024px) {
   .form-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
+  }
+  
+  .form-section {
+    padding: 30px;
+  }
+  
+  .employee-addjob-form {
+    padding: 35px;
   }
 }
 
 @media (max-width: 768px) {
   .employee-addjob-container {
-    padding: 80px 15px 30px;
+    padding: 80px 20px 40px;
   }
-  
+
   .employee-addjob-header {
-    padding: 30px 20px;
+    padding: 35px 25px;
+    margin-bottom: 25px;
   }
-  
-  .employee-addjob-header h1 {
+
+  .header-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .header-icon svg {
     font-size: 2rem;
   }
-  
+
+  .employee-addjob-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .employee-addjob-header p {
+    font-size: 1rem;
+  }
+
   .employee-addjob-form {
     padding: 30px 20px;
   }
-  
+
+  .form-section {
+    padding: 25px 20px;
+    margin-bottom: 30px;
+  }
+
   .form-grid {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
-  
-  .form-section h2 {
-    font-size: 1.3rem;
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
   }
-  
+
+  .section-title svg {
+    font-size: 1.4rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 13px 16px;
+    font-size: 0.95rem;
+  }
+
   .form-actions {
     flex-direction: column;
     gap: 15px;
+    padding-top: 25px;
   }
-  
+
   .submit-btn,
   .clear-btn {
     width: 100%;
-    max-width: 300px;
+    max-width: 350px;
+  }
+
+  .submit-btn {
+    padding: 16px 32px;
+    font-size: 1rem;
+  }
+
+  .clear-btn {
+    padding: 14px 28px;
   }
 }
 
 @media (max-width: 480px) {
+  .employee-addjob-container {
+    padding: 75px 15px 35px;
+  }
+
+  .employee-addjob-header {
+    padding: 30px 20px;
+  }
+
+  .header-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .header-icon svg {
+    font-size: 1.8rem;
+  }
+
   .employee-addjob-header h1 {
-    font-size: 1.7rem;
+    font-size: 1.9rem;
   }
-  
+
   .employee-addjob-header p {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
-  
+
+  .employee-addjob-form {
+    padding: 25px 15px;
+  }
+
   .form-section {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
+    padding: 20px 15px;
+    margin-bottom: 25px;
   }
-  
+
+  .section-title {
+    font-size: 1.3rem;
+    gap: 8px;
+  }
+
+  .section-title svg {
+    font-size: 1.2rem;
+  }
+
+  .form-group {
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+
   .form-group input,
   .form-group select,
   .form-group textarea {
     padding: 12px 14px;
+    font-size: 0.9rem;
   }
-  
+
+  .form-group textarea {
+    min-height: 100px;
+  }
+
   .submit-btn {
-    padding: 14px 24px;
+    padding: 15px 28px;
+    font-size: 0.95rem;
+    min-width: 150px;
+  }
+
+  .clear-btn {
+    padding: 13px 24px;
+    font-size: 0.9rem;
+  }
+
+  .btn-icon {
     font-size: 1rem;
   }
+
+  .message {
+    padding: 15px 20px;
+    font-size: 0.9rem;
+  }
+
+  .message-icon {
+    font-size: 1.3rem;
+  }
+}
+
+/* ============================================
+   Accessibility Enhancements
+   ============================================ */
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+.submit-btn:focus-visible,
+.clear-btn:focus-visible {
+  outline: 3px solid #667eea;
+  outline-offset: 3px;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  /* Add dark mode styles if needed */
+}
+
+/* Print styles */
+@media print {
+  .employee-addjob-container {
+    background: white;
+    padding: 20px;
+  }
   
-  .clear-btn {
-    padding: 12px 20px;
+  .form-actions {
+    display: none;
   }
 }

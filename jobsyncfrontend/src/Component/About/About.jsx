@@ -47,15 +47,15 @@ const About = () => {
             </p>
             <div className="mission-stats">
               <div className="stat-item">
-                <h3>1000+</h3>
+                <h3>100+</h3>
                 <p>Jobs Posted</p>
               </div>
               <div className="stat-item">
-                <h3>500+</h3>
+                <h3>50+</h3>
                 <p>Companies</p>
               </div>
               <div className="stat-item">
-                <h3>10,000+</h3>
+                <h3>10,00+</h3>
                 <p>Happy Users</p>
               </div>
             </div>
@@ -127,15 +127,15 @@ const About = () => {
           <div className="contact-info">
             <div className="contact-item">
               <span className="contact-icon">📧</span>
-              <p>info@jobsync.com</p>
+              <p>Meet@jobsync.com</p>
             </div>
             <div className="contact-item">
               <span className="contact-icon">📱</span>
-              <p>+1 (555) 123-4567</p>
+              <p>+91 7862056323</p>
             </div>
             <div className="contact-item">
               <span className="contact-icon">📍</span>
-              <p>123 Innovation Drive, Tech City, TC 12345</p>
+              <p>123 Charotar city, Tech City, 12345</p>
             </div>
           </div>
         </div>

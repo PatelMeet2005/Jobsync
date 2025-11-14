@@ -192,13 +192,13 @@ const AdminCompany = () => {
               <p>Active Jobs</p>
             </div>
           </div>
-          <div className="stat-card">
+          {/* <div className="stat-card">
             <div className="stat-icon">📝</div>
             <div className="stat-info">
               <h3>{totalStats.totalApplications}</h3>
               <p>Total Applications</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -246,8 +246,8 @@ const AdminCompany = () => {
                     <div className="company-meta">
                       <span className="industry">🏭 {company.industry}</span>
                       <span className="location">📍 {company.location}</span>
-                      <span className="size">👥 {company.size} employees</span>
-                      <span className="founded">📅 Founded {company.founded}</span>
+                      {/* <span className="size">👥 {company.size} employees</span> */}
+                      {/* <span className="founded">📅 Founded {company.founded}</span> */}
                     </div>
                   </div>
                 </div>
@@ -275,10 +275,10 @@ const AdminCompany = () => {
                     {company.email}
                   </a>
                 </div>
-                <div className="contact-item">
+                {/* <div className="contact-item">
                   <span className="contact-label">Phone:</span>
                   <span className="contact-value">{company.phone}</span>
-                </div>
+                </div> */}
               </div>
 
               <div className="company-job-stats">

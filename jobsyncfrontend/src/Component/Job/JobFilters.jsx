@@ -4,30 +4,52 @@ import "./JobFilters.css";
 const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   
-  // Salary range options
+  // Salary range options based on actual data
   const salaryRanges = [
     { label: "Any", value: "" },
-    { label: "$0 - $50K", value: "0-50" },
-    { label: "$50K - $100K", value: "50-100" },
-    { label: "$100K - $150K", value: "100-150" },
-    { label: "$150K+", value: "150+" }
+    { label: "$0 - $50K", value: "0-50000" },
+    { label: "$50K - $75K", value: "50000-75000" },
+    { label: "$75K - $100K", value: "75000-100000" },
+    { label: "$100K+", value: "100000+" }
   ];
   
-  // Experience level options
+  // Experience level options (Entry, Mid, Senior, Executive)
   const experienceLevels = [
     { label: "Any", value: "" },
-    { label: "Entry Level", value: "entry" },
-    { label: "Mid Level", value: "mid" },
-    { label: "Senior Level", value: "senior" },
-    { label: "Executive", value: "executive" }
+    { label: "Entry", value: "Entry" },
+    { label: "Mid", value: "Mid" },
+    { label: "Senior", value: "Senior" },
+    { label: "Executive", value: "Executive" }
   ];
   
-  // Remote work options
-  const remoteOptions = [
+  // Work mode options (Remote, Hybrid, Onsite)
+  const workModeOptions = [
     { label: "Any", value: "" },
-    { label: "Remote", value: "remote" },
-    { label: "Hybrid", value: "hybrid" },
-    { label: "On-Site", value: "onsite" }
+    { label: "Remote", value: "Remote" },
+    { label: "Hybrid", value: "Hybrid" },
+    { label: "Onsite", value: "Onsite" }
+  ];
+
+  // Job type options (Full-time, Part-time, Contract, etc.)
+  const jobTypeOptions = [
+    { label: "All Job Types", value: "" },
+    { label: "Full-time", value: "Full-time" },
+    { label: "Part-time", value: "Part-time" },
+    { label: "Contract", value: "Contract" },
+    { label: "Internship", value: "Internship" }
+  ];
+
+  // Category options
+  const categoryOptions = [
+    { label: "All Categories", value: "" },
+    { label: "Technology", value: "Technology" },
+    { label: "Engineering", value: "Engineering" },
+    { label: "Design", value: "Design" },
+    { label: "Marketing", value: "Marketing" },
+    { label: "Sales", value: "Sales" },
+    { label: "Finance", value: "Finance" },
+    { label: "Healthcare", value: "Healthcare" },
+    { label: "Education", value: "Education" }
   ];
 
   return (
@@ -64,14 +86,14 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
           <div className="filter-group">
             <h3 className="filter-group-title">
               <i className="fas fa-search"></i>
-              Keywords
+              Search Keywords
             </h3>
             <input
               type="text"
               name="keywords"
-              value={filters.keywords}
+              value={filters.keywords || ""}
               onChange={onFilterChange}
-              placeholder="Job title, skills, etc."
+              placeholder="Job title, skills..."
               className="filter-input"
             />
           </div>
@@ -84,26 +106,11 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
             <input
               type="text"
               name="location"
-              value={filters.location}
+              value={filters.location || ""}
               onChange={onFilterChange}
-              placeholder="City, state, or remote"
+              placeholder="City, state..."
               className="filter-input"
             />
-            <div className="remote-options">
-              {remoteOptions.map(option => (
-                <label key={option.value} className="filter-option">
-                  <input
-                    type="radio"
-                    name="remote"
-                    value={option.value}
-                    checked={filters.remote === option.value}
-                    onChange={onFilterChange}
-                  />
-                  <span className="checkmark"></span>
-                  {option.label}
-                </label>
-              ))}
-            </div>
           </div>
           
           <div className="filter-group">
@@ -113,16 +120,13 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
             </h3>
             <select
               name="type"
-              value={filters.type}
+              value={filters.type || ""}
               onChange={onFilterChange}
               className="filter-input"
             >
-              <option value="">All Job Types</option>
-              <option value="Full-Time">Full-Time</option>
-              <option value="Part-Time">Part-Time</option>
-              <option value="Contract">Contract</option>
-              <option value="Internship">Internship</option>
-              <option value="Freelance">Freelance</option>
+              {jobTypeOptions.map(option => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
           
@@ -131,21 +135,16 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
               <i className="fas fa-money-bill-wave"></i>
               Salary Range
             </h3>
-            <div className="salary-options">
+            <select
+              name="salary"
+              value={filters.salary || ""}
+              onChange={onFilterChange}
+              className="filter-input"
+            >
               {salaryRanges.map(range => (
-                <label key={range.value} className="filter-option">
-                  <input
-                    type="radio"
-                    name="salary"
-                    value={range.value}
-                    checked={filters.salary === range.value}
-                    onChange={onFilterChange}
-                  />
-                  <span className="checkmark"></span>
-                  {range.label}
-                </label>
+                <option key={range.value} value={range.value}>{range.label}</option>
               ))}
-            </div>
+            </select>
           </div>
           
           <div className="filter-group">
@@ -153,21 +152,16 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
               <i className="fas fa-chart-line"></i>
               Experience Level
             </h3>
-            <div className="experience-options">
+            <select
+              name="experience"
+              value={filters.experience || ""}
+              onChange={onFilterChange}
+              className="filter-input"
+            >
               {experienceLevels.map(level => (
-                <label key={level.value} className="filter-option">
-                  <input
-                    type="radio"
-                    name="experience"
-                    value={level.value}
-                    checked={filters.experience === level.value}
-                    onChange={onFilterChange}
-                  />
-                  <span className="checkmark"></span>
-                  {level.label}
-                </label>
+                <option key={level.value} value={level.value}>{level.label}</option>
               ))}
-            </div>
+            </select>
           </div>
           
           <div className="filter-group">
@@ -177,12 +171,12 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
             </h3>
             <select
               name="sort"
-              value={filters.sort}
+              value={filters.sort || ""}
               onChange={onSortChange}
               className="filter-input"
             >
-              <option value="">Relevance</option>
-              <option value="date">Date Posted (Newest)</option>
+              <option value="">Newest First</option>
+              <option value="date">Date Posted</option>
               <option value="salary-desc">Salary (High to Low)</option>
               <option value="salary-asc">Salary (Low to High)</option>
               <option value="company">Company Name</option>
@@ -193,6 +187,17 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
         <div className="active-filters">
           <h4>Active Filters:</h4>
           <div className="active-filters-list">
+            {filters.keywords && (
+              <span className="active-filter">
+                Keywords: {filters.keywords}
+                <button 
+                  onClick={() => onFilterChange({ target: { name: 'keywords', value: '' } })}
+                  aria-label="Remove keywords filter"
+                >
+                  ×
+                </button>
+              </span>
+            )}
             {filters.location && (
               <span className="active-filter">
                 Location: {filters.location}
@@ -204,6 +209,7 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
                 </button>
               </span>
             )}
+
             {filters.type && (
               <span className="active-filter">
                 Type: {filters.type}
@@ -215,12 +221,24 @@ const JobFilters = ({ filters, onFilterChange, onSortChange, onResetFilters }) =
                 </button>
               </span>
             )}
+
             {filters.salary && (
               <span className="active-filter">
                 Salary: {salaryRanges.find(r => r.value === filters.salary)?.label}
                 <button 
                   onClick={() => onFilterChange({ target: { name: 'salary', value: '' } })}
                   aria-label="Remove salary filter"
+                >
+                  ×
+                </button>
+              </span>
+            )}
+            {filters.experience && (
+              <span className="active-filter">
+                Experience: {filters.experience}
+                <button 
+                  onClick={() => onFilterChange({ target: { name: 'experience', value: '' } })}
+                  aria-label="Remove experience filter"
                 >
                   ×
                 </button>

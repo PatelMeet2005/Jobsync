@@ -15,6 +15,8 @@ import AdminRequest from './Component/Admin/AdminRequest/AdminRequest'
 import UserProfile from './Component/UserProfile/UserProfile'
 import Employees from './Component/Employee/Employees'
 import EmployeesNav from './Component/Employee/EmployeesNav'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 import About from './Component/About/About'
 
@@ -25,6 +27,18 @@ const App = () => {
 
   return (
     <div>
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         {selectedrole === "admin" ? (
           <>

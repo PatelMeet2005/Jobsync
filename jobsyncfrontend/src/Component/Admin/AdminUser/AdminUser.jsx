@@ -317,7 +317,7 @@ const fetchUsersAndEmployees = async () => {
 
               <div className="user-actions">
 
-                <button className="view-btn"> View Profile</button>
+                {/* <button className="view-btn"> View Profile</button> */}
                 <button
                   className="delete-btn"
                   onClick={() => handleDeleteUser(user._id, user.userType)}

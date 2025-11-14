@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Companie.css';
 import { IoSearch, IoStar, IoStarOutline, IoFilter, IoClose } from 'react-icons/io5';
 
 const Companie = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFilters, setSelectedFilters] = useState({
-    industry: [],
-    location: [],
-    department: [],
-    jobCount: []
+  const [filters, setFilters] = useState({
+    name: '',
+    industry: '',
+    location: '',
+    department: '',
+    jobCount: ''
   });
   const [showFilters, setShowFilters] = useState(false);
   const [companies, setCompanies] = useState([]);
@@ -17,95 +20,8 @@ const Companie = () => {
   const [error, setError] = useState('');
 
   // Sample company data
-  const companiesData = [
-    {
-      id: 1,
-      name: "Supreme Petrochem",
-      logo: "S",
-      rating: 4.1,
-      reviews: 117,
-      industry: "Chemicals",
-      founded: 1993,
-      employees: "201-500 emp.",
-      type: "Corporate",
-      location: "Mumbai",
-      description: "Leading petrochemical company in India",
-      color: "#e74c3c"
-    },
-    {
-      id: 2,
-      name: "Beehyv",
-      logo: "🐝",
-      rating: 2.4,
-      reviews: 56,
-      industry: "IT Services & Consulting",
-      founded: 2010,
-      employees: "51-200 emp.",
-      type: "Corporate",
-      location: "Bangalore",
-      description: "Digital transformation and technology solutions",
-      color: "#3498db"
-    },
-    {
-      id: 3,
-      name: "Mindteck",
-      logo: "M",
-      rating: 3.1,
-      reviews: 272,
-      industry: "IT Services & Consulting",
-      founded: 1991,
-      employees: "1001-5000 emp.",
-      type: "Indian MNC",
-      location: "Kolkata",
-      description: "Global technology consulting and services",
-      color: "#2ecc71"
-    },
-    {
-      id: 4,
-      name: "Nipro India Corporation",
-      logo: "N",
-      rating: 3.3,
-      reviews: 168,
-      industry: "Medical Services / Hospital",
-      founded: 1985,
-      employees: "501-1000 emp.",
-      type: "Foreign MNC",
-      location: "Delhi",
-      description: "Medical devices and healthcare solutions",
-      color: "#9b59b6"
-    },
-    {
-      id: 5,
-      name: "TCS",
-      logo: "T",
-      rating: 4.2,
-      reviews: 45000,
-      industry: "IT Services & Consulting",
-      founded: 1968,
-      employees: "500000+ emp.",
-      type: "Indian MNC",
-      location: "Mumbai",
-      description: "India's largest IT services company",
-      color: "#34495e"
-    },
-    {
-      id: 6,
-      name: "Infosys",
-      logo: "I",
-      rating: 4.0,
-      reviews: 25000,
-      industry: "IT Services & Consulting",
-      founded: 1981,
-      employees: "250000+ emp.",
-      type: "Indian MNC",
-      location: "Bangalore",
-      description: "Global leader in next-generation digital services",
-      color: "#e67e22"
-    }
-  ];
 
   const industries = [
-    { name: "MNCs", count: "2.2K+ Companies" },
     { name: "Internet", count: "255 Companies" },
     { name: "Manufacturing", count: "1K+ Companies" },
     { name: "Fortune 500", count: "188 Companies" },
@@ -113,35 +29,15 @@ const Companie = () => {
     { name: "IT Services", count: "3.5K+ Companies" }
   ];
 
-  // Generate dynamic filter options based on actual company data
-  const generateFilterOptions = () => {
-    const locations = [...new Set(companies.map(c => c.location).filter(Boolean))];
-    const industries = [...new Set(companies.map(c => c.industry).filter(Boolean))];
-    const departments = [...new Set(companies.map(c => c.department).filter(Boolean))];
-    
-    return {
-      industry: industries.map(industry => ({
-        label: industry,
-        count: companies.filter(c => c.industry === industry).length
-      })),
-      location: locations.map(location => ({
-        label: location,
-        count: companies.filter(c => c.location === location).length
-      })),
-      department: departments.map(department => ({
-        label: department,
-        count: companies.filter(c => c.department === department).length
-      })),
-      jobCount: [
-        { label: "1 Job", count: companies.filter(c => c.totalJobs === 1).length },
-        { label: "2-5 Jobs", count: companies.filter(c => c.totalJobs >= 2 && c.totalJobs <= 5).length },
-        { label: "6-10 Jobs", count: companies.filter(c => c.totalJobs >= 6 && c.totalJobs <= 10).length },
-        { label: "10+ Jobs", count: companies.filter(c => c.totalJobs > 10).length }
-      ]
-    };
-  };
-
-  const filterOptions = generateFilterOptions();
+  // Job count range options
+  const jobCountOptions = [
+    { label: "All", value: "" },
+    { label: "0-5 Jobs", value: "0-5" },
+    { label: "5-10 Jobs", value: "5-10" },
+    { label: "10-15 Jobs", value: "10-15" },
+    { label: "15-20 Jobs", value: "15-20" },
+    { label: "20+ Jobs", value: "20+" }
+  ];
 
   const fetchCompanies = async () => {
     try {
@@ -217,48 +113,67 @@ const Companie = () => {
   }, []);
 
   const filteredCompanies = companies.filter(company => {
-    const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    // Search term filter
+    const matchesSearch = searchTerm === '' || 
+                         company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.department.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesIndustry = selectedFilters.industry.length === 0 || 
-                           selectedFilters.industry.includes(company.industry);
+    // Name filter
+    const matchesName = filters.name === '' || 
+                       company.name.toLowerCase().includes(filters.name.toLowerCase());
     
-    const matchesLocation = selectedFilters.location.length === 0 || 
-                           selectedFilters.location.includes(company.location);
+    // Industry filter
+    const matchesIndustry = filters.industry === '' || 
+                           company.industry.toLowerCase().includes(filters.industry.toLowerCase());
+    
+    // Location filter
+    const matchesLocation = filters.location === '' || 
+                           company.location.toLowerCase().includes(filters.location.toLowerCase());
 
-    const matchesDepartment = selectedFilters.department.length === 0 || 
-                             selectedFilters.department.includes(company.department);
+    // Department filter
+    const matchesDepartment = filters.department === '' || 
+                             company.department.toLowerCase().includes(filters.department.toLowerCase());
 
-    const matchesJobCount = selectedFilters.jobCount.length === 0 || 
-                           selectedFilters.jobCount.some(filter => {
-                             if (filter === "1 Job") return company.totalJobs === 1;
-                             if (filter === "2-5 Jobs") return company.totalJobs >= 2 && company.totalJobs <= 5;
-                             if (filter === "6-10 Jobs") return company.totalJobs >= 6 && company.totalJobs <= 10;
-                             if (filter === "10+ Jobs") return company.totalJobs > 10;
-                             return false;
-                           });
+    // Job count range filter
+    const matchesJobCount = (() => {
+      if (filters.jobCount === '') return true;
+      const jobCount = company.totalJobs;
+      
+      if (filters.jobCount === '0-5') return jobCount >= 0 && jobCount <= 5;
+      if (filters.jobCount === '5-10') return jobCount > 5 && jobCount <= 10;
+      if (filters.jobCount === '10-15') return jobCount > 10 && jobCount <= 15;
+      if (filters.jobCount === '15-20') return jobCount > 15 && jobCount <= 20;
+      if (filters.jobCount === '20+') return jobCount > 20;
+      return true;
+    })();
 
-    return matchesSearch && matchesIndustry && matchesLocation && matchesDepartment && matchesJobCount;
+    return matchesSearch && matchesName && matchesIndustry && matchesLocation && matchesDepartment && matchesJobCount;
   });
 
-  const handleFilterChange = (filterType, value) => {
-    setSelectedFilters(prev => ({
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({
       ...prev,
-      [filterType]: prev[filterType].includes(value)
-        ? prev[filterType].filter(item => item !== value)
-        : [...prev[filterType], value]
+      [name]: value
     }));
   };
 
   const clearAllFilters = () => {
-    setSelectedFilters({
-      industry: [],
-      location: [],
-      department: [],
-      jobCount: []
+    setFilters({
+      name: '',
+      industry: '',
+      location: '',
+      department: '',
+      jobCount: ''
     });
+    setSearchTerm('');
+  };
+
+  const handleViewJobs = (company) => {
+    // Navigate to job page with company filter
+    navigate(`/job?company=${encodeURIComponent(company.name)}`);
   };
 
   const renderStars = (rating) => {
@@ -325,171 +240,218 @@ const Companie = () => {
       {/* Main Content */}
       <div className="companies-container">
         {/* Sidebar Filters */}
-        <aside className={`filters-sidebar ${showFilters ? 'mobile-open' : ''}`}>
+        <aside className={`job-filters-sidebar ${showFilters ? 'expanded' : ''}`}>
           <div className="filters-header">
-            <h3>All Filters</h3>
+            <h2 className="filters-title">
+              <i className="fas fa-filter"></i>
+              Filters
+            </h2>
             <button 
-              className="close-filters mobile-only"
-              onClick={() => setShowFilters(false)}
+              className="reset-filters-btn"
+              onClick={clearAllFilters}
             >
-              <IoClose />
+              Reset All
             </button>
           </div>
 
-          <div className="filter-section">
-            <h4>Industry</h4>
-            {filterOptions.industry.map((option) => (
-              <label key={option.label} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={selectedFilters.industry.includes(option.label)}
-                  onChange={() => handleFilterChange('industry', option.label)}
-                />
-                <span className="checkmark"></span>
-                {option.label} ({option.count})
-              </label>
-            ))}
+          <div className="filters-content">
+            <div className="filter-group">
+              <h3 className="filter-group-title">
+                <i className="fas fa-building"></i>
+                Company Name
+              </h3>
+              <input
+                type="text"
+                name="name"
+                value={filters.name}
+                onChange={handleFilterChange}
+                placeholder="Search by company name..."
+                className="filter-input"
+              />
+            </div>
+
+            <div className="filter-group">
+              <h3 className="filter-group-title">
+                <i className="fas fa-industry"></i>
+                Industry
+              </h3>
+              <input
+                type="text"
+                name="industry"
+                value={filters.industry}
+                onChange={handleFilterChange}
+                placeholder="e.g., Technology, Finance..."
+                className="filter-input"
+              />
+            </div>
+
+            <div className="filter-group">
+              <h3 className="filter-group-title">
+                <i className="fas fa-map-marker-alt"></i>
+                Location
+              </h3>
+              <input
+                type="text"
+                name="location"
+                value={filters.location}
+                onChange={handleFilterChange}
+                placeholder="e.g., New York, Remote..."
+                className="filter-input"
+              />
+            </div>
+
+            <div className="filter-group">
+              <h3 className="filter-group-title">
+                <i className="fas fa-briefcase"></i>
+                Department
+              </h3>
+              <input
+                type="text"
+                name="department"
+                value={filters.department}
+                onChange={handleFilterChange}
+                placeholder="e.g., Engineering, Sales..."
+                className="filter-input"
+              />
+            </div>
+
+            <div className="filter-group">
+              <h3 className="filter-group-title">
+                <i className="fas fa-chart-bar"></i>
+                Job Count
+              </h3>
+              <select
+                name="jobCount"
+                value={filters.jobCount}
+                onChange={handleFilterChange}
+                className="filter-input"
+              >
+                {jobCountOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          <div className="filter-section">
-          <h4>Location</h4>
-          
-            {filterOptions.location.map((option) => (
-              <label key={option.label} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={selectedFilters.location.includes(option.label)}
-                  onChange={() => handleFilterChange('location', option.label)}
-                />
-                <span className="checkmark"></span>
-                {option.label} ({option.count})
-              </label>
-            ))}
+          <div className="active-filters">
+            <h4>Active Filters:</h4>
+            <div className="active-filters-list">
+              {filters.name && (
+                <span className="active-filter">
+                  Name: {filters.name}
+                  <button 
+                    onClick={() => setFilters(prev => ({ ...prev, name: '' }))}
+                    aria-label="Remove name filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {filters.industry && (
+                <span className="active-filter">
+                  Industry: {filters.industry}
+                  <button 
+                    onClick={() => setFilters(prev => ({ ...prev, industry: '' }))}
+                    aria-label="Remove industry filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {filters.location && (
+                <span className="active-filter">
+                  Location: {filters.location}
+                  <button 
+                    onClick={() => setFilters(prev => ({ ...prev, location: '' }))}
+                    aria-label="Remove location filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {filters.department && (
+                <span className="active-filter">
+                  Department: {filters.department}
+                  <button 
+                    onClick={() => setFilters(prev => ({ ...prev, department: '' }))}
+                    aria-label="Remove department filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+              {filters.jobCount && (
+                <span className="active-filter">
+                  Jobs: {jobCountOptions.find(opt => opt.value === filters.jobCount)?.label}
+                  <button 
+                    onClick={() => setFilters(prev => ({ ...prev, jobCount: '' }))}
+                    aria-label="Remove job count filter"
+                  >
+                    ×
+                  </button>
+                </span>
+              )}
+            </div>
           </div>
-
-          <div className="filter-section">
-            <h4>Department</h4>
-            {filterOptions.department.map((option) => (
-              <label key={option.label} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={selectedFilters.department.includes(option.label)}
-                  onChange={() => handleFilterChange('department', option.label)}
-                />
-                <span className="checkmark"></span>
-                {option.label} ({option.count})
-              </label>
-            ))}
-          </div>
-
-          <div className="filter-section">
-            <h4>Job Count</h4>
-            {filterOptions.jobCount.map((option) => (
-              <label key={option.label} className="filter-option">
-                <input
-                  type="checkbox"
-                  checked={selectedFilters.jobCount.includes(option.label)}
-                  onChange={() => handleFilterChange('jobCount', option.label)}
-                />
-                <span className="checkmark"></span>
-                {option.label} ({option.count})
-              </label>
-            ))}
-          </div>
-
-          <button className="clear-filters" onClick={clearAllFilters}>
-            Clear All Filters
-          </button>
         </aside>
 
         {/* Main Content Area */}
         <main className="companies-main">
-          {/* Search and Filter Controls */}
-          <div className="search-controls">
-            <div className="search-bar">
-              <IoSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search companies by name or industry..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            
-            <button 
-              className="filter-toggle mobile-only"
-              onClick={() => setShowFilters(true)}
-            >
-              <IoFilter /> Filters
-            </button>
-          </div>
-
-          {/* Results Summary */}
-          <div className="results-summary">
-            <p>Showing {filteredCompanies.length} companies</p>
-          </div>
 
           {/* Companies Grid */}
           <div className="companies-grid">
             {filteredCompanies.map((company) => (
               <div key={company.id} className="company-card">
+                {/* Card Header */}
                 <div className="company-header">
-                  {/* <div 
-                    className="company-logo"
-                    style={{ backgroundColor: company.color }}
-                  >
-                    {company.logo}
-                  </div> */}
                   <div className="company-info">
+                    <div className="company-name">
                     <h3>{company.name}</h3>
-                    {/* <div className="rating-info">
-                      <div className="stars">
-                        {renderStars(company.rating)}
-                      </div>
-                      <span className="rating-text">
-                        {company.rating} {company.reviews} reviews
-                      </span>
-                    </div> */}
+                    </div>
+                    <div className="company-email">
+                      <i className="fas fa-envelope"></i>
+                      <span>{company.email}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="company-details">
-                  <div className="detail-tags">
-                    <span className="tag industry">{company.industry}</span>
-                    {/* <span className="tag founded">Founded: {company.founded}</span>
-                    <span className="tag employees">{company.employees}</span> */}
+                {/* Company Meta Info - Industry, Location, Department in one line */}
+                <div className="company-meta-badges">
+                  <div className="meta-badge">
+                    <i className="fas fa-industry"></i>
+                    <span>{company.industry}</span>
                   </div>
-                  
-                  
-                  
-                  <div className="company-meta">
-                    <span className="location">{company.location}</span>
-                    <span className="type">{company.type}</span>
+                  <div className="meta-badge">
+                    <i className="fas fa-map-marker-alt"></i>
+                    <span>{company.location}</span>
                   </div>
-
-                  {/* Job Statistics */}
-                  <div className="job-stats-company">
-                    <div className="job-stat">
-                      <span className="stat-number">{company.totalJobs || 0}</span>
-                      <span className="stat-label">Total Jobs</span>
-                    </div>
-                    <div className="job-stat">
-                      <span className="stat-number">{company.activeJobs || 0}</span>
-                      <span className="stat-label">Active Jobs</span>
-                    </div>
-                    {company.department && (
-                      <div className="job-stat">
-                        <span className="stat-label">Department:</span>
-                        <span className="stat-value">{company.department}</span>
-                      </div>
-                    )}
+                  <div className="meta-badge">
+                    <i className="fas fa-building"></i>
+                    <span>{company.department}</span>
                   </div>
-
-                  <p className="company-description">{company.description}</p>
                 </div>
 
+                {/* Job Statistics - Simple Format */}
+                <div className="job-stats-simple">
+                  <div className="stat-row">
+                    <span className="stat-label-simple">Total Jobs:</span>
+                    <span className="stat-value-simple">{company.totalJobs || 0}</span>
+                  </div>
+                  <div className="stat-row">
+                    <span className="stat-label-simple">Active Jobs:</span>
+                    <span className="stat-value-simple">{company.activeJobs || 0}</span>
+                  </div>
+                </div>
+
+
+                {/* Action Button */}
                 <div className="company-actions">
-                  <button className="btn-primary"><a href="/">View Jobs</a></button>
+                  <button className="btn-view-jobs" onClick={() => handleViewJobs(company)}>
+                    <i className="fas fa-arrow-right"></i>
+                    View All Jobs
+                  </button>
                 </div>
               </div>
             ))}

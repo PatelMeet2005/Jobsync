@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AdminJobList.css";
 
@@ -8,10 +9,18 @@ const AdminJobList = () => {
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchJobs();
-  }, []);
+    
+    // Get company from URL query parameter and set it as search term
+    const companyFromUrl = searchParams.get('company');
+    if (companyFromUrl) {
+      setSearchTerm(companyFromUrl);
+    }
+  }, [searchParams]);
 
   const fetchJobs = async () => {
     try {
@@ -82,6 +91,22 @@ const AdminJobList = () => {
       <div className="admin-job-list-header">
         <h1>Job Listings</h1>
         <p>Browse and manage all available jobs</p>
+        {searchParams.get('company') && (
+          <div className="filter-info">
+            <span className="filter-badge">
+              🏢 Showing jobs from: <strong>{searchParams.get('company')}</strong>
+            </span>
+            <button 
+              onClick={() => {
+                setSearchTerm('');
+                navigate('/adminjoblist');
+              }} 
+              className="clear-filter-btn"
+            >
+              ✕ Clear Filter
+            </button>
+          </div>
+        )}
       </div>
 
       {error && (
@@ -203,11 +228,11 @@ const AdminJobList = () => {
                 </div>
               </div>
 
-              <div className="job-actions">
+              {/* <div className="job-actions">
                 <button className="view-btn">View</button>
                 <button className="edit-btn">Edit</button>
                 <button className="delete-btn">Delete</button>
-              </div>
+              </div> */}
             </div>
           ))
         )}

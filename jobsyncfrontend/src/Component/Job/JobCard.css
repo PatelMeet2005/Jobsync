@@ -13,6 +13,7 @@
   flex-direction: column;
   gap: 16px;
   height: 100%;
+  width: 100%;
 }
 
 .job-card:hover {
@@ -100,32 +101,6 @@
   font-weight: 600;
 }
 
-.save-job-btn {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  color: #64748b;
-}
-
-.save-job-btn:hover {
-  background: #f1f5f9;
-  color: #4361ee;
-}
-
-.save-job-btn.saved {
-  background: #4361ee;
-  border-color: #4361ee;
-  color: white;
-}
-
 .job-card-body {
   display: flex;
   flex-direction: column;
@@ -134,9 +109,12 @@
 }
 
 .job-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  gap: 12px !important;
 }
 
 .meta-item {
@@ -263,7 +241,7 @@
   }
   
   .job-meta {
-    flex-direction: column;
+    flex-direction: row;
     gap: 8px;
   }
   

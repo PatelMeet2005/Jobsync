@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { toast } from 'react-toastify';
 import "./JobDetailPage.css";
 import { useTokenValidation } from "../../utils/tokenValidation";
 import SessionWarningBanner from "../SessionWarningBanner/SessionWarningBanner";
@@ -61,19 +62,34 @@ const JobDetailPage = () => {
         // Check if job is saved (you would implement this logic based on your app)
         const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
         setIsSaved(savedJobs.includes(id));
+        
         // after loading job, check if current user has already applied
         try {
           const token = localStorage.getItem('token') || sessionStorage.getItem('token');
           if (token) {
-            const headers = { Authorization: `Bearer ${token}` };
-            const appRes = await axios.get(`http://localhost:8000/applications/mine?jobId=${id}`, { headers });
-            if (appRes.data && appRes.data.success && Array.isArray(appRes.data.applications) && appRes.data.applications.length > 0) {
-              // pick the most recent application for this job
-              setAppliedApplication(appRes.data.applications[0]);
+            // Verify token is not expired before making request
+            try {
+              const headers = { Authorization: `Bearer ${token}` };
+              const appRes = await axios.get(`http://localhost:8000/applications/mine?jobId=${id}`, { headers });
+              if (appRes.data && appRes.data.success && Array.isArray(appRes.data.applications) && appRes.data.applications.length > 0) {
+                // pick the most recent application for this job
+                const application = appRes.data.applications[0];
+                setAppliedApplication(application);
+                console.log('Found existing application:', application._id);
+              }
+            } catch (tokenErr) {
+              // If token is expired, clear it and show warning
+              if (tokenErr.response?.status === 401 || tokenErr.response?.data?.message?.includes('expired')) {
+                console.warn('Token expired - clearing session');
+                toast.warning('Your session has expired. Please login again to apply for jobs.');
+                // Clear expired tokens
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+              }
             }
           }
         } catch (err) {
-          // swallow - not critical, we'll allow apply for guests
+          // swallow - not critical
           console.warn('Could not check existing application', err?.response?.data || err.message || err);
         }
       } catch (err) {
@@ -94,22 +110,10 @@ const JobDetailPage = () => {
     }
   }, [tokenValidation]);
 
-  const handleSaveJob = () => {
-    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-    if (isSaved) {
-      const updatedJobs = savedJobs.filter(jobId => jobId !== id);
-      localStorage.setItem('savedJobs', JSON.stringify(updatedJobs));
-    } else {
-      savedJobs.push(id);
-      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-    }
-    setIsSaved(!isSaved);
-  };
-
   const handleApplyClick = () => {
     const userEmail = sessionStorage.getItem("userEmail");
     if (!userEmail) {
-      alert("You must login first!");
+      toast.warning("You must login first!");
       navigate("/login");
     } else {
       setShowApplyForm(true);
@@ -167,7 +171,7 @@ const JobDetailPage = () => {
         />
       )}
       
-      <button onClick={() => navigate(-1)} className="back-button">
+      <button onClick={() => navigate('/jobs')} className="back-button">
         <i className="fas fa-arrow-left"></i> Back to Jobs
       </button>
       
@@ -188,23 +192,7 @@ const JobDetailPage = () => {
               </div>
             </div>
             
-            <div className="job-actions">
-              <button 
-                className={`save-job-btn ${isSaved ? 'saved' : ''}`}
-                onClick={handleSaveJob}
-                aria-label={isSaved ? "Remove from saved jobs" : "Save this job"}
-              >
-                <i className={`fas ${isSaved ? 'fa-bookmark' : 'fa-bookmark'}`}></i>
-                {isSaved ? 'Saved' : 'Save'}
-              </button>
-              {appliedApplication && appliedApplication.status && appliedApplication.status !== 'rejected' ? (
-                <button className="apply-now-btn disabled" disabled>Already Applied</button>
-              ) : (
-                <button className="apply-now-btn" onClick={handleApplyClick}>
-                  Apply Now
-                </button>
-              )}
-            </div>
+            
           </header>
 
           <div className="job-meta-grid">
@@ -292,6 +280,16 @@ const JobDetailPage = () => {
                 ))}
               </ul>
             </section>
+
+            <div className="job-actions">
+              {appliedApplication && appliedApplication.status && appliedApplication.status !== 'rejected' ? (
+                <button className="apply-now-btn disabled" disabled>Already Applied</button>
+              ) : (
+                <button className="apply-now-btn" onClick={handleApplyClick}>
+                  Apply Now
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -318,9 +316,9 @@ const JobDetailPage = () => {
               }}
               validationSchema={validationSchema}
               onSubmit={(values, { setSubmitting, resetForm }) => {
+                // This onSubmit is overridden by form's onSubmit handler below
                 setTimeout(() => {
                   console.log("Application submitted:", values);
-                  alert("Application submitted successfully!");
                   setSubmitting(false);
                   resetForm();
                   setShowApplyForm(false);
@@ -332,46 +330,55 @@ const JobDetailPage = () => {
                     e.preventDefault();
                     const form = e.target;
                     const formData = new FormData(form);
-                    // append jobId
+                    
+                    // Append jobId
                     formData.append('jobId', job._id);
+                    
+                    // Append user ID from session storage
+                    const userId = sessionStorage.getItem('userId') || sessionStorage.getItem('_id');
+                    if (userId) {
+                      formData.append('applicantId', userId);
+                    }
 
                     try {
                       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-                      const headers = { 'Content-Type': 'multipart/form-data' };
-                      if (token) headers.Authorization = `Bearer ${token}`;
+                      
+                      if (!token) {
+                        toast.error('You must be logged in to apply. Please login first.');
+                        setShowApplyForm(false);
+                        return;
+                      }
+                      
+                      const headers = { 
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${token}`
+                      };
 
                       const res = await axios.post('http://localhost:8000/applications', formData, {
                         headers
                       });
+                      
                       if (res.data && res.data.success) {
-                            console.log('Application response:', res.data.application);
+                            console.log('Application submitted:', res.data.application);
                             const app = res.data.application;
                             
-                            // Check if applicant was linked successfully
-                            const hasApplicantId = app && (app.applicant || app.applicantId);
-                            
-                            if (!hasApplicantId) {
-                              alert('⚠️ Application submitted, but applicant was not linked on server.\n\n' +
-                                    'This means:\n' +
-                                    '• Your application was saved but may not show in your profile\n' +
-                                    '• You need to LOGOUT and LOGIN again to refresh your session\n' +
-                                    '• Then reapply for this job\n\n' +
-                                    'This happens when your login session is outdated.');
-                              
-                              // Don't cache applications without applicant ID
-                              console.warn('Skipping cache for application without applicant ID');
-                              form.reset();
-                              setShowApplyForm(false);
-                              return;
+                            // Check if application was linked to user
+                            if (!app.applicant && !app.applicantId) {
+                              toast.warning('Application submitted but not linked to your account. Please logout and login again, then check your profile.');
+                            } else {
+                              toast.success('Application submitted successfully!');
                             }
                             
-                            // Success case - applicant was linked properly
-                            alert('✅ Application submitted successfully!');
                             form.reset();
                             setShowApplyForm(false);
                             
-                            // Mark as applied so button hides
+                            // Mark as applied so button shows "Already Applied"
                             setAppliedApplication(app);
+                            
+                            // Refresh the page after a short delay to update application status
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 1500);
                             
                             // Cache the application locally for immediate display in profile
                             try {
@@ -407,11 +414,24 @@ const JobDetailPage = () => {
                               console.warn('Could not cache applied application', err);
                             }
                       } else {
-                        alert('Failed to submit application');
+                        toast.error('Failed to submit application');
                       }
                     } catch (err) {
                       console.error('Application submission error', err);
-                      alert('Error submitting application. Please try again later.');
+                      
+                      // Check if error is due to expired token
+                      if (err.response?.status === 401 || err.response?.data?.message?.includes('expired')) {
+                        toast.error('Your session has expired. Please logout and login again.');
+                        // Clear expired tokens
+                        localStorage.removeItem('token');
+                        sessionStorage.removeItem('token');
+                      } else if (err.response?.data?.message) {
+                        toast.error(err.response.data.message);
+                      } else {
+                        toast.error('Error submitting application. Please try again later.');
+                      }
+                      
+                      setShowApplyForm(false);
                     }
                   }}>
                   <div className="form-group">

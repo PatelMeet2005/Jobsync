@@ -87,4 +87,50 @@ const getJobById = async (req, res) => {
   }
 };
 
-module.exports = { createJob, fetchJobs, getMyJobs, updateJobStatus, getJobById };
+// PUT /employee/jobs/:jobId - Update job details
+const updateJob = async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    
+    // Check if user is authenticated
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ success: false, message: "User not authenticated" });
+    }
+    
+    const userId = req.user.id;
+    const updateData = req.body;
+
+    console.log('Updating job:', jobId);
+    console.log('User ID:', userId);
+    console.log('Update data:', updateData);
+
+    // Find the job
+    const job = await Job.findById(jobId);
+
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    console.log('Job found, posted by:', job.postedBy.toString());
+
+    // Check if the user is the owner of the job
+    if (job.postedBy.toString() !== userId.toString()) {
+      return res.status(403).json({ success: false, message: "You are not authorized to update this job" });
+    }
+
+    // Update the job with new data
+    const updatedJob = await Job.findByIdAndUpdate(
+      jobId,
+      { ...updateData },
+      { new: true, runValidators: true }
+    ).populate('postedBy', 'employeename employeeemail');
+
+    console.log('Job updated successfully');
+    res.status(200).json(updatedJob);
+  } catch (error) {
+    console.error('Error updating job:', error);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+module.exports = { createJob, fetchJobs, getMyJobs, updateJobStatus, getJobById, updateJob };

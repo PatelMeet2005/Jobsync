@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Register.css";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Signup = ({ onClose, switchToLogin }) => {
 
@@ -47,7 +48,7 @@ const Signup = ({ onClose, switchToLogin }) => {
     try {
       const response = await axios.post(`http://localhost:8000/user/register`, data);
       console.log("Response Data:", response.data);
-      alert(response.data.message);
+      toast.success(response.data.message || 'Registration successful!');
 
       // reset form fields after successful registration
       setUserFirstName('');
@@ -63,7 +64,7 @@ const Signup = ({ onClose, switchToLogin }) => {
 
     } catch (error) {
       console.log("Error", error);
-      alert(error.response.data.message);
+      toast.error(error.response?.data?.message || 'Registration failed. Please try again.');
 
     }
   }
