@@ -38,13 +38,20 @@ const EmployeeDashboard = () => {
     try {
       setLoading(true);
       const currentUser = getCurrentUser();
-      const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       
-      // Fetch all jobs
-      const jobsResponse = await axios.get('http://localhost:8000/employee/fetchjobs');
+      if (!token) {
+        setError('Please login to view dashboard');
+        setLoading(false);
+        return;
+      }
       
-      // Fetch all applications for the employee
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      // Fetch only MY jobs (posted by current employee)
+      const jobsResponse = await axios.get('http://localhost:8000/employee/myjobs', { headers });
+      
+      // Fetch all applications for the employee's jobs
       let allApplications = [];
       let totalApplications = 0;
       let pendingApplications = 0;
@@ -63,58 +70,57 @@ const EmployeeDashboard = () => {
         // Continue with job data even if applications fail
       }
       
-      if (jobsResponse.data.success) {
-        const allJobs = jobsResponse.data.jobs;
-        
-        // Calculate statistics
-        const totalJobs = allJobs.length;
-        const activeJobs = allJobs.filter(job => job.status === 'pending').length;
-        const acceptedJobs = allJobs.filter(job => job.status === 'accepted').length;
-        
-        // Create a map of job IDs to application counts
-        const jobApplicationCounts = {};
-        allApplications.forEach(app => {
-          const jobId = app.jobId?._id || app.jobId;
-          if (jobId) {
-            jobApplicationCounts[jobId] = (jobApplicationCounts[jobId] || 0) + 1;
-          }
-        });
-        
-        // Get recent jobs (last 5) with real applicant counts
-        const recentJobs = allJobs
-          .sort((a, b) => new Date(b.postedDate || b.createdAt) - new Date(a.postedDate || a.createdAt))
-          .slice(0, 5)
-          .map(job => ({
-            id: job._id,
-            title: job.title,
-            company: job.company?.name || job.company || 'N/A',
-            location: job.company?.location || 'N/A',
-            type: job.jobType || 'N/A',
-            salary: job.salary ? `₹${job.salary}` : 'N/A',
-            status: job.status || 'pending',
-            postedDate: formatDate(job.postedDate || job.createdAt),
-            applicants: jobApplicationCounts[job._id] || 0 // Real applicant count
-          }));
+      // jobsResponse from myjobs endpoint returns array directly, not wrapped in success object
+      const allJobs = Array.isArray(jobsResponse.data) ? jobsResponse.data : (jobsResponse.data.jobs || []);
+      
+      // Calculate statistics
+      const totalJobs = allJobs.length;
+      const activeJobs = allJobs.filter(job => job.status === 'pending').length;
+      const acceptedJobs = allJobs.filter(job => job.status === 'accepted').length;
+      
+      // Create a map of job IDs to application counts
+      const jobApplicationCounts = {};
+      allApplications.forEach(app => {
+        const jobId = app.jobId?._id || app.jobId;
+        if (jobId) {
+          jobApplicationCounts[jobId] = (jobApplicationCounts[jobId] || 0) + 1;
+        }
+      });
+      
+      // Get recent jobs (last 5) with real applicant counts
+      const recentJobs = allJobs
+        .sort((a, b) => new Date(b.postedDate || b.createdAt) - new Date(a.postedDate || a.createdAt))
+        .slice(0, 5)
+        .map(job => ({
+          id: job._id,
+          title: job.title,
+          company: job.company?.name || job.company || 'N/A',
+          location: job.company?.location || 'N/A',
+          type: job.jobType || 'N/A',
+          salary: job.salary ? `₹${job.salary}` : 'N/A',
+          status: job.status || 'pending',
+          postedDate: formatDate(job.postedDate || job.createdAt),
+          applicants: jobApplicationCounts[job._id] || 0 // Real applicant count
+        }));
 
-        // Generate recent activity based on real applications
-        const recentActivity = generateRecentActivity(allApplications.slice(0, 6), allJobs);
+      // Generate recent activity based on real applications
+      const recentActivity = generateRecentActivity(allApplications.slice(0, 6), allJobs);
 
-        setDashboardData({
-          stats: {
-            totalJobs,
-            activeJobs,
-            totalApplications, // Real total applications count
-            pendingReviews: pendingApplications // Real pending applications count
-          },
-          recentJobs,
-          recentActivity,
-          employeeInfo: currentUser
-        });
-        
-        setError('');
-        setLastUpdated(new Date());
-        toast.success('Dashboard updated successfully!');
-      }
+      setDashboardData({
+        stats: {
+          totalJobs,
+          activeJobs,
+          totalApplications, // Real total applications count
+          pendingReviews: pendingApplications // Real pending applications count
+        },
+        recentJobs,
+        recentActivity,
+        employeeInfo: currentUser
+      });
+      
+      setError('');
+      setLastUpdated(new Date());
+      toast.success('Dashboard updated successfully!');
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
       setError('Failed to load dashboard data');

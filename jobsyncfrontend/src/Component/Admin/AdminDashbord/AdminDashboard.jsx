@@ -14,50 +14,52 @@ const AdminDashboard = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   useEffect(() => {
     fetchDashboardStats();
+    
+    // Set up real-time updates every 30 seconds
+    const intervalId = setInterval(() => {
+      fetchDashboardStats();
+    }, 30000); // 30 seconds
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchDashboardStats = async () => {
     try {
-      // Mock data for now - replace with actual API calls
-      // You can implement these API endpoints in your backend
-      
-      // For now, using mock data
-      setTimeout(() => {
-        setStats({
-          totalUsers: 150,
-          totalEmployees: 45,
-          totalJobs: 89,
-          totalRequests: 234,
-          pendingRequests: 56,
-          acceptedRequests: 145,
-          rejectedRequests: 33
-        });
-        setLoading(false);
-      }, 1000);
-
-      // Uncomment and modify these when you have actual API endpoints
-      /*
-      const [usersRes, employeesRes, jobsRes, requestsRes] = await Promise.all([
-        axios.get('http://localhost:8000/admin/users/count'),
-        axios.get('http://localhost:8000/admin/employees/count'),
-        axios.get('http://localhost:8000/admin/jobs/count'),
-        axios.get('http://localhost:8000/admin/requests/stats')
+      // Fetch real data from backend APIs
+      const [usersRes, employeesRes, jobsRes] = await Promise.all([
+        axios.get('http://localhost:8000/user/getallusers'),
+        axios.get('http://localhost:8000/employee/all'),
+        axios.get('http://localhost:8000/employee/fetchjobs')
       ]);
 
+      // Process jobs data to get status breakdown
+      const jobs = jobsRes.data?.jobs || [];
+      const totalJobs = jobs.length;
+      const pendingJobs = jobs.filter(job => job.status?.toLowerCase() === 'pending').length;
+      const acceptedJobs = jobs.filter(job => job.status?.toLowerCase() === 'accepted').length;
+      const rejectedJobs = jobs.filter(job => job.status?.toLowerCase() === 'rejected').length;
+
+      // Get users and employees data (APIs return arrays directly)
+      const users = Array.isArray(usersRes.data) ? usersRes.data : [];
+      const employees = Array.isArray(employeesRes.data) ? employeesRes.data : [];
+
       setStats({
-        totalUsers: usersRes.data.count,
-        totalEmployees: employeesRes.data.count,
-        totalJobs: jobsRes.data.count,
-        totalRequests: requestsRes.data.total,
-        pendingRequests: requestsRes.data.pending,
-        acceptedRequests: requestsRes.data.accepted,
-        rejectedRequests: requestsRes.data.rejected
+        totalUsers: users.length,
+        totalEmployees: employees.length,
+        totalJobs: totalJobs,
+        totalRequests: totalJobs, // Using total jobs as requests
+        pendingRequests: pendingJobs,
+        acceptedRequests: acceptedJobs,
+        rejectedRequests: rejectedJobs
       });
+      
+      setLastUpdated(new Date());
       setLoading(false);
-      */
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
       setLoading(false);
@@ -77,7 +79,16 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <h1>Admin Dashboard</h1>
+      <div className="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <div className="last-updated">
+          <span className="update-indicator">🔄</span>
+          <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
+          <button onClick={fetchDashboardStats} className="refresh-btn" title="Refresh now">
+            ↻
+          </button>
+        </div>
+      </div>
       
       <div className="dashboard-stats">
         <div className="stats-grid">

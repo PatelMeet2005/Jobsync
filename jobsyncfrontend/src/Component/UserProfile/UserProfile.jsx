@@ -573,12 +573,6 @@ const UserProfile = () => {
                                 <i className="fas fa-redo"></i> Apply Again
                               </button>
                             )}
-                            <button className="view-job-btn" onClick={() => {
-                              if (jobIdValue) navigate(`/jobs/${jobIdValue}`);
-                              else toast.info('Job details not available.')
-                            }}>
-                              <i className="fas fa-eye"></i> View Job
-                            </button>
                           </div>
                         </div>
                       )

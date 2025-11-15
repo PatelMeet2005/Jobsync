@@ -92,6 +92,9 @@ const JobPage = () => {
 
   // Filtering & Sorting
   const filteredJobs = jobs.filter(job => {
+    // Status filter - only show accepted jobs
+    const matchesStatus = job.jobStatus?.toLowerCase() === 'accepted';
+    
     // Search term filter
     const matchesSearch =
       job.jobTitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -138,7 +141,7 @@ const JobPage = () => {
       return true;
     })() : true;
     
-    return matchesSearch && matchesKeywords && matchesLocation && matchesWorkMode && 
+    return matchesStatus && matchesSearch && matchesKeywords && matchesLocation && matchesWorkMode && 
            matchesType && matchesCategory && matchesExperience && matchesSalary;
   });
 
