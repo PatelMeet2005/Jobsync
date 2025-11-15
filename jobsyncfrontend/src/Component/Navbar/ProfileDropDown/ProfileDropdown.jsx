@@ -100,11 +100,11 @@ const ProfileDropdown = ({ firstName, lastName, onClose }) => {
           className="profile-dropdown-item"
           onClick={() => {
             onClose();
-            navigate("/");
+            navigate("/resume-job-match");
           }}
         >
           <i className="fas fa-briefcase"></i>
-          <span>My Jobs</span>
+          <span>Browse Jobs</span>
         </button>
         <div className="profile-dropdown-divider"></div>
         <button className="profile-dropdown-item profile-dropdown-logout" onClick={handleLogoutClick}>

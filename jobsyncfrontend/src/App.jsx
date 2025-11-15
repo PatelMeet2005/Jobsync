@@ -15,6 +15,7 @@ import AdminRequest from './Component/Admin/AdminRequest/AdminRequest'
 import UserProfile from './Component/UserProfile/UserProfile'
 import Employees from './Component/Employee/Employees'
 import EmployeesNav from './Component/Employee/EmployeesNav'
+import ResumeJobMatch from './Component/ResumeJobMatch/ResumeJobMatch'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
@@ -54,8 +55,10 @@ const App = () => {
         ) : (
           <>
             <Route path="/" element={<><Navbar /><Job /><Footer /></>} />
+            <Route path="/job" element={<><Navbar /><Job /><Footer /></>} />
             <Route path="/companie" element={<><Navbar /><Companie /><Footer /></>} />
             <Route path="/profile" element={<><Navbar /><UserProfile /></>} />
+            <Route path="/resume-job-match" element={<><Navbar /><ResumeJobMatch /></>} />
             <Route path="/about"element={<><Navbar /><About /> <Footer /></>} />
             <Route path="/jobdetails/:id" element={<><Navbar /><JobDetailPage /><Footer /></>} />
             {/* <Route path="/employees" element={<><EmployeesNav /><EmployeePage /></>} /> */}
